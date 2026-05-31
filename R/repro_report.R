@@ -1,8 +1,8 @@
 #' Generate a human-readable reproducibility report
 #'
 #' @description
-#' Renders a reproducibility audit report from an [audit_script()] result
-#' and optionally a [risk_score()] result and [check_drift()] result. Three
+#' Renders a reproducibility audit report from an [reproducr::audit_script()] result
+#' and optionally a [reproducr::risk_score()] result and [reproducr::check_drift()] result. Three
 #' style presets are available:
 #'
 #' - **`"minimal"`** — compact summary suitable for console review or internal
@@ -12,10 +12,10 @@
 #' - **`"pharma"`** — structured QC document with a risk register and sign-off
 #'   fields, suitable for pharmaceutical or regulated analytical workflows.
 #'
-#' @param audit An `audit_report` object from [audit_script()]. Required.
-#' @param risks A `risk_report` data frame from [risk_score()]. Optional but
+#' @param audit An `audit_report` object from [reproducr::audit_script()]. Required.
+#' @param risks A `risk_report` data frame from [reproducr::risk_score()]. Optional but
 #'   strongly recommended — without it, the report cannot assess reproducibility.
-#' @param drift A `drift_report` data frame from [check_drift()]. Optional.
+#' @param drift A `drift_report` data frame from [reproducr::check_drift()]. Optional.
 #' @param format `character(1)`. Output format: `"text"` (console),
 #'   `"md"` (Markdown file), or `"html"` (HTML file). Default `"text"`.
 #' @param style `character(1)`. Report style: `"minimal"`, `"academic"`, or
@@ -27,7 +27,7 @@
 #' @return Invisibly returns the report content as a character string. For
 #'   file-based formats, the file is also written to disk.
 #'
-#' @seealso [audit_script()], [risk_score()], [check_drift()], [repro_badge()]
+#' @seealso [reproducr::audit_script()], [reproducr::risk_score()], [reproducr::check_drift()], [reproducr::repro_badge()]
 #'
 #' @examples
 #' script <- tempfile(fileext = ".R")
@@ -71,7 +71,7 @@ repro_report <- function(audit,
 
   if (format == "html") {
     content <- .md_to_html(md_content,
-                           title = sprintf("reproducr Report \u2014 %s", style))
+                           title = sprintf("reproducr Report \2014 %s", style))
   } else {
     content <- md_content
   }
@@ -110,9 +110,9 @@ repro_report <- function(audit,
 #' Can be inserted automatically into a `README.md` (e.g. from a GitHub
 #' Actions workflow).
 #'
-#' @param audit An `audit_report` from [audit_script()].
-#' @param risks A `risk_report` from [risk_score()]. Optional.
-#' @param drift A `drift_report` from [check_drift()]. Optional.
+#' @param audit An `audit_report` from [reproducr::audit_script()].
+#' @param risks A `risk_report` from [reproducr::risk_score()]. Optional.
+#' @param drift A `drift_report` from [reproducr::check_drift()]. Optional.
 #' @param output `character(1)`. `"markdown"` (return the badge string) or
 #'   `"README"` (insert/update the badge in `README.md`). Default `"markdown"`.
 #' @param readme_path `character(1)`. Path to the README file when
@@ -194,7 +194,7 @@ repro_badge <- function(audit,
   if (is.null(risks) && is.null(drift)) {
     return(list(
       level   = "unknown",
-      summary = "Reproducibility status unknown \u2014 run `risk_score()` to assess.",
+      summary = "Reproducibility status unknown \2014 run `risk_score()` to assess.",
       emoji   = "?"
     ))
   }
@@ -270,7 +270,7 @@ repro_badge <- function(audit,
       lines <- c(lines,
         sprintf("- **%s** `%s`%s",
                 toupper(d$status), d$output,
-                if (nchar(trimws(d$note)) > 0L) paste0(" \u2014 ", d$note) else "")
+                if (nchar(trimws(d$note)) > 0L) paste0(" \2014 ", d$note) else "")
       )
     }
     lines <- c(lines, "")
@@ -310,7 +310,6 @@ repro_badge <- function(audit,
     paste0(
       "All analyses were conducted in R (version %s) on %s. ",
       "The following packages were used: %s. ",
-      "Package environments were managed using renv. ",
       "%s ",
       "The full audit report and certification records are available in ",
       "the supplementary materials."

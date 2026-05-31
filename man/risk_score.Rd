@@ -28,10 +28,6 @@ risk_score(
 \item{min_risk}{\code{character(1)}. Minimum risk level to include in the output.
 One of \code{"low"} (show all), \code{"medium"}, or \code{"high"}. Default \code{"low"}.}
 
-\item{x}{A \code{risk_report} object.}
-
-\item{...}{Additional arguments (currently unused).}
-
 \item{i}{Row index.}
 
 \item{j}{Column index. When columns are subsetted and required columns are
@@ -45,7 +41,7 @@ row per flagged call. Columns:
 \item{\code{file}}{Source file path.}
 \item{\code{line}}{Line number of the call.}
 \item{\code{call}}{The \code{pkg::fn} string.}
-\item{\code{pkg_version}}{Installed or renv-locked version.}
+\item{\code{pkg_version}}{Installed or lockfile-resolved version.}
 \item{\code{risk}}{\code{"high"}, \code{"medium"}, or \code{"low"}.}
 \item{\code{check}}{Which check flagged it: \code{"changelog"}, \code{"seed_check"},
 or \code{"locale_check"}.}

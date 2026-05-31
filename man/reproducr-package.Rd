@@ -4,19 +4,16 @@
 \name{reproducr-package}
 \alias{reproducr}
 \alias{reproducr-package}
-\title{reproducr: Computational Reproducibility Auditing for R Projects}
+\title{reproducr: Behavioural Reproducibility Auditing for R Projects}
 \description{
-\code{reproducr} audits R scripts for reproducibility risk beyond what
-\href{https://rstudio.github.io/renv/}{renv} provides. While \code{renv} locks
-package versions, it cannot tell you:
-\itemize{
-\item Whether a function's \emph{behaviour} changed silently between versions
-\item Whether stochastic calls lack a \code{set.seed()}
-\item Whether results have numerically drifted since your last analysis
-\item Whether your code is locale-sensitive
-}
+You finish an analysis. The code runs. The numbers look right. But are
+they stable?
 
-\code{reproducr} fills those gaps.
+\code{reproducr} makes behavioural reproducibility risks visible and trackable.
+It scans your scripts for known silent breaking changes, flags stochastic
+calls missing \code{set.seed()}, certifies analytical outputs as baselines, and
+detects numerical drift across runs — before it reaches a journal, a
+regulator, or a collaborator.
 }
 \section{Workflow}{
 
@@ -33,7 +30,7 @@ print(risks)
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{model <- lm(mpg ~ wt, data = mtcars)
 certify(list(coefs = coef(model)), tag = "submission-v1")
 
-# Later, after a package upgrade:
+# After any environment change:
 check_drift(list(coefs = coef(model)), against = "submission-v1")
 }\if{html}{\out{</div>}}
 
@@ -57,23 +54,13 @@ repro_badge(report, risks, output = "README")
 }
 }
 
-\section{Relationship to renv}{
-
-
-\code{reproducr} and \code{renv} are complementary tools, not alternatives.
-Use \code{renv} to freeze package versions. Use \code{reproducr} to verify that
-freezing is actually sufficient — i.e. that no silent behavioural changes,
-missing seeds, or locale dependencies threaten your results.
-}
-
 \section{The breaking-changes database}{
 
 
-The internal database currently covers known breaking changes in:
+The internal database covers known silent breaking changes in:
 \code{dplyr}, \code{tidyr}, \code{ggplot2}, \code{readr}, \code{purrr}, \code{stringr}, \code{broom},
-\code{data.table}, \code{lme4}, \code{lubridate}, and base R (RNG changes in R 3.6.0).
-Community contributions to expand the database are very welcome — see
-the contributing guide on GitHub.
+\code{data.table}, \code{lme4}, \code{lubridate}, and base R. Community contributions
+to expand the database are very welcome — see the contributing vignette.
 }
 
 \seealso{
@@ -85,7 +72,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Ndoh Penn \email{ndohpenn9@gmail.com} (\href{https://orcid.org/0009-0003-9054-465X}{ORCID})
+\strong{Maintainer}: First Last \email{you@example.com} (\href{https://orcid.org/0000-0000-0000-0000}{ORCID})
 
 }
-\keyword{internal}

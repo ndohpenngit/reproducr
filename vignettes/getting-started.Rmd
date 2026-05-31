@@ -18,17 +18,17 @@ library(reproducr)
 
 ## What is reproducr?
 
-`reproducr` audits R scripts for computational reproducibility risk — filling
-the gap that `renv` leaves. While `renv` is excellent at freezing package
-versions, it cannot detect whether a function's *behaviour* changed silently
-between versions, whether stochastic code is missing a `set.seed()`, or
-whether analytical results have numerically drifted after a package upgrade.
+You finish an analysis. The code runs. The numbers look right. But are they stable?
 
-`reproducr` answers those questions via a three-tier workflow:
+Package updates change function behaviour silently. Stochastic code without a fixed seed produces different results on every run. Results certified last month may drift this month — with no error and no warning.
+
+`reproducr` makes these risks visible and trackable via a three-tier workflow:
 
 1. **Scan & score** — parse your scripts and assess risk
 2. **Baseline & drift** — certify outputs and detect changes over time
 3. **Report & export** — generate human-readable audit reports
+
+It works with your existing setup. If you use `renv`, `reproducr` reads your lockfile automatically. No configuration required.
 
 ## Tier 1: Scan and score
 
@@ -36,7 +36,7 @@ whether analytical results have numerically drifted after a package upgrade.
 
 The entry point is `audit_script()`. It reads your R source files, extracts
 every qualified `pkg::fn` call, and resolves which version of each package is
-in use (from `renv.lock` if available, otherwise the installed library).
+in use.
 
 ```{r audit}
 # Create a small example script
@@ -55,8 +55,6 @@ report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 ```
 
-The `audit_report` object holds the detected calls as a data frame:
-
 ```{r calls}
 report$calls
 ```
@@ -70,11 +68,9 @@ risks <- risk_score(report)
 print(risks)
 ```
 
-The `"changelog"` check compares each call against a curated database of
-known breaking changes. The `"seed_check"` verifies stochastic functions have
-`set.seed()` nearby. The `"locale_check"` flags locale-sensitive operations.
-
-You can run individual checks or filter by minimum risk level:
+- **`"changelog"`** — checks calls against a curated database of known silent breaking changes
+- **`"seed_check"`** — flags stochastic functions without a nearby `set.seed()`
+- **`"locale_check"`** — flags functions whose output varies by system locale
 
 ```{r risk-filtered}
 # High-severity only
@@ -84,11 +80,8 @@ high_risks <- risk_score(report, min_risk = "high")
 seed_issues <- risk_score(report, methods = "seed_check")
 ```
 
-The result is a plain data frame, so you can filter, sort, and export it with
-standard R tools:
-
 ```{r risk-df}
-# All risks as a regular data frame
+# As a plain data frame for downstream use
 as.data.frame(risks)
 ```
 
@@ -96,11 +89,10 @@ as.data.frame(risks)
 
 ### Certifying outputs
 
-After running an analysis, certify the key outputs using `certify()`. This
-hashes each object and stores the hash alongside full environment metadata.
+After running an analysis, certify the key outputs using `certify()`.
 
 ```{r certify}
-cert_file <- tempfile()  # Use ".reproducr" in a real project
+cert_file <- tempfile()
 
 model <- lm(mpg ~ wt, data = mtcars)
 
@@ -116,19 +108,15 @@ certify(
 )
 ```
 
-Inspect stored certifications with `list_certs()`:
-
 ```{r list-certs}
 list_certs(file = cert_file)
 ```
 
 ### Checking for drift
 
-After a package upgrade or environment change, re-run `check_drift()` to
-verify that your results have not changed:
+After any environment change, re-run `check_drift()`:
 
 ```{r drift-ok}
-# Same outputs — should report "ok"
 result <- check_drift(
   outputs = list(
     coefs     = coef(model),
@@ -140,10 +128,8 @@ result <- check_drift(
 )
 ```
 
-If an output changes, `check_drift()` reports it clearly:
-
 ```{r drift-detect}
-# Different model — will show drift
+# Different model — shows drift
 model2 <- lm(mpg ~ hp, data = mtcars)
 
 check_drift(
@@ -153,54 +139,19 @@ check_drift(
 )
 ```
 
-The drift report is also a data frame you can inspect:
-
-```{r drift-df}
-print(result)
-```
-
 ## Tier 3: Report and export
-
-### Generating reports
-
-`repro_report()` renders audit findings in three styles:
-
-**Minimal** — a compact summary:
 
 ```{r report-minimal, results='hide'}
 repro_report(report, risks, format = "text", style = "minimal")
 ```
 
-**Academic** — a methods paragraph ready to paste into a paper:
-
 ```{r report-academic}
 cat(repro_report(report, risks, format = "text", style = "academic"))
 ```
 
-**Pharma** — a structured QC document with risk register and sign-off fields:
-
-```{r report-pharma, results='hide'}
-html_file <- tempfile(fileext = ".html")
-repro_report(report, risks,
-             format      = "html",
-             style       = "pharma",
-             output_file = html_file)
-```
-
-### Generating badges
-
-`repro_badge()` creates a shields.io badge reflecting the current
-reproducibility status:
-
 ```{r badge}
 badge <- repro_badge(report, risks, output = "markdown")
 cat(badge)
-```
-
-To insert the badge into your `README.md` automatically (e.g. from CI):
-
-```r
-repro_badge(report, risks, output = "README")
 ```
 
 ## The full pipeline
@@ -218,7 +169,6 @@ certify(
   tag     = "submission-v1"
 )
 
-# After an upgrade:
 check_drift(
   outputs = list(coefs = coef(my_model)),
   against = "submission-v1"
@@ -228,20 +178,6 @@ check_drift(
 repro_report(report, risks, format = "html", style = "pharma")
 repro_badge(report, risks, output = "README")
 ```
-
-## Working with renv
-
-`reproducr` is designed to complement `renv`, not replace it. When an
-`renv.lock` file is present, `audit_script()` reads package versions from
-the lockfile automatically:
-
-```r
-# renv.lock present in working directory — versions read automatically
-report <- audit_script("analysis.R")  # renv = TRUE by default
-```
-
-Commit both `renv.lock` and `.reproducr.rds` to version control for a
-complete, auditable reproducibility record.
 
 ```{r cleanup, include = FALSE}
 unlink(script)

@@ -2,18 +2,18 @@
 #'
 #' @description
 #' Parses one or more R source files and extracts every qualified
-#' `package::function` call, resolving the installed (or `renv`-locked) version
-#' of each package. The resulting `audit_report` object is the entry point for
-#' the rest of the `reproducr` workflow.
+#' `package::function` call, resolving the installed version of each package.
+#' The resulting `audit_report` object is the entry point for the rest of the
+#' `reproducr` workflow.
 #'
 #' @param path `character(1)`. Path to a `.R`, `.Rmd`, or `.qmd` file **or**
 #'   a directory. When a directory is supplied, all R-ish source files are
 #'   scanned recursively, excluding `renv/` and `packrat/` subdirectories.
 #'   Defaults to `"."` (the current working directory).
-#' @param renv `logical(1)`. If `TRUE` *and* an `renv.lock` file exists in the
+#' @param renv `logical(1)`. If `TRUE` and a `renv.lock` file exists in the
 #'   current working directory, package versions are read from the lockfile
-#'   rather than the currently installed library. This gives more stable results
-#'   in CI environments. Default `TRUE`.
+#'   rather than the currently installed library. Useful for stable version
+#'   reporting in CI environments. Default `TRUE`.
 #' @param verbose `logical(1)`. Whether to print progress messages.
 #'   Default `TRUE`.
 #'
@@ -22,7 +22,7 @@
 #'   \item{`calls`}{A `data.frame` with one row per detected `pkg::fn` call,
 #'     columns `file`, `line`, `pkg`, `fn`, `pkg_version`.}
 #'   \item{`env`}{A list with R version, platform, OS, locale, and timezone.}
-#'   \item{`renv_used`}{`logical` — were versions sourced from `renv.lock`?}
+#'   \item{`renv_used`}{`logical` — were versions sourced from a lockfile?}
 #'   \item{`timestamp`}{`POSIXct` timestamp of when the audit was run.}
 #'   \item{`paths`}{Character vector of files that were scanned.}
 #' }
@@ -40,8 +40,8 @@
 #' the package cannot be determined unambiguously from source text alone.
 #' This is by design: qualifying calls is also a reproducibility best practice.
 #'
-#' @seealso [risk_score()] to check detected calls against the breaking-changes
-#'   database; [repro_report()] to render the full audit; [certify()] to lock
+#' @seealso [reproducr::risk_score()] to check detected calls against the breaking-changes
+#'   database; [reproducr::repro_report()] to render the full audit; [reproducr::certify()] to lock
 #'   a set of outputs as a baseline.
 #'
 #' @examples
@@ -120,6 +120,7 @@ audit_script <- function(path = ".", renv = TRUE, verbose = TRUE) {
 
 # ---- S3 methods -------------------------------------------------------------
 
+#' @rdname audit_script
 #' @export
 print.audit_report <- function(x, ...) {
   n_files <- length(x$paths)
@@ -146,6 +147,7 @@ print.audit_report <- function(x, ...) {
   invisible(x)
 }
 
+#' @rdname audit_script
 #' @export
 summary.audit_report <- function(object, ...) {
   calls_per_pkg <- if (nrow(object$calls) > 0L) {

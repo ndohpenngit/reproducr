@@ -22,11 +22,10 @@ together form the *baseline and drift detection* system.
 
 ## The problem they solve
 
-`renv` freezes the package versions you declare. But packages change hands,
-maintainers push silent fixes, platform-level libraries (BLAS, LAPACK) get
-updated by system administrators, and R itself changes RNG defaults between
-minor versions. Any of these can alter your numerical results without
-producing an error.
+Packages change hands. Maintainers push silent fixes. Platform-level libraries
+(BLAS, LAPACK) get updated by system administrators. R itself changes RNG
+defaults between minor versions. Any of these can alter your numerical results
+without producing an error.
 
 `certify()` and `check_drift()` detect this. The idea is simple:
 
@@ -48,16 +47,11 @@ model <- lm(mpg ~ wt + cyl, data = mtcars)
 
 certify(
   outputs = list(
-    # Model parameters
     coefs       = coef(model),
     r_squared   = summary(model)$r.squared,
     sigma       = sigma(model),
-
-    # Key data properties
     n_obs       = nrow(mtcars),
     n_complete  = sum(complete.cases(mtcars)),
-
-    # A summary table
     group_means = aggregate(mpg ~ cyl, data = mtcars, FUN = mean)
   ),
   tag    = "baseline-v1",
@@ -65,10 +59,6 @@ certify(
   file   = cert_file
 )
 ```
-
-Any R object that can be serialised works: numeric vectors, data frames,
-matrices, lists, character vectors, and scalars. The hash is computed with
-SHA-256 via the `digest` package if available, or a base-R fallback otherwise.
 
 ### Choosing what to certify
 
@@ -83,11 +73,9 @@ such as `proc.time()` outputs or `Sys.time()` values.
 
 ### Tags and the certification store
 
-Every certification requires a `tag` — a human-readable label that identifies
-the analysis milestone:
+Every certification requires a `tag` — a human-readable label:
 
 ```{r tags}
-# Certify at multiple milestones
 certify(
   outputs = list(coefs = coef(model)),
   tag     = "pre-peer-review",
@@ -101,55 +89,23 @@ certify(
 )
 ```
 
-All certifications for a project accumulate in a single `.reproducr.rds` file.
-Tags must be unique within a file — passing a duplicate tag overwrites the
-existing record with a warning:
+Passing a duplicate tag overwrites the existing record with a warning:
 
 ```{r duplicate-tag, warning = TRUE}
 certify(
   outputs = list(coefs = coef(model)),
-  tag     = "baseline-v1",  # already exists
+  tag     = "baseline-v1",
   file    = cert_file
 )
 ```
-
-### What gets stored alongside the hashes
-
-Each certification record stores:
-
-| Field | Description |
-|---|---|
-| `tag` | The label you supplied |
-| `timestamp` | ISO 8601 timestamp |
-| `script` | Path to the script (if supplied) |
-| `r_version` | R version at certification time |
-| `r_platform` | Platform string |
-| `os` | Operating system |
-| `hashes` | Named list of SHA-256 hashes |
-| `output_names` | Names of certified outputs |
-| `output_classes` | R class of each output |
-| `output_dims` | Dimensions/length of each output |
-
-This means that even if `check_drift()` reports a mismatch, the record tells
-you what *type* of object changed and approximately what size it was — which
-helps diagnose whether it was a data issue or a model issue.
 
 ---
 
 ## `list_certs()` — inspecting the store
 
-Before running `check_drift()`, you can inspect what certifications are stored:
-
 ```{r list-certs}
 list_certs(file = cert_file)
 ```
-
-The result is a plain data frame — one row per certification, in insertion
-order. This is useful for:
-
-- Confirming the right tag exists before passing it to `check_drift()`
-- Auditing the history of an analysis over time
-- Checking that CI has been certifying on each run
 
 ---
 
@@ -158,16 +114,15 @@ order. This is useful for:
 ### Basic usage
 
 ```{r drift-basic}
-# Re-run the same analysis
 model2 <- lm(mpg ~ wt + cyl, data = mtcars)
 
 result <- check_drift(
   outputs = list(
-    coefs      = coef(model2),
-    r_squared  = summary(model2)$r.squared,
-    sigma      = sigma(model2),
-    n_obs      = nrow(mtcars),
-    n_complete = sum(complete.cases(mtcars)),
+    coefs       = coef(model2),
+    r_squared   = summary(model2)$r.squared,
+    sigma       = sigma(model2),
+    n_obs       = nrow(mtcars),
+    n_complete  = sum(complete.cases(mtcars)),
     group_means = aggregate(mpg ~ cyl, data = mtcars, FUN = mean)
   ),
   against = "baseline-v1",
@@ -177,10 +132,7 @@ result <- check_drift(
 
 ### The four statuses
 
-Every output in the comparison gets one of four statuses:
-
 ```{r statuses}
-# Demonstrate all four by constructing an artificial scenario
 certify(
   outputs = list(
     stays_same  = 42L,
@@ -194,9 +146,8 @@ certify(
 demo_result <- check_drift(
   outputs = list(
     stays_same  = 42L,
-    will_change = coef(lm(mpg ~ hp, data = mtcars)),  # different model
+    will_change = coef(lm(mpg ~ hp, data = mtcars)),
     brand_new   = "this output is new"
-    # will_vanish is not supplied
   ),
   against = "four-statuses",
   file    = cert_file
@@ -212,30 +163,17 @@ print(demo_result)
 | `missing` | Present in baseline, not supplied to `check_drift()` |
 | `new` | Supplied to `check_drift()`, not in baseline |
 
-`"missing"` and `"new"` are not errors by themselves — you may have
-intentionally added or removed outputs between milestones. But they are worth
-reviewing, especially `"missing"`, which could indicate an output was dropped
-by accident.
-
-### Using `"latest"` to always compare against the most recent certification
+### Using `"latest"`
 
 ```{r latest}
 certify(outputs = list(x = 1L), tag = "run-1", file = cert_file)
 certify(outputs = list(x = 1L), tag = "run-2", file = cert_file)
 certify(outputs = list(x = 1L), tag = "run-3", file = cert_file)
 
-# Compares against "run-3" automatically
 check_drift(outputs = list(x = 1L), against = "latest", file = cert_file)
 ```
 
-This is the pattern to use in CI: always certify after a successful run, then
-on the next run compare against `"latest"`. Any drift between consecutive runs
-is caught immediately.
-
-### Working with the drift report
-
-The return value is a `data.frame` with columns `output`, `status`,
-`max_delta`, and `note`. Use it programmatically to make CI fail on drift:
+### Using drift results programmatically
 
 ```{r drift-programmatic, eval = FALSE}
 result <- check_drift(outputs = current_outputs, against = "latest")
@@ -253,16 +191,11 @@ if (n_drifted > 0L) {
 
 ---
 
-## Recommended workflow across a project lifecycle
+## Recommended workflow
 
-### Initial analysis
+### At submission
 
 ```r
-# Run analysis
-model <- lm(...)
-results <- compute_results(...)
-
-# Certify at submission
 certify(
   outputs = list(
     primary_coef = coef(model)[2],
@@ -278,9 +211,6 @@ certify(
 ### After reviewer comments
 
 ```r
-# Re-run with minor changes
-# ...
-
 check_drift(
   outputs = list(
     primary_coef = coef(model)[2],
@@ -290,55 +220,20 @@ check_drift(
   ),
   against = "submitted-2026-01-15"
 )
-# If all "ok" — results are numerically identical to submission
-# If "drifted" — investigate before resubmitting
-```
-
-### In a CI pipeline (GitHub Actions)
-
-```yaml
-- name: Certify and check drift
-  run: |
-    Rscript -e "
-      source('main_analysis.R')
-      library(reproducr)
-
-      # On first run, certify
-      if (!file.exists('.reproducr.rds')) {
-        certify(outputs = OUTPUTS, tag = 'ci-initial')
-      }
-
-      # On every subsequent run, check
-      result <- check_drift(outputs = OUTPUTS, against = 'latest')
-      certify(outputs = OUTPUTS, tag = paste0('ci-', Sys.Date()))
-
-      if (any(result\$status == 'drifted')) stop('Drift detected!')
-    "
 ```
 
 ---
 
-## Version control considerations
+## Version control
 
-Commit `.reproducr.rds` to your Git repository. This gives you:
+Commit `.reproducr.rds` to your Git repository. This gives you a permanent,
+auditable history of what every run produced, and lets you compare against any
+past milestone.
 
-- A permanent, auditable history of what every run produced
-- The ability to `check_drift()` against any past milestone, not just the
-  most recent one
-- A single file reviewers can inspect to verify reproducibility claims
-
-Add `.reproducr.rds` to your `.gitattributes` as a binary file to prevent
-noisy diffs:
+Add to `.gitattributes` to prevent noisy diffs:
 
 ```
 .reproducr.rds binary
-```
-
-And add a note to your `.Rbuildignore` so it does not end up in a package
-tarball if your analysis is inside a package directory:
-
-```
-^\.reproducr\.rds$
 ```
 
 ```{r cleanup, include = FALSE}

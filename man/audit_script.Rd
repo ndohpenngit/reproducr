@@ -2,9 +2,15 @@
 % Please edit documentation in R/audit_script.R
 \name{audit_script}
 \alias{audit_script}
+\alias{print.audit_report}
+\alias{summary.audit_report}
 \title{Audit an R script for reproducibility risks}
 \usage{
 audit_script(path = ".", renv = TRUE, verbose = TRUE)
+
+\method{print}{audit_report}(x, ...)
+
+\method{summary}{audit_report}(object, ...)
 }
 \arguments{
 \item{path}{\code{character(1)}. Path to a \code{.R}, \code{.Rmd}, or \code{.qmd} file \strong{or}
@@ -12,10 +18,10 @@ a directory. When a directory is supplied, all R-ish source files are
 scanned recursively, excluding \verb{renv/} and \verb{packrat/} subdirectories.
 Defaults to \code{"."} (the current working directory).}
 
-\item{renv}{\code{logical(1)}. If \code{TRUE} \emph{and} an \code{renv.lock} file exists in the
+\item{renv}{\code{logical(1)}. If \code{TRUE} and a \code{renv.lock} file exists in the
 current working directory, package versions are read from the lockfile
-rather than the currently installed library. This gives more stable results
-in CI environments. Default \code{TRUE}.}
+rather than the currently installed library. Useful for stable version
+reporting in CI environments. Default \code{TRUE}.}
 
 \item{verbose}{\code{logical(1)}. Whether to print progress messages.
 Default \code{TRUE}.}
@@ -26,16 +32,16 @@ An S3 object of class \code{"audit_report"}, a list containing:
 \item{\code{calls}}{A \code{data.frame} with one row per detected \code{pkg::fn} call,
 columns \code{file}, \code{line}, \code{pkg}, \code{fn}, \code{pkg_version}.}
 \item{\code{env}}{A list with R version, platform, OS, locale, and timezone.}
-\item{\code{renv_used}}{\code{logical} — were versions sourced from \code{renv.lock}?}
+\item{\code{renv_used}}{\code{logical} — were versions sourced from a lockfile?}
 \item{\code{timestamp}}{\code{POSIXct} timestamp of when the audit was run.}
 \item{\code{paths}}{Character vector of files that were scanned.}
 }
 }
 \description{
 Parses one or more R source files and extracts every qualified
-\verb{package::function} call, resolving the installed (or \code{renv}-locked) version
-of each package. The resulting \code{audit_report} object is the entry point for
-the rest of the \code{reproducr} workflow.
+\verb{package::function} call, resolving the installed version of each package.
+The resulting \code{audit_report} object is the entry point for the rest of the
+\code{reproducr} workflow.
 }
 \section{Detection approach}{
 

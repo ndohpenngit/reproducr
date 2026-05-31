@@ -2,3 +2,8 @@ url: https://ndohpenngit.github.io/reproducr/
 template:
   bootstrap: 5
 
+navbar:
+  logo:
+    image: logo.png
+    href: index.html
+

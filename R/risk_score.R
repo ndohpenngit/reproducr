@@ -12,7 +12,7 @@
 #' - **`"locale_check"`** — flags functions whose output is locale-sensitive
 #'   (`sort()`, `format()`, `tolower()`, etc.).
 #'
-#' @param audit An `audit_report` object returned by [audit_script()].
+#' @param audit An `audit_report` object returned by [reproducr::audit_script()].
 #' @param methods `character`. Which checks to run. Any combination of
 #'   `"changelog"`, `"seed_check"`, `"locale_check"`. Default: all three.
 #' @param min_risk `character(1)`. Minimum risk level to include in the output.
@@ -24,7 +24,7 @@
 #'     \item{`file`}{Source file path.}
 #'     \item{`line`}{Line number of the call.}
 #'     \item{`call`}{The `pkg::fn` string.}
-#'     \item{`pkg_version`}{Installed or renv-locked version.}
+#'     \item{`pkg_version`}{Installed or lockfile-resolved version.}
 #'     \item{`risk`}{`"high"`, `"medium"`, or `"low"`.}
 #'     \item{`check`}{Which check flagged it: `"changelog"`, `"seed_check"`,
 #'       or `"locale_check"`.}
@@ -41,7 +41,7 @@
 #' `from_ver` *and* *at most* `to_ver`. This means the risk is scoped to
 #' versions where the breaking change is known to apply.
 #'
-#' @seealso [audit_script()] to generate the input; [repro_report()] to render
+#' @seealso [reproducr::audit_script()] to generate the input; [reproducr::repro_report()] to render
 #'   the results; the `reproducr` GitHub repository to contribute new database
 #'   entries.
 #'
@@ -63,11 +63,6 @@
 #' # Only the changelog check
 #' risk_score(report, methods = "changelog")
 #'
-#' @rdname risk_score
-#' @param i Row index.
-#' @param j Column index. When columns are subsetted and required columns are
-#'   removed, the `"risk_report"` class is stripped so that
-#'   `print.risk_report()` is not called on an incomplete object.
 #' @export
 risk_score <- function(audit,
                        methods  = c("changelog", "seed_check", "locale_check"),
@@ -234,8 +229,6 @@ risk_score <- function(audit,
 # ---- S3 methods -------------------------------------------------------------
 
 #' @rdname risk_score
-#' @param x A `risk_report` object (for `print`, `as.data.frame`, and `[`).
-#' @param ... Additional arguments (currently unused).
 #' @export
 print.risk_report <- function(x, ...) {
   if (nrow(x) == 0L) {
@@ -284,10 +277,15 @@ as.data.frame.risk_report <- function(x, ...) {
 }
 
 #' @rdname risk_score
-#' @param x A `risk_report` object.
+#' @param i Row index.
+#' @param j Column index. When columns are subsetted and required columns are
+#'   removed, the `"risk_report"` class is stripped so that
+#'   `print.risk_report()` is not called on an incomplete object.
 #' @export
 `[.risk_report` <- function(x, i, j, ...) {
   out <- NextMethod()
+  # If column subsetting removed required columns, return a plain data frame
+  # so print.risk_report is not called on an incomplete object
   required <- c("file", "line", "call", "risk", "check", "description", "reference")
   if (!is.data.frame(out) || !all(required %in% names(out))) {
     class(out) <- setdiff(class(out), "risk_report")
