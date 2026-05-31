@@ -1,6 +1,6 @@
 # reproducr <img src="man/figures/logo.svg" align="right" height="120" alt="" />
 
-<!-- reproducr-badge -->![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)<!-- /reproducr-badge -->
+<!-- reproducr-badge -->![reproducibility](https://img.shields.io/badge/reproducibility-at%20risk-red)<!-- /reproducr-badge -->
 ![CRAN status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)
 ![R version](https://img.shields.io/badge/R-%3E%3D%204.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
