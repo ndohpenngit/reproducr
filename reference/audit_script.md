@@ -1,0 +1,117 @@
+# Audit an R script for reproducibility risks
+
+Parses one or more R source files and extracts every qualified
+`package::function` call, resolving the installed (or `renv`-locked)
+version of each package. The resulting `audit_report` object is the
+entry point for the rest of the `reproducr` workflow.
+
+## Usage
+
+``` r
+audit_script(path = ".", renv = TRUE, verbose = TRUE)
+```
+
+## Arguments
+
+- path:
+
+  `character(1)`. Path to a `.R`, `.Rmd`, or `.qmd` file **or** a
+  directory. When a directory is supplied, all R-ish source files are
+  scanned recursively, excluding `renv/` and `packrat/` subdirectories.
+  Defaults to `"."` (the current working directory).
+
+- renv:
+
+  `logical(1)`. If `TRUE` *and* an `renv.lock` file exists in the
+  current working directory, package versions are read from the lockfile
+  rather than the currently installed library. This gives more stable
+  results in CI environments. Default `TRUE`.
+
+- verbose:
+
+  `logical(1)`. Whether to print progress messages. Default `TRUE`.
+
+## Value
+
+An S3 object of class `"audit_report"`, a list containing:
+
+- `calls`:
+
+  A `data.frame` with one row per detected `pkg::fn` call, columns
+  `file`, `line`, `pkg`, `fn`, `pkg_version`.
+
+- `env`:
+
+  A list with R version, platform, OS, locale, and timezone.
+
+- `renv_used`:
+
+  `logical` — were versions sourced from `renv.lock`?
+
+- `timestamp`:
+
+  `POSIXct` timestamp of when the audit was run.
+
+- `paths`:
+
+  Character vector of files that were scanned.
+
+## Detection approach
+
+`audit_script()` uses regular-expression matching on source text to
+extract qualified calls of the form `pkg::fn` or `pkg:::fn`. It
+intentionally skips comment lines (lines beginning with `#`, after
+trimming whitespace). For more robust analysis, tools that operate on
+the parse tree (e.g. `lintr`) should be used alongside `reproducr`.
+
+## What counts as a qualifying call?
+
+Only *qualified* calls — those using `::` or `:::` — are detected.
+Unqualified calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not
+detected because the package cannot be determined unambiguously from
+source text alone. This is by design: qualifying calls is also a
+reproducibility best practice.
+
+## See also
+
+[`risk_score()`](https://ndohpenngit.github.io/reproducr/reference/risk_score.md)
+to check detected calls against the breaking-changes database;
+[`repro_report()`](https://ndohpenngit.github.io/reproducr/reference/repro_report.md)
+to render the full audit;
+[`certify()`](https://ndohpenngit.github.io/reproducr/reference/certify.md)
+to lock a set of outputs as a baseline.
+
+## Examples
+
+``` r
+# Write a temporary script to audit
+script <- tempfile(fileext = ".R")
+writeLines(c(
+  "set.seed(42)",
+  "x <- dplyr::filter(mtcars, cyl == 4)",
+  "y <- dplyr::summarise(x, mean_mpg = mean(mpg))",
+  "z <- stats::rnorm(nrow(y))"
+), script)
+
+report <- audit_script(script, renv = FALSE, verbose = FALSE)
+print(report)
+#> 
+#> -- reproducr audit report [2026-05-31 00:35] --
+#> 
+#>   Files scanned:     1
+#>   Packages found:    2
+#>   Calls detected:    3
+#>   R version:         4.6.0
+#>   Platform:          Linux 6.17.0-1015-azure
+#>   Versions from:     installed library
+#> 
+#>   Next step: risks <- risk_score(report)
+#> 
+
+# See the detected calls as a data frame
+report$calls
+#>                                 file line   pkg        fn pkg_version
+#> 1 /tmp/RtmpbfkpED/file18cc38cc5038.R    2 dplyr    filter        <NA>
+#> 2 /tmp/RtmpbfkpED/file18cc38cc5038.R    3 dplyr summarise        <NA>
+#> 3 /tmp/RtmpbfkpED/file18cc38cc5038.R    4 stats     rnorm       4.6.0
+```

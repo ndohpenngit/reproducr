@@ -1,0 +1,13 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  audit-and-risk: audit-and-risk.html
+  certify-and-drift: certify-and-drift.html
+  contributing-to-the-database: contributing-to-the-database.html
+  getting-started: getting-started.html
+  reports-and-badges: reports-and-badges.html
+last_built: 2026-05-31T00:35Z
+urls:
+  reference: https://ndohpenngit.github.io/reproducr/reference
+  article: https://ndohpenngit.github.io/reproducr/articles
