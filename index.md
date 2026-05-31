@@ -1,8 +1,7 @@
 # reproducr ![](reference/figures/logo.svg)
 
 ![reproducibility](https://img.shields.io/badge/reproducibility-at%20risk-red)![CRAN
-status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)![R
-version](https://img.shields.io/badge/R-%3E%3D%204.0.0-blue)![License](https://img.shields.io/badge/license-MIT-green)![Tests](https://img.shields.io/badge/tests-63%20passing-brightgreen)
+status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)![Tests](https://img.shields.io/badge/tests-63%20passing-brightgreen)
 
 > **Computational reproducibility auditing for R — the layer `renv`
 > doesn’t cover.**
