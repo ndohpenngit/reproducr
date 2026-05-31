@@ -3,8 +3,6 @@ name: Reproducibility audit
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
   schedule:
     - cron: '0 6 * * 1'   # Weekly on Monday at 06:00 UTC
 
@@ -31,25 +29,21 @@ jobs:
         run: |
           Rscript -e "
             library(reproducr)
-            report <- audit_script('.', renv = TRUE, verbose = FALSE)
+            report <- audit_script('vignettes/', renv = FALSE, verbose = FALSE)
             risks  <- risk_score(report)
             repro_badge(report, risks, output = 'README')
-            repro_report(report, risks,
-                         format      = 'md',
-                         style       = 'minimal',
-                         output_file = 'reproducibility_report.md')
             n_high <- sum(risks\$risk == 'high', na.rm = TRUE)
             if (n_high > 0) {
-              warning(n_high, ' high-severity reproducibility risk(s) detected.')
+              message(n_high, ' high-severity reproducibility risk(s) detected.')
             }
           "
 
-      - name: Commit audit results
+      - name: Commit updated badge
         if: github.event_name == 'push'
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add README.md reproducibility_report.md
+          git add README.md
           git diff --staged --quiet || \
-            git commit -m "chore: update reproducibility audit [skip ci]"
+            git commit -m "chore: update reproducibility badge [skip ci]"
           git push

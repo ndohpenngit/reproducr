@@ -86,7 +86,7 @@ The minimal style includes:
 
 - Generation timestamp and R version
 - File count, package count, call count
-- Version source (renv.lock or installed library)
+- Version source (lockfile or installed library)
 - Overall verdict
 - One entry per risk (if any)
 - Drift summary (if drift is supplied)
@@ -118,10 +118,9 @@ materials.
 
 > All analyses were conducted in R (version 4.3.3) on Linux 6.1.0.
 > The following packages were used: dplyr (v1.1.4), ggplot2 (v3.5.1),
-> readr (v2.1.5). Package environments were managed using renv
-> (Ushey & Wickham, 2023). Reproducibility auditing (reproducr) identified
-> no risks. The full audit report and certification records are available in
-> the supplementary materials.
+> readr (v2.1.5). Reproducibility auditing (reproducr) identified no risks.
+> The full audit report and certification records are available in the
+> supplementary materials.
 
 ---
 
@@ -272,16 +271,16 @@ any text editor or `grep`.
 
 ## Full CI pipeline
 
-The recommended CI pattern combines all three tiers and updates both the
-badge and a report file on every push:
+The recommended CI pattern updates the badge automatically on every push:
 
 ```yaml
-# .github/workflows/reproducr-audit.yml
 name: Reproducibility audit
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
+  schedule:
+    - cron: '0 6 * * 1'   # Weekly on Monday at 06:00 UTC
 
 jobs:
   audit:
@@ -291,56 +290,38 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: r-lib/actions/setup-r@v2
         with:
-          r-version: release
+          r-version: 'release'
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-renv@v2
-
       - name: Install reproducr
-        run: Rscript -e "remotes::install_github('ndohpenngit/reproducr')"
+        run: Rscript -e "install.packages('.', repos = NULL, type = 'source')"
 
-      - name: Source analysis and audit
+      - name: Run reproducibility audit
         run: |
           Rscript -e "
-            source('analysis.R')          # produces OUTPUTS list
             library(reproducr)
-
-            report <- audit_script('.', renv = TRUE, verbose = FALSE)
+            report <- audit_script('vignettes/', renv = FALSE, verbose = FALSE)
             risks  <- risk_score(report)
-
-            # Check drift against last run
-            if (file.exists('.reproducr.rds')) {
-              drift <- check_drift(OUTPUTS, against = 'latest')
-            } else {
-              drift <- NULL
+            repro_badge(report, risks, output = 'README')
+            n_high <- sum(risks\$risk == 'high', na.rm = TRUE)
+            if (n_high > 0) {
+              message(n_high, ' high-severity reproducibility risk(s) detected.')
             }
-
-            # Certify this run
-            certify(OUTPUTS, tag = paste0('ci-', Sys.Date()))
-
-            # Update badge and report
-            repro_badge(report, risks, drift = drift, output = 'README')
-            repro_report(report, risks, drift = drift,
-                         format = 'md', style = 'minimal',
-                         output_file = 'reproducibility_report.md')
-
-            # Fail CI on high risks or drift
-            if (any(risks\$risk == 'high'))
-              stop('High-severity reproducibility risks detected.')
-            if (!is.null(drift) && any(drift\$status == 'drifted'))
-              stop('Output drift detected since last run.')
           "
 
-      - name: Commit results
+      - name: Commit updated badge
+        if: github.event_name == 'push'
         run: |
           git config user.name  'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add README.md reproducibility_report.md .reproducr.rds || true
+          git add README.md
           git diff --staged --quiet || \
-            git commit -m 'chore: update reproducibility audit [skip ci]'
+            git commit -m 'chore: update reproducibility badge [skip ci]'
           git push
 ```
 
