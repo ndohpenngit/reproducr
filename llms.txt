@@ -2,7 +2,7 @@
 
 ![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)![CRAN
 status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)![R CMD
-check](https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yaml/badge.svg)
+check](https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yml/badge.svg)
 
 > **Know your R analysis will produce the same results tomorrow as it
 > does today.**
