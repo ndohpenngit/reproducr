@@ -1,4 +1,4 @@
-# reproducr ![](reference/figures/logo.svg)
+# reproducr
 
 ![reproducibility](https://img.shields.io/badge/reproducibility-at%20risk-red)
 

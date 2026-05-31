@@ -18,6 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Computational Reproducibility Auditing for R Projects">
 <meta name="description" content="Audits R scripts for reproducibility risk beyond what renv provides. Scans scripts for qualified package::function calls, checks them against a curated database of known breaking changes across popular CRAN packages, flags stochastic calls lacking set.seed(), and detects locale-sensitive operations. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows. Designed to complement renv, not replace it: renv locks your packages; reproducr tells you whether locking them is actually enough.">
 <meta property="og:description" content="Audits R scripts for reproducibility risk beyond what renv provides. Scans scripts for qualified package::function calls, checks them against a curated database of known breaking changes across popular CRAN packages, flags stochastic calls lacking set.seed(), and detects locale-sensitive operations. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows. Designed to complement renv, not replace it: renv locks your packages; reproducr tells you whether locking them is actually enough.">
+<meta property="og:image" content="https://ndohpenngit.github.io/reproducr/logo.svg">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -63,8 +64,10 @@
 <div class="row">
   <main id="main" class="col-md-9"><p><img src="https://img.shields.io/badge/reproducibility-at%20risk-red" alt="reproducibility"><!-- /reproducr-badge --></p>
 <div class="section level1">
-<div class="page-header"><h1 id="reproducr-">reproducr <img src="reference/figures/logo.svg" align="right" height="120" alt=""><a class="anchor" aria-label="anchor" href="#reproducr-"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.svg" class="logo" alt=""><h1 id="reproducr-">reproducr <a class="anchor" aria-label="anchor" href="#reproducr-"></a>
+</h1>
+</div>
 <p><img src="https://img.shields.io/badge/reproducibility-at%20risk-red" alt="reproducibility"><img src="https://img.shields.io/badge/CRAN-not%20yet-lightgrey" alt="CRAN status"><img src="https://img.shields.io/badge/tests-63%20passing-brightgreen" alt="Tests"></p>
 <blockquote>
 <p><strong>Computational reproducibility auditing for R — the layer <code>renv</code> doesn’t cover.</strong></p>

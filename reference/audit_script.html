@@ -5,7 +5,7 @@ of each package. The resulting audit_report object is the entry point for
 the rest of the reproducr workflow."><meta property="og:description" content="Parses one or more R source files and extracts every qualified
 package::function call, resolving the installed (or renv-locked) version
 of each package. The resulting audit_report object is the entry point for
-the rest of the reproducr workflow."></head><body>
+the rest of the reproducr workflow."><meta property="og:image" content="https://ndohpenngit.github.io/reproducr/logo.svg"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -41,8 +41,7 @@ the rest of the reproducr workflow."></head><body>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Audit an R script for reproducibility risks</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Audit an R script for reproducibility risks</h1>
       <small class="dont-index">Source: <a href="https://github.com/ndohpenngit/reproducr/blob/main/R/audit_script.R" class="external-link"><code>R/audit_script.R</code></a></small>
       <div class="d-none name"><code>audit_script.Rd</code></div>
     </div>
@@ -142,7 +141,7 @@ a set of outputs as a baseline.</p></div>
 <span class="r-in"><span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu">audit_script</span><span class="op">(</span><span class="va">script</span>, renv <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">report</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -- reproducr audit report [2026-05-31 11:51] --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -- reproducr audit report [2026-05-31 12:00] --</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Files scanned:     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Packages found:    2</span>
@@ -156,10 +155,10 @@ a set of outputs as a baseline.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># See the detected calls as a data frame</span></span></span>
 <span class="r-in"><span><span class="va">report</span><span class="op">$</span><span class="va">calls</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                file line   pkg        fn pkg_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /tmp/Rtmp8aWaQd/file1975775e739.R    2 dplyr    filter        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /tmp/Rtmp8aWaQd/file1975775e739.R    3 dplyr summarise        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /tmp/Rtmp8aWaQd/file1975775e739.R    4 stats     rnorm       4.6.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                 file line   pkg        fn pkg_version</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /tmp/RtmpofRmdP/file196b249905d8.R    2 dplyr    filter        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /tmp/RtmpofRmdP/file196b249905d8.R    3 dplyr summarise        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /tmp/RtmpofRmdP/file196b249905d8.R    4 stats     rnorm       4.6.0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

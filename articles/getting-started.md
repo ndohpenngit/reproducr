@@ -43,7 +43,7 @@ writeLines(c(
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 #> 
-#> -- reproducr audit report [2026-05-31 11:51] --
+#> -- reproducr audit report [2026-05-31 12:00] --
 #> 
 #>   Files scanned:     1
 #>   Packages found:    3
@@ -61,11 +61,11 @@ The `audit_report` object holds the detected calls as a data frame:
 
 report$calls
 #>                                 file line   pkg        fn pkg_version
-#> 1 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    3 dplyr    filter        <NA>
-#> 2 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    4 dplyr summarise        <NA>
-#> 3 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    4 dplyr         n        <NA>
-#> 4 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    6 stats     rnorm       4.6.0
-#> 5 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    7  base      sort       4.6.0
+#> 1 /tmp/RtmpLiCMAQ/file1b142ffae028.R    3 dplyr    filter        <NA>
+#> 2 /tmp/RtmpLiCMAQ/file1b142ffae028.R    4 dplyr summarise        <NA>
+#> 3 /tmp/RtmpLiCMAQ/file1b142ffae028.R    4 dplyr         n        <NA>
+#> 4 /tmp/RtmpLiCMAQ/file1b142ffae028.R    6 stats     rnorm       4.6.0
+#> 5 /tmp/RtmpLiCMAQ/file1b142ffae028.R    7  base      sort       4.6.0
 ```
 
 ### Scoring for risk
@@ -85,13 +85,13 @@ print(risks)
 #>   MEDIUM:    0
 #>   LOW:       1
 #> 
-#> [HIGH]    stats::rnorm  (line 6 in file1b1c72cf3e66.R)
+#> [HIGH]    stats::rnorm  (line 6 in file1b142ffae028.R)
 #>          Check    : changelog
 #>          Details  : In R 3.6.0, RNG defaults changed. Stochastic output from rnorm()
 #>                     with the same seed will differ between R <= 3.5 and R >= 3.6.
 #>          Reference: https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html
 #> 
-#> [LOW]     base::sort  (line 7 in file1b1c72cf3e66.R)
+#> [LOW]     base::sort  (line 7 in file1b142ffae028.R)
 #>          Check    : locale_check
 #>          Details  : sort() output is locale-sensitive. Current locale: C.UTF-8.
 #>                     Results may differ on machines with different LC_COLLATE or
@@ -123,8 +123,8 @@ with standard R tools:
 # All risks as a regular data frame
 as.data.frame(risks)
 #>                                 file line         call pkg_version risk
-#> 1 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    6 stats::rnorm       4.6.0 high
-#> 2 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R    7   base::sort       4.6.0  low
+#> 1 /tmp/RtmpLiCMAQ/file1b142ffae028.R    6 stats::rnorm       4.6.0 high
+#> 2 /tmp/RtmpLiCMAQ/file1b142ffae028.R    7   base::sort       4.6.0  low
 #>          check
 #> 1    changelog
 #> 2 locale_check
@@ -171,9 +171,9 @@ Inspect stored certifications with
 
 list_certs(file = cert_file)
 #>           tag                timestamp r_version                      os
-#> 1 baseline-v1 2026-05-31T11:51:57+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1 baseline-v1 2026-05-31T12:00:45+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs                             script
-#> 1         3 /tmp/Rtmp29ZWD2/file1b1c72cf3e66.R
+#> 1         3 /tmp/RtmpLiCMAQ/file1b142ffae028.R
 ```
 
 ### Checking for drift
@@ -281,7 +281,7 @@ repro_report(report, risks,
              format      = "html",
              style       = "pharma",
              output_file = html_file)
-#> reproducr: report written to '/tmp/Rtmp29ZWD2/file1b1c7073c28d.html'
+#> reproducr: report written to '/tmp/RtmpLiCMAQ/file1b1468a35907.html'
 ```
 
 ### Generating badges
