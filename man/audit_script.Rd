@@ -25,6 +25,12 @@ reporting in CI environments. Default \code{TRUE}.}
 
 \item{verbose}{\code{logical(1)}. Whether to print progress messages.
 Default \code{TRUE}.}
+
+\item{x}{An \code{audit_report} object (for \code{print}).}
+
+\item{...}{Additional arguments (currently unused).}
+
+\item{object}{An \code{audit_report} object (for \code{summary}).}
 }
 \value{
 An S3 object of class \code{"audit_report"}, a list containing:

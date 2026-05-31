@@ -17,7 +17,7 @@ repro_report(
 \item{audit}{An \code{audit_report} object from \code{\link[=audit_script]{audit_script()}}. Required.}
 
 \item{risks}{A \code{risk_report} data frame from \code{\link[=risk_score]{risk_score()}}. Optional but
-strongly recommended — without it, the report cannot assess reproducibility.}
+strongly recommended â without it, the report cannot assess reproducibility.}
 
 \item{drift}{A \code{drift_report} data frame from \code{\link[=check_drift]{check_drift()}}. Optional.}
 
@@ -40,11 +40,11 @@ Renders a reproducibility audit report from an \code{\link[=audit_script]{audit_
 and optionally a \code{\link[=risk_score]{risk_score()}} result and \code{\link[=check_drift]{check_drift()}} result. Three
 style presets are available:
 \itemize{
-\item \strong{\code{"minimal"}} — compact summary suitable for console review or internal
+\item \strong{\code{"minimal"}} â compact summary suitable for console review or internal
 project documentation.
-\item \strong{\code{"academic"}} — generates a ready-to-paste methods paragraph for journal
+\item \strong{\code{"academic"}} â generates a ready-to-paste methods paragraph for journal
 submissions, listing all packages with versions and summarising risk findings.
-\item \strong{\code{"pharma"}} — structured QC document with a risk register and sign-off
+\item \strong{\code{"pharma"}} â structured QC document with a risk register and sign-off
 fields, suitable for pharmaceutical or regulated analytical workflows.
 }
 }

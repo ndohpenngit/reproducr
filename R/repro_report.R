@@ -5,16 +5,16 @@
 #' and optionally a [reproducr::risk_score()] result and [reproducr::check_drift()] result. Three
 #' style presets are available:
 #'
-#' - **`"minimal"`** — compact summary suitable for console review or internal
+#' - **`"minimal"`** â compact summary suitable for console review or internal
 #'   project documentation.
-#' - **`"academic"`** — generates a ready-to-paste methods paragraph for journal
+#' - **`"academic"`** â generates a ready-to-paste methods paragraph for journal
 #'   submissions, listing all packages with versions and summarising risk findings.
-#' - **`"pharma"`** — structured QC document with a risk register and sign-off
+#' - **`"pharma"`** â structured QC document with a risk register and sign-off
 #'   fields, suitable for pharmaceutical or regulated analytical workflows.
 #'
 #' @param audit An `audit_report` object from [reproducr::audit_script()]. Required.
 #' @param risks A `risk_report` data frame from [reproducr::risk_score()]. Optional but
-#'   strongly recommended — without it, the report cannot assess reproducibility.
+#'   strongly recommended â without it, the report cannot assess reproducibility.
 #' @param drift A `drift_report` data frame from [reproducr::check_drift()]. Optional.
 #' @param format `character(1)`. Output format: `"text"` (console),
 #'   `"md"` (Markdown file), or `"html"` (HTML file). Default `"text"`.
@@ -71,7 +71,7 @@ repro_report <- function(audit,
 
   if (format == "html") {
     content <- .md_to_html(md_content,
-                           title = sprintf("reproducr Report \2014 %s", style))
+                           title = sprintf("reproducr Report - %s", style))
   } else {
     content <- md_content
   }
@@ -102,10 +102,10 @@ repro_report <- function(audit,
 #' Produces a [shields.io](https://shields.io) Markdown badge reflecting the
 #' current reproducibility status of a project. The badge is colour-coded:
 #'
-#' - **Green** (`reproducible`) — no risks detected.
-#' - **Yellow** (`caution`) — medium-severity risks only.
-#' - **Red** (`at risk`) — one or more high-severity risks or drifted outputs.
-#' - **Grey** (`unknown`) — no risk information supplied.
+#' - **Green** (`reproducible`) â no risks detected.
+#' - **Yellow** (`caution`) â medium-severity risks only.
+#' - **Red** (`at risk`) â one or more high-severity risks or drifted outputs.
+#' - **Grey** (`unknown`) â no risk information supplied.
 #'
 #' Can be inserted automatically into a `README.md` (e.g. from a GitHub
 #' Actions workflow).
@@ -194,7 +194,7 @@ repro_badge <- function(audit,
   if (is.null(risks) && is.null(drift)) {
     return(list(
       level   = "unknown",
-      summary = "Reproducibility status unknown \2014 run `risk_score()` to assess.",
+      summary = "Reproducibility status unknown - run `risk_score()` to assess.",
       emoji   = "?"
     ))
   }
@@ -270,7 +270,7 @@ repro_badge <- function(audit,
       lines <- c(lines,
         sprintf("- **%s** `%s`%s",
                 toupper(d$status), d$output,
-                if (nchar(trimws(d$note)) > 0L) paste0(" \2014 ", d$note) else "")
+                if (nchar(trimws(d$note)) > 0L) paste0(" - ", d$note) else "")
       )
     }
     lines <- c(lines, "")

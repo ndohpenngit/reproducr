@@ -229,6 +229,8 @@ risk_score <- function(audit,
 # ---- S3 methods -------------------------------------------------------------
 
 #' @rdname risk_score
+#' @param x A `risk_report` object (for `print`, `as.data.frame`, and `[`).
+#' @param ... Additional arguments (currently unused).
 #' @export
 print.risk_report <- function(x, ...) {
   if (nrow(x) == 0L) {

@@ -32,10 +32,10 @@ Invisibly returns the badge Markdown string.
 Produces a \href{https://shields.io}{shields.io} Markdown badge reflecting the
 current reproducibility status of a project. The badge is colour-coded:
 \itemize{
-\item \strong{Green} (\code{reproducible}) — no risks detected.
-\item \strong{Yellow} (\code{caution}) — medium-severity risks only.
-\item \strong{Red} (\verb{at risk}) — one or more high-severity risks or drifted outputs.
-\item \strong{Grey} (\code{unknown}) — no risk information supplied.
+\item \strong{Green} (\code{reproducible}) â no risks detected.
+\item \strong{Yellow} (\code{caution}) â medium-severity risks only.
+\item \strong{Red} (\verb{at risk}) â one or more high-severity risks or drifted outputs.
+\item \strong{Grey} (\code{unknown}) â no risk information supplied.
 }
 
 Can be inserted automatically into a \code{README.md} (e.g. from a GitHub

@@ -121,6 +121,8 @@ audit_script <- function(path = ".", renv = TRUE, verbose = TRUE) {
 # ---- S3 methods -------------------------------------------------------------
 
 #' @rdname audit_script
+#' @param x An `audit_report` object (for `print`).
+#' @param ... Additional arguments (currently unused).
 #' @export
 print.audit_report <- function(x, ...) {
   n_files <- length(x$paths)
@@ -148,6 +150,7 @@ print.audit_report <- function(x, ...) {
 }
 
 #' @rdname audit_script
+#' @param object An `audit_report` object (for `summary`).
 #' @export
 summary.audit_report <- function(object, ...) {
   calls_per_pkg <- if (nrow(object$calls) > 0L) {

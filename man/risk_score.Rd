@@ -28,6 +28,10 @@ risk_score(
 \item{min_risk}{\code{character(1)}. Minimum risk level to include in the output.
 One of \code{"low"} (show all), \code{"medium"}, or \code{"high"}. Default \code{"low"}.}
 
+\item{x}{A \code{risk_report} object (for \code{print}, \code{as.data.frame}, and \code{[}).}
+
+\item{...}{Additional arguments (currently unused).}
+
 \item{i}{Row index.}
 
 \item{j}{Column index. When columns are subsetted and required columns are

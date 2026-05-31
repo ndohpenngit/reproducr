@@ -72,6 +72,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{you@example.com} (\href{https://orcid.org/0000-0000-0000-0000}{ORCID})
+\strong{Maintainer}: Ndoh Penn \email{ndohpenn9@gmail.com} (\href{https://orcid.org/0009-0003-9054-465X}{ORCID})
 
 }
