@@ -30,5 +30,5 @@ Suggests:
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/ndohpenngit/reproducr
+URL: https://github.com/ndohpenngit/reproducr, https://ndohpenngit.github.io/reproducr/
 BugReports: https://github.com/ndohpenngit/reproducr/issues

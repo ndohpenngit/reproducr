@@ -6,3 +6,6 @@
 ^\.Rproj\.user$
 ^cran-comments\.md$
 ^\.reproducr\.rds$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
