@@ -10,12 +10,12 @@
 Source:
 [`DESCRIPTION`](https://github.com/ndohpenngit/reproducr/blob/main/DESCRIPTION)
 
-Penn N (2026). *reproducr: Computational Reproducibility Auditing for R
+Penn N (2026). *reproducr: Behavioural Reproducibility Auditing for R
 Projects*. R package version 0.1.0,
 <https://github.com/ndohpenngit/reproducr>.
 
     @Manual{,
-      title = {reproducr: Computational Reproducibility Auditing for R Projects},
+      title = {reproducr: Behavioural Reproducibility Auditing for R Projects},
       author = {Ndoh Penn},
       year = {2026},
       note = {R package version 0.1.0},

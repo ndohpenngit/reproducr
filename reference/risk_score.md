@@ -52,14 +52,6 @@ x[i, j, ...]
   `character(1)`. Minimum risk level to include in the output. One of
   `"low"` (show all), `"medium"`, or `"high"`. Default `"low"`.
 
-- x:
-
-  A `risk_report` object.
-
-- ...:
-
-  Additional arguments (currently unused).
-
 - i:
 
   Row index.
@@ -89,7 +81,7 @@ per flagged call. Columns:
 
 - `pkg_version`:
 
-  Installed or renv-locked version.
+  Installed or lockfile-resolved version.
 
 - `risk`:
 
@@ -147,20 +139,20 @@ print(risks)
 #>   MEDIUM:    1
 #>   LOW:       1
 #> 
-#> [HIGH]    stats::rnorm  (line 2 in file196b78c6d4e6.R)
+#> [HIGH]    stats::rnorm  (line 2 in file19459077e8c.R)
 #>          Check    : changelog
 #>          Details  : In R 3.6.0, RNG defaults changed. Stochastic output from rnorm()
 #>                     with the same seed will differ between R <= 3.5 and R >= 3.6.
 #>          Reference: https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html
 #> 
-#> [MEDIUM]  stats::rnorm  (line 2 in file196b78c6d4e6.R)
+#> [MEDIUM]  stats::rnorm  (line 2 in file19459077e8c.R)
 #>          Check    : seed_check
 #>          Details  : rnorm() is stochastic but no set.seed() was found in the 50 lines
 #>                     above this call (line 2). Output will differ across runs without
 #>                     a fixed seed.
 #>          Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Random.html
 #> 
-#> [LOW]     base::sort  (line 3 in file196b78c6d4e6.R)
+#> [LOW]     base::sort  (line 3 in file19459077e8c.R)
 #>          Check    : locale_check
 #>          Details  : sort() output is locale-sensitive. Current locale: C. Results may
 #>                     differ on machines with different LC_COLLATE or LC_TIME settings.
@@ -176,7 +168,7 @@ risk_score(report, min_risk = "high")
 #>   MEDIUM:    0
 #>   LOW:       0
 #> 
-#> [HIGH]    stats::rnorm  (line 2 in file196b78c6d4e6.R)
+#> [HIGH]    stats::rnorm  (line 2 in file19459077e8c.R)
 #>          Check    : changelog
 #>          Details  : In R 3.6.0, RNG defaults changed. Stochastic output from rnorm()
 #>                     with the same seed will differ between R <= 3.5 and R >= 3.6.
@@ -192,7 +184,7 @@ risk_score(report, methods = "changelog")
 #>   MEDIUM:    0
 #>   LOW:       0
 #> 
-#> [HIGH]    stats::rnorm  (line 2 in file196b78c6d4e6.R)
+#> [HIGH]    stats::rnorm  (line 2 in file19459077e8c.R)
 #>          Check    : changelog
 #>          Details  : In R 3.6.0, RNG defaults changed. Stochastic output from rnorm()
 #>                     with the same seed will differ between R <= 3.5 and R >= 3.6.

@@ -1,14 +1,20 @@
 # Audit an R script for reproducibility risks
 
 Parses one or more R source files and extracts every qualified
-`package::function` call, resolving the installed (or `renv`-locked)
-version of each package. The resulting `audit_report` object is the
-entry point for the rest of the `reproducr` workflow.
+`package::function` call, resolving the installed version of each
+package. The resulting `audit_report` object is the entry point for the
+rest of the `reproducr` workflow.
 
 ## Usage
 
 ``` r
 audit_script(path = ".", renv = TRUE, verbose = TRUE)
+
+# S3 method for class 'audit_report'
+print(x, ...)
+
+# S3 method for class 'audit_report'
+summary(object, ...)
 ```
 
 ## Arguments
@@ -22,10 +28,10 @@ audit_script(path = ".", renv = TRUE, verbose = TRUE)
 
 - renv:
 
-  `logical(1)`. If `TRUE` *and* an `renv.lock` file exists in the
-  current working directory, package versions are read from the lockfile
-  rather than the currently installed library. This gives more stable
-  results in CI environments. Default `TRUE`.
+  `logical(1)`. If `TRUE` and a `renv.lock` file exists in the current
+  working directory, package versions are read from the lockfile rather
+  than the currently installed library. Useful for stable version
+  reporting in CI environments. Default `TRUE`.
 
 - verbose:
 
@@ -46,7 +52,7 @@ An S3 object of class `"audit_report"`, a list containing:
 
 - `renv_used`:
 
-  `logical` — were versions sourced from `renv.lock`?
+  `logical` — were versions sourced from a lockfile?
 
 - `timestamp`:
 
@@ -96,7 +102,7 @@ writeLines(c(
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 #> 
-#> -- reproducr audit report [2026-05-31 12:00] --
+#> -- reproducr audit report [2026-05-31 12:26] --
 #> 
 #>   Files scanned:     1
 #>   Packages found:    2
@@ -111,7 +117,7 @@ print(report)
 # See the detected calls as a data frame
 report$calls
 #>                                 file line   pkg        fn pkg_version
-#> 1 /tmp/RtmpofRmdP/file196b249905d8.R    2 dplyr    filter        <NA>
-#> 2 /tmp/RtmpofRmdP/file196b249905d8.R    3 dplyr summarise        <NA>
-#> 3 /tmp/RtmpofRmdP/file196b249905d8.R    4 stats     rnorm       4.6.0
+#> 1 /tmp/Rtmpt0FnI5/file194522d3811f.R    2 dplyr    filter        <NA>
+#> 2 /tmp/Rtmpt0FnI5/file194522d3811f.R    3 dplyr summarise        <NA>
+#> 3 /tmp/Rtmpt0FnI5/file194522d3811f.R    4 stats     rnorm       4.6.0
 ```

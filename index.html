@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Computational Reproducibility Auditing for R Projects • reproducr</title>
+<title>Behavioural Reproducibility Auditing for R Projects • reproducr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -15,9 +15,9 @@
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Computational Reproducibility Auditing for R Projects">
-<meta name="description" content="Audits R scripts for reproducibility risk beyond what renv provides. Scans scripts for qualified package::function calls, checks them against a curated database of known breaking changes across popular CRAN packages, flags stochastic calls lacking set.seed(), and detects locale-sensitive operations. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows. Designed to complement renv, not replace it: renv locks your packages; reproducr tells you whether locking them is actually enough.">
-<meta property="og:description" content="Audits R scripts for reproducibility risk beyond what renv provides. Scans scripts for qualified package::function calls, checks them against a curated database of known breaking changes across popular CRAN packages, flags stochastic calls lacking set.seed(), and detects locale-sensitive operations. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows. Designed to complement renv, not replace it: renv locks your packages; reproducr tells you whether locking them is actually enough.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Behavioural Reproducibility Auditing for R Projects">
+<meta name="description" content="Audits R scripts for behavioural reproducibility risk. Scans scripts for qualified package::function calls and checks them against a curated database of known silent breaking changes across popular CRAN packages. Flags stochastic calls lacking set.seed() and detects locale-sensitive operations that may produce different results across systems. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows.">
+<meta property="og:description" content="Audits R scripts for behavioural reproducibility risk. Scans scripts for qualified package::function calls and checks them against a curated database of known silent breaking changes across popular CRAN packages. Flags stochastic calls lacking set.seed() and detects locale-sensitive operations that may produce different results across systems. Supports baseline certification of analytical outputs so that silent numerical drift can be detected across package upgrades or platform changes. Generates human-readable audit reports suitable for academic submission or pharmaceutical QC workflows.">
 <meta property="og:image" content="https://ndohpenngit.github.io/reproducr/logo.svg">
 </head>
 <body>
@@ -62,29 +62,31 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9"><p><img src="https://img.shields.io/badge/reproducibility-at%20risk-red" alt="reproducibility"><!-- /reproducr-badge --></p>
-<div class="section level1">
+  <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
 <img src="logo.svg" class="logo" alt=""><h1 id="reproducr-">reproducr <a class="anchor" aria-label="anchor" href="#reproducr-"></a>
 </h1>
 </div>
-<p><img src="https://img.shields.io/badge/reproducibility-at%20risk-red" alt="reproducibility"><img src="https://img.shields.io/badge/CRAN-not%20yet-lightgrey" alt="CRAN status"><img src="https://img.shields.io/badge/tests-63%20passing-brightgreen" alt="Tests"></p>
+<p><img src="https://img.shields.io/badge/reproducibility-reproducible-brightgreen" alt="reproducibility"><img src="https://img.shields.io/badge/CRAN-not%20yet-lightgrey" alt="CRAN status"><img src="https://img.shields.io/badge/tests-63%20passing-brightgreen" alt="Tests"></p>
 <blockquote>
-<p><strong>Computational reproducibility auditing for R — the layer <code>renv</code> doesn’t cover.</strong></p>
+<p><strong>Know your R analysis will produce the same results tomorrow as it does today.</strong></p>
 </blockquote>
 <hr>
 <div class="section level2">
 <h2 id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
 </h2>
-<p>You have an analysis. You have <code>renv</code>. Your packages are locked. Are you done?</p>
-<p>Not quite. <code>renv</code> answers one question: <em>“Can I reinstall these packages?”</em> It cannot tell you:</p>
-<ul>
-<li>Whether a function’s <strong>behaviour changed silently</strong> between versions (e.g. <code>dplyr::summarise()</code> changed its grouping defaults in v1.1.0)</li>
-<li>Whether your <strong>stochastic code</strong> is missing a <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> and will produce different results every run</li>
-<li>Whether your results have <strong>numerically drifted</strong> since your last analysis</li>
-<li>Whether your code is <strong>locale-sensitive</strong> and will behave differently on a server in a different country</li>
-</ul>
-<p><code>reproducr</code> answers those questions. Use it <em>alongside</em> <code>renv</code>, not instead of it.</p>
+<p>You finish an analysis. The code runs. The numbers look right. But are they stable?</p>
+<p>Package updates change function behaviour silently. Stochastic code without a fixed seed produces different results on every run. A model fitted on one platform may return subtly different coefficients on another. Results that were correct in January may drift by March — with no error, no warning, and no obvious cause.</p>
+<p><code>reproducr</code> makes these risks visible and trackable, before they reach a journal, a regulator, or a collaborator.</p>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="what-it-does">What it does<a class="anchor" aria-label="anchor" href="#what-it-does"></a>
+</h2>
+<p><strong>Scans your scripts</strong> for known breaking changes across popular CRAN packages, flags stochastic calls missing <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code>, and identifies locale-sensitive operations that behave differently across systems.</p>
+<p><strong>Certifies your outputs</strong> by hashing key results — model coefficients, summary statistics, p-values — so any numerical drift is detected automatically on subsequent runs.</p>
+<p><strong>Generates audit reports</strong> in three styles: a plain summary, a ready-to-paste academic methods paragraph, and a structured QC document with sign-off fields for regulated workflows.</p>
+<p><strong>Works with your existing setup.</strong> If you use <code>renv</code>, <code>reproducr</code> reads your lockfile automatically. If you don’t, it uses your installed library. No configuration required.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -92,8 +94,7 @@
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Development version from GitHub</span></span>
-<span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ndohpenngit/reproducr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"ndohpenngit/reproducr"</span><span class="op">)</span></span></code></pre></div>
 <hr>
 </div>
 <div class="section level2">
@@ -111,9 +112,9 @@
 <span><span class="co">#&gt;   Files scanned:    1</span></span>
 <span><span class="co">#&gt;   Packages found:   4</span></span>
 <span><span class="co">#&gt;   Calls detected:   23</span></span>
-<span><span class="co">#&gt;   R version:        4.3.3</span></span>
-<span><span class="co">#&gt;   Platform:         Linux 6.18.5</span></span>
-<span><span class="co">#&gt;   Versions from:    renv.lock</span></span>
+<span><span class="co">#&gt;   R version:        4.4.2</span></span>
+<span><span class="co">#&gt;   Platform:         aarch64-apple-darwin20</span></span>
+<span><span class="co">#&gt;   Versions from:    installed library</span></span>
 <span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   Next step: risks &lt;- risk_score(report)</span></span>
 <span></span>
@@ -147,7 +148,7 @@
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; reproducr: certified 3 output(s) [2026-05-30] under tag 'submission-v1'</span></span>
 <span></span>
-<span><span class="co"># Step 4: After a package upgrade, check for drift</span></span>
+<span><span class="co"># Step 4: After any environment change or package upgrade, check for drift</span></span>
 <span><span class="fu"><a href="reference/check_drift.html">check_drift</a></span><span class="op">(</span></span>
 <span>  outputs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    coefs     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>,</span>
@@ -232,7 +233,7 @@ audit_script()                 certify()                       repro_report()
      │                              │                               │
      ▼                              ▼                               ▼
 risk_score()               check_drift()                    repro_badge()</code></pre>
-<p>You can use just Tier 1 for a quick scan, or build up to the full pipeline for regulated or peer-reviewed work.</p>
+<p>Use Tier 1 alone for a quick scan, or build the full pipeline for regulated or peer-reviewed work.</p>
 <hr>
 </div>
 </div>
@@ -314,7 +315,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 </tr>
 </tbody>
 </table>
-<p><strong>Contributing:</strong> The database is designed for community contribution. Each entry is a plain R list — see <code>R/breaking_changes_db.R</code> and open a pull request to add new entries.</p>
+<p><strong>Contributing:</strong> Each entry is a plain R list in <code>R/breaking_changes_db.R</code>. Open a pull request to add new entries — see the contributing guide for the schema.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -324,14 +325,14 @@ risk_score()               check_drift()                    repro_badge()</code>
 <h3 id="changelog--breaking-changes-database">
 <code>"changelog"</code> — Breaking changes database<a class="anchor" aria-label="anchor" href="#changelog--breaking-changes-database"></a>
 </h3>
-<p>Checks every detected <code>pkg::fn</code> call against the built-in database. A call is flagged only if the installed (or <code>renv</code>-locked) version falls within a known risky version window <code>(from_ver, to_ver]</code>.</p>
-<p>Risk levels: - <strong>HIGH</strong> — output values can change silently with no error - <strong>MEDIUM</strong> — argument renamed/deprecated; may error or produce different output - <strong>LOW</strong> — minor behavioural note; output unlikely to differ in practice</p>
+<p>Checks every detected <code>pkg::fn</code> call against the built-in database. A call is flagged only if the installed version falls within a known risky version window <code>(from_ver, to_ver]</code>.</p>
+<p>Risk levels: - <strong>HIGH</strong> — output values can change silently with no error - <strong>MEDIUM</strong> — argument renamed or deprecated; may error or produce different output - <strong>LOW</strong> — minor behavioural note; output unlikely to differ in practice</p>
 </div>
 <div class="section level3">
 <h3 id="seed_check--missing-setseed">
 <code>"seed_check"</code> — Missing set.seed()<a class="anchor" aria-label="anchor" href="#seed_check--missing-setseed"></a>
 </h3>
-<p>Flags any call to a stochastic function (<code>rnorm</code>, <code>sample</code>, <code>rbinom</code>, etc.) where no <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> is found within the 50 lines above the call. Rated <strong>MEDIUM</strong> risk — results will differ across runs.</p>
+<p>Flags any call to a stochastic function (<code>rnorm</code>, <code>sample</code>, <code>rbinom</code>, etc.) where no <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> is found within 50 lines above the call.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># This will be flagged:</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
@@ -344,7 +345,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 <h3 id="locale_check--locale-sensitive-operations">
 <code>"locale_check"</code> — Locale-sensitive operations<a class="anchor" aria-label="anchor" href="#locale_check--locale-sensitive-operations"></a>
 </h3>
-<p>Flags functions whose output depends on the system locale (<code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code>, <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code>, <code><a href="https://rdrr.io/r/base/strptime.html" class="external-link">strftime()</a></code>, etc.). Rated <strong>LOW</strong> risk — relevant when code will run on servers in different countries or with different OS locale settings.</p>
+<p>Flags functions whose output depends on the system locale (<code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code>, <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code>, <code><a href="https://rdrr.io/r/base/strptime.html" class="external-link">strftime()</a></code>, etc.) — relevant when code runs on servers in different countries or with different OS locale settings.</p>
 <hr>
 </div>
 </div>
@@ -363,7 +364,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 <span>  script <span class="op">=</span> <span class="st">"main_analysis.R"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Three months later, after a dplyr upgrade:</span></span>
+<span><span class="co"># Three months later, after any environment change:</span></span>
 <span><span class="fu"><a href="reference/check_drift.html">check_drift</a></span><span class="op">(</span></span>
 <span>  outputs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    model_coefs  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">my_model</span><span class="op">)</span>,</span>
@@ -382,22 +383,22 @@ risk_score()               check_drift()                    repro_badge()</code>
 <h3 id="minimal-default">
 <code>"minimal"</code> (default)<a class="anchor" aria-label="anchor" href="#minimal-default"></a>
 </h3>
-<p>A compact Markdown/HTML summary covering environment, verdict, and risk table. Good for internal project documentation.</p>
+<p>A compact Markdown/HTML summary covering environment, verdict, and risk table.</p>
 </div>
 <div class="section level3">
 <h3 id="academic">
 <code>"academic"</code><a class="anchor" aria-label="anchor" href="#academic"></a>
 </h3>
-<p>Generates a ready-to-paste methods paragraph for journal submissions:</p>
+<p>A ready-to-paste methods paragraph for journal submissions:</p>
 <blockquote>
-<p><em>All analyses were conducted in R (version 4.3.3) on Linux 6.18.5. The following packages were used: dplyr (v1.1.4), ggplot2 (v3.5.1) … Reproducibility auditing (reproducr) identified no risks. The full audit report and certification records are available in the supplementary materials.</em></p>
+<p><em>All analyses were conducted in R (version 4.4.2) on macOS 26.5. The following packages were used: dplyr (v1.1.4), ggplot2 (v3.5.1) … Reproducibility auditing (reproducr) identified no risks. The full audit report and certification records are available in the supplementary materials.</em></p>
 </blockquote>
 </div>
 <div class="section level3">
 <h3 id="pharma">
 <code>"pharma"</code><a class="anchor" aria-label="anchor" href="#pharma"></a>
 </h3>
-<p>A structured QC document with: - Execution environment table - Full package inventory with versions - Risk register (one entry per flagged call) - Drift assessment table - Sign-off fields for analyst and reviewer</p>
+<p>A structured QC document with execution environment table, full package inventory, risk register, drift assessment, and sign-off fields for analyst and reviewer.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/repro_report.html">repro_report</a></span><span class="op">(</span><span class="va">report</span>, <span class="va">risks</span>, <span class="va">drift</span>,</span>
 <span>             format <span class="op">=</span> <span class="st">"html"</span>, style <span class="op">=</span> <span class="st">"pharma"</span>,</span>
@@ -408,99 +409,14 @@ risk_score()               check_drift()                    repro_badge()</code>
 <div class="section level2">
 <h2 id="cicd-integration">CI/CD integration<a class="anchor" aria-label="anchor" href="#cicd-integration"></a>
 </h2>
-<p>Add <code>reproducr</code> to your GitHub Actions workflow to automatically audit on every push and update the badge in your README:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># .github/workflows/reproducr.yml</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Reproducibility audit</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="at">push</span><span class="kw">,</span><span class="at"> pull_request</span><span class="kw">]</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="at">  </span><span class="fu">audit</span><span class="kw">:</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> r-lib/actions/setup-r@v2</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="at">          </span><span class="fu">use-public-rspm</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Install reproducr</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="at">        </span><span class="fu">run</span><span class="kw">:</span><span class="at"> Rscript -e "remotes::install_github('ndohpenngit/reproducr')"</span></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Run audit</span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>          Rscript -e "</span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>            library(reproducr)</span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>            report &lt;- audit_script('.', verbose = FALSE)</span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>            risks  &lt;- risk_score(report)</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>            repro_badge(report, risks, output = 'README')</span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>            repro_report(report, risks, format = 'md',</span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>                         output_file = 'reproducibility_report.md')</span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>            if (any(risks\$risk == 'high')) stop('High-severity risks detected.')</span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>          "</span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Commit updated badge</span></span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a><span class="fu">        run</span><span class="kw">: </span><span class="ch">|</span></span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>          git config --local user.email "action@github.com"</span>
-<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>          git config --local user.name "GitHub Action"</span>
-<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a>          git add README.md reproducibility_report.md</span>
-<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a>          git diff --staged --quiet || git commit -m "chore: update reproducibility badge"</span>
-<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a>          git push</span></code></pre></div>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="relationship-to-renv">Relationship to renv<a class="anchor" aria-label="anchor" href="#relationship-to-renv"></a>
-</h2>
-<table class="table">
-<thead><tr>
-<th></th>
-<th><code>renv</code></th>
-<th><code>reproducr</code></th>
-</tr></thead>
-<tbody>
-<tr>
-<td>Freezes package versions</td>
-<td>✓</td>
-<td>—</td>
-</tr>
-<tr>
-<td>Restores environments</td>
-<td>✓</td>
-<td>—</td>
-</tr>
-<tr>
-<td>Detects silent behavioural changes</td>
-<td>—</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>Flags missing set.seed()</td>
-<td>—</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>Detects numerical drift</td>
-<td>—</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>Generates QC reports</td>
-<td>—</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>Works without renv</td>
-<td>—</td>
-<td>✓</td>
-</tr>
-<tr>
-<td>Works best with renv</td>
-<td>✓</td>
-<td>✓</td>
-</tr>
-</tbody>
-</table>
-<p><code>renv</code> locks your packages. <code>reproducr</code> tells you whether locking is enough.</p>
+<p><code>reproducr</code> is designed to run automatically on every push. A typical workflow:</p>
+<ul>
+<li>Audits your scripts for risk</li>
+<li>Checks for drift against the last certified run</li>
+<li>Updates the reproducibility badge in your README</li>
+<li>Commits a <code>reproducibility_report.md</code> to the repo</li>
+</ul>
+<p>See the <a href="https://ndohpenngit.github.io/reproducr/articles/reports-and-badges.html">reports and badges vignette</a> for the complete GitHub Actions workflow.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -521,17 +437,10 @@ risk_score()               check_drift()                    repro_badge()</code>
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>If you use <code>reproducr</code> in published research, please cite:</p>
-<pre><code>Last, F. (2026). reproducr: Computational Reproducibility Auditing for R
+<pre><code>Penn, N. (2026). reproducr: Behavioural Reproducibility Auditing for R
 Projects. R package version 0.1.0. https://github.com/ndohpenngit/reproducr</code></pre>
-<hr>
-</div>
-<div class="section level2">
-<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
-</h2>
-<p>MIT © 2026 reproducr authors</p>
 </div>
 </div>
-
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">

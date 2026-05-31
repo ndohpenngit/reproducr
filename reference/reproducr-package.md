@@ -1,19 +1,14 @@
-# reproducr: Computational Reproducibility Auditing for R Projects
+# reproducr: Behavioural Reproducibility Auditing for R Projects
 
-`reproducr` audits R scripts for reproducibility risk beyond what
-[renv](https://rstudio.github.io/renv/) provides. While `renv` locks
-package versions, it cannot tell you:
+You finish an analysis. The code runs. The numbers look right. But are
+they stable?
 
-- Whether a function's *behaviour* changed silently between versions
-
-- Whether stochastic calls lack a
-  [`set.seed()`](https://rdrr.io/r/base/Random.html)
-
-- Whether results have numerically drifted since your last analysis
-
-- Whether your code is locale-sensitive
-
-`reproducr` fills those gaps.
+`reproducr` makes behavioural reproducibility risks visible and
+trackable. It scans your scripts for known silent breaking changes,
+flags stochastic calls missing
+[`set.seed()`](https://rdrr.io/r/base/Random.html), certifies analytical
+outputs as baselines, and detects numerical drift across runs — before
+it reaches a journal, a regulator, or a collaborator.
 
 ## Workflow
 
@@ -28,7 +23,7 @@ package versions, it cannot tell you:
     model <- lm(mpg ~ wt, data = mtcars)
     certify(list(coefs = coef(model)), tag = "submission-v1")
 
-    # Later, after a package upgrade:
+    # After any environment change:
     check_drift(list(coefs = coef(model)), against = "submission-v1")
 
 **Tier 3 — Report & export**
@@ -49,20 +44,12 @@ package versions, it cannot tell you:
 | [`repro_badge()`](https://ndohpenngit.github.io/reproducr/reference/repro_badge.md) | Generate a reproducibility status badge |
 | [`list_certs()`](https://ndohpenngit.github.io/reproducr/reference/list_certs.md) | List all certifications in a `.reproducr` file |
 
-## Relationship to renv
-
-`reproducr` and `renv` are complementary tools, not alternatives. Use
-`renv` to freeze package versions. Use `reproducr` to verify that
-freezing is actually sufficient — i.e. that no silent behavioural
-changes, missing seeds, or locale dependencies threaten your results.
-
 ## The breaking-changes database
 
-The internal database currently covers known breaking changes in:
-`dplyr`, `tidyr`, `ggplot2`, `readr`, `purrr`, `stringr`, `broom`,
-`data.table`, `lme4`, `lubridate`, and base R (RNG changes in R 3.6.0).
-Community contributions to expand the database are very welcome — see
-the contributing guide on GitHub.
+The internal database covers known silent breaking changes in: `dplyr`,
+`tidyr`, `ggplot2`, `readr`, `purrr`, `stringr`, `broom`, `data.table`,
+`lme4`, `lubridate`, and base R. Community contributions to expand the
+database are very welcome — see the contributing vignette.
 
 ## See also
 
@@ -74,5 +61,5 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Ndoh Penn <ndohpenn9@gmail.com>
-([ORCID](https://orcid.org/0009-0003-9054-465X))
+**Maintainer**: First Last <you@example.com>
+([ORCID](https://orcid.org/0000-0000-0000-0000))
