@@ -155,25 +155,38 @@ repro_badge <- function(audit,
     "https://img.shields.io/badge/reproducibility-%s-%s",
     badge_meta$label, badge_meta$color
   )
-  badge_md <- sprintf("![reproducibility](%s)", badge_url)
+  # Linked badge: [![alt](img)](link) -- standard tidyverse convention
+  badge_md <- sprintf(
+    "[![reproducibility](%s)](https://ndohpenngit.github.io/reproducr/)",
+    badge_url
+  )
 
   if (output == "README") {
     if (!file.exists(readme_path)) {
       stop("README not found at '", readme_path, "'. ",
            "Create the file first or set readme_path.", call. = FALSE)
     }
-    lines   <- readLines(readme_path, warn = FALSE)
-    tag_open  <- "<!-- reproducr-badge -->"
-    tag_close <- "<!-- /reproducr-badge -->"
-    badge_line <- paste0(tag_open, badge_md, tag_close)
+    lines <- readLines(readme_path, warn = FALSE)
 
-    existing <- grep(tag_open, lines, fixed = TRUE)
-    if (length(existing) > 0L) {
-      lines[existing[[1L]]] <- badge_line
-      if (length(existing) > 1L) lines <- lines[-existing[-1L]]
+    # Replace existing reproducibility badge line
+    badge_line_idx <- grep("^\\[!\\[reproducibility\\]", lines, perl = TRUE)
+
+    if (length(badge_line_idx) > 0L) {
+      lines[badge_line_idx[[1L]]] <- badge_md
     } else {
-      lines <- c(badge_line, "", lines)
+      # Insert after <!-- badges: start --> if present
+      start_idx <- grep("<!-- badges: start -->", lines, fixed = TRUE)
+      if (length(start_idx) > 0L) {
+        lines <- c(
+          lines[seq_len(start_idx[[1L]])],
+          badge_md,
+          lines[seq(start_idx[[1L]] + 1L, length(lines))]
+        )
+      } else {
+        lines <- c(badge_md, "", lines)
+      }
     }
+
     writeLines(lines, readme_path)
     message("reproducr: badge updated in '", readme_path, "'")
   } else {
