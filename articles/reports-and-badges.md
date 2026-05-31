@@ -42,7 +42,7 @@ clean_risks  <- risk_score(clean_report)
 cat(repro_report(clean_report, clean_risks, format = "text", style = "minimal"))
 #> reproducr audit report
 #> 
-#> - Generated: 2026-05-31 17:46
+#> - Generated: 2026-05-31 18:03
 #> - R version: 4.6.0
 #> - Platform: Linux 6.17.0-1015-azure
 #> - Files scanned: 1
@@ -55,7 +55,7 @@ cat(repro_report(clean_report, clean_risks, format = "text", style = "minimal"))
 #> > REPRODUCIBLE: No significant risks detected.
 #> # reproducr audit report
 #> 
-#> - **Generated:** 2026-05-31 17:46
+#> - **Generated:** 2026-05-31 18:03
 #> - **R version:** 4.6.0
 #> - **Platform:** Linux 6.17.0-1015-azure
 #> - **Files scanned:** 1
@@ -81,7 +81,7 @@ quick console review.
 cat(repro_report(report, risks, format = "text", style = "minimal"))
 #> reproducr audit report
 #> 
-#> - Generated: 2026-05-31 17:46
+#> - Generated: 2026-05-31 18:03
 #> - R version: 4.6.0
 #> - Platform: Linux 6.17.0-1015-azure
 #> - Files scanned: 1
@@ -96,19 +96,19 @@ cat(repro_report(report, risks, format = "text", style = "minimal"))
 #> ## Risks
 #> 
 #> ### [HIGH] stats::rnorm
-#> - File: file1b543a211071.R, line 4
+#> - File: file1b595ffc4d78.R, line 4
 #> - Check: changelog
 #> - Details: In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6.
 #> - Reference: <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html>
 #> 
 #> ### [LOW] base::sort
-#> - File: file1b543a211071.R, line 5
+#> - File: file1b595ffc4d78.R, line 5
 #> - Check: locale_check
 #> - Details: sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings.
 #> - Reference: <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html>
 #> # reproducr audit report
 #> 
-#> - **Generated:** 2026-05-31 17:46
+#> - **Generated:** 2026-05-31 18:03
 #> - **R version:** 4.6.0
 #> - **Platform:** Linux 6.17.0-1015-azure
 #> - **Files scanned:** 1
@@ -123,13 +123,13 @@ cat(repro_report(report, risks, format = "text", style = "minimal"))
 #> ## Risks
 #> 
 #> ### [HIGH] `stats::rnorm`
-#> - **File:** file1b543a211071.R, line 4
+#> - **File:** file1b595ffc4d78.R, line 4
 #> - **Check:** changelog
 #> - **Details:** In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6.
 #> - **Reference:** <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html>
 #> 
 #> ### [LOW] `base::sort`
-#> - **File:** file1b543a211071.R, line 5
+#> - **File:** file1b595ffc4d78.R, line 5
 #> - **Check:** locale_check
 #> - **Details:** sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings.
 #> - **Reference:** <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html>
@@ -150,7 +150,7 @@ cat(repro_report(report, risks, drift = drift,
                  format = "text", style = "minimal"))
 #> reproducr audit report
 #> 
-#> - Generated: 2026-05-31 17:46
+#> - Generated: 2026-05-31 18:03
 #> - R version: 4.6.0
 #> - Platform: Linux 6.17.0-1015-azure
 #> - Files scanned: 1
@@ -165,13 +165,13 @@ cat(repro_report(report, risks, drift = drift,
 #> ## Risks
 #> 
 #> ### [HIGH] stats::rnorm
-#> - File: file1b543a211071.R, line 4
+#> - File: file1b595ffc4d78.R, line 4
 #> - Check: changelog
 #> - Details: In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6.
 #> - Reference: <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html>
 #> 
 #> ### [LOW] base::sort
-#> - File: file1b543a211071.R, line 5
+#> - File: file1b595ffc4d78.R, line 5
 #> - Check: locale_check
 #> - Details: sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings.
 #> - Reference: <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html>
@@ -181,7 +181,7 @@ cat(repro_report(report, risks, drift = drift,
 #> - OK coefs
 #> # reproducr audit report
 #> 
-#> - **Generated:** 2026-05-31 17:46
+#> - **Generated:** 2026-05-31 18:03
 #> - **R version:** 4.6.0
 #> - **Platform:** Linux 6.17.0-1015-azure
 #> - **Files scanned:** 1
@@ -196,13 +196,13 @@ cat(repro_report(report, risks, drift = drift,
 #> ## Risks
 #> 
 #> ### [HIGH] `stats::rnorm`
-#> - **File:** file1b543a211071.R, line 4
+#> - **File:** file1b595ffc4d78.R, line 4
 #> - **Check:** changelog
 #> - **Details:** In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6.
 #> - **Reference:** <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html>
 #> 
 #> ### [LOW] `base::sort`
-#> - **File:** file1b543a211071.R, line 5
+#> - **File:** file1b595ffc4d78.R, line 5
 #> - **Check:** locale_check
 #> - **Details:** sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings.
 #> - **Reference:** <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html>
@@ -282,7 +282,7 @@ cat(repro_report(report, risks, drift = drift,
 #> 
 #> ## 2. Files audited
 #> 
-#> - /tmp/RtmpsiEyfZ/file1b543a211071.R
+#> - /tmp/RtmpY3Y1DA/file1b595ffc4d78.R
 #> 
 #> ## 3. Package inventory
 #> 
@@ -298,7 +298,7 @@ cat(repro_report(report, risks, drift = drift,
 #> | Field | Value |
 #> |---|---|
 #> | Severity | HIGH |
-#> | File | file1b543a211071.R, line 4 |
+#> | File | file1b595ffc4d78.R, line 4 |
 #> | Check method | changelog |
 #> | Description | In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6. |
 #> | Reference | <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html> |
@@ -307,7 +307,7 @@ cat(repro_report(report, risks, drift = drift,
 #> | Field | Value |
 #> |---|---|
 #> | Severity | LOW |
-#> | File | file1b543a211071.R, line 5 |
+#> | File | file1b595ffc4d78.R, line 5 |
 #> | Check method | locale_check |
 #> | Description | sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings. |
 #> | Reference | <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html> |
@@ -346,7 +346,7 @@ cat(repro_report(report, risks, drift = drift,
 #> 
 #> ## 2. Files audited
 #> 
-#> - `/tmp/RtmpsiEyfZ/file1b543a211071.R`
+#> - `/tmp/RtmpY3Y1DA/file1b595ffc4d78.R`
 #> 
 #> ## 3. Package inventory
 #> 
@@ -362,7 +362,7 @@ cat(repro_report(report, risks, drift = drift,
 #> | Field | Value |
 #> |---|---|
 #> | Severity | **HIGH** |
-#> | File | file1b543a211071.R, line 4 |
+#> | File | file1b595ffc4d78.R, line 4 |
 #> | Check method | changelog |
 #> | Description | In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with the same seed will differ between R <= 3.5 and R >= 3.6. |
 #> | Reference | <https://stat.ethz.ch/R-manual/R-devel/doc/html/NEWS.3.html> |
@@ -371,7 +371,7 @@ cat(repro_report(report, risks, drift = drift,
 #> | Field | Value |
 #> |---|---|
 #> | Severity | **LOW** |
-#> | File | file1b543a211071.R, line 5 |
+#> | File | file1b595ffc4d78.R, line 5 |
 #> | Check method | locale_check |
 #> | Description | sort() output is locale-sensitive. Current locale: C.UTF-8. Results may differ on machines with different LC_COLLATE or LC_TIME settings. |
 #> | Reference | <https://stat.ethz.ch/R-manual/R-devel/library/base/html/locales.html> |
@@ -419,7 +419,7 @@ repro_report(report, risks,
              format      = "md",
              style       = "minimal",
              output_file = md_file)
-#> reproducr: report written to '/tmp/RtmpsiEyfZ/file1b543a0eae51.md'
+#> reproducr: report written to '/tmp/RtmpY3Y1DA/file1b5929af61d8.md'
 
 # Inspect the raw Markdown
 cat(readLines(md_file, warn = FALSE), sep = "\n")
@@ -432,7 +432,7 @@ repro_report(report, risks, drift = drift,
              format      = "html",
              style       = "pharma",
              output_file = html_file)
-#> reproducr: report written to '/tmp/RtmpsiEyfZ/file1b54400f66a.html'
+#> reproducr: report written to '/tmp/RtmpY3Y1DA/file1b5987f5e56.html'
 
 # The file is self-contained — open it in a browser
 # browseURL(html_file)
@@ -516,7 +516,7 @@ writeLines(c(
 
 # Insert badge at the top
 repro_badge(report, risks, output = "README", readme_path = readme)
-#> reproducr: badge updated in '/tmp/RtmpsiEyfZ/file1b5451936906.md'
+#> reproducr: badge updated in '/tmp/RtmpY3Y1DA/file1b592a335f76.md'
 
 # See the result
 cat(readLines(readme, warn = FALSE), sep = "\n")
