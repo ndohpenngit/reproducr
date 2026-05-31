@@ -76,8 +76,8 @@ test_that("repro_badge() inserts badge into a README that has none", {
   repro_badge(r, rs, output = "README", readme_path = readme)
   content <- paste(readLines(readme, warn = FALSE), collapse = "\n")
 
-  expect_true(grepl("reproducr-badge", content, fixed = TRUE))
-  expect_true(grepl("shields.io",      content, fixed = TRUE))
+  expect_true(grepl("[![reproducibility]", content, fixed = TRUE))
+  expect_true(grepl("shields.io",          content, fixed = TRUE))
 })
 
 test_that("repro_badge() replaces an existing badge — produces exactly one badge line", {
@@ -87,7 +87,9 @@ test_that("repro_badge() replaces an existing badge — produces exactly one bad
 
   writeLines(
     c("# Project",
-      "<!-- reproducr-badge -->![reproducibility](old-url)<!-- /reproducr-badge -->",
+      "<!-- badges: start -->",
+      "[![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://ndohpenngit.github.io/reproducr/)",
+      "<!-- badges: end -->",
       "Other content."),
     readme
   )
@@ -95,7 +97,7 @@ test_that("repro_badge() replaces an existing badge — produces exactly one bad
 
   repro_badge(r, output = "README", readme_path = readme)
   lines       <- readLines(readme, warn = FALSE)
-  badge_lines <- grep("reproducr-badge", lines, value = TRUE)
+  badge_lines <- grep("^\\[!\\[reproducibility\\]", lines, value = TRUE, perl = TRUE)
 
   expect_equal(length(badge_lines), 1L)
 })
@@ -105,7 +107,12 @@ test_that("repro_badge() does not duplicate badge on repeated calls", {
   readme <- tempfile(fileext = ".md")
   on.exit(unlink(c(f, readme)))
 
-  writeLines(c("# Project", "Content."), readme)
+  writeLines(c(
+    "# Project",
+    "<!-- badges: start -->",
+    "<!-- badges: end -->",
+    "Content."
+  ), readme)
   r <- audit_script(f, renv = FALSE, verbose = FALSE)
 
   repro_badge(r, output = "README", readme_path = readme)
@@ -113,7 +120,7 @@ test_that("repro_badge() does not duplicate badge on repeated calls", {
   repro_badge(r, output = "README", readme_path = readme)  # third call
 
   lines       <- readLines(readme, warn = FALSE)
-  badge_lines <- grep("reproducr-badge", lines, value = TRUE)
+  badge_lines <- grep("^\\[!\\[reproducibility\\]", lines, value = TRUE, perl = TRUE)
   expect_equal(length(badge_lines), 1L)
 })
 
