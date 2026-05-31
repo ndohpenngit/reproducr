@@ -2,6 +2,9 @@
 % Please edit documentation in R/risk_score.R
 \name{risk_score}
 \alias{risk_score}
+\alias{print.risk_report}
+\alias{as.data.frame.risk_report}
+\alias{[.risk_report}
 \title{Score function calls for reproducibility risk}
 \usage{
 risk_score(
@@ -9,6 +12,12 @@ risk_score(
   methods = c("changelog", "seed_check", "locale_check"),
   min_risk = "low"
 )
+
+\method{print}{risk_report}(x, ...)
+
+\method{as.data.frame}{risk_report}(x, ...)
+
+\method{[}{risk_report}(x, i, j, ...)
 }
 \arguments{
 \item{audit}{An \code{audit_report} object returned by \code{\link[=audit_script]{audit_script()}}.}
@@ -18,6 +27,16 @@ risk_score(
 
 \item{min_risk}{\code{character(1)}. Minimum risk level to include in the output.
 One of \code{"low"} (show all), \code{"medium"}, or \code{"high"}. Default \code{"low"}.}
+
+\item{x}{A \code{risk_report} object.}
+
+\item{...}{Additional arguments (currently unused).}
+
+\item{i}{Row index.}
+
+\item{j}{Column index. When columns are subsetted and required columns are
+removed, the \code{"risk_report"} class is stripped so that
+\code{print.risk_report()} is not called on an incomplete object.}
 }
 \value{
 A \code{data.frame} of class \code{c("risk_report", "data.frame")} with one
