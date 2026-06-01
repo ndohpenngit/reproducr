@@ -71,8 +71,9 @@
 <!-- badges: start -->
 
 <blockquote>
-<p><strong>Know your R analysis will produce the same results tomorrow as it does today.</strong></p>
+<p>The reproducibility badge reflects the status of the <a href="#see-it-in-action">example analysis repos</a>. See those repos for a live demonstration of <code><a href="reference/repro_badge.html">repro_badge()</a></code> in a real analysis workflow.</p>
 </blockquote>
+<p><strong>Know your R analysis will produce the same results tomorrow as it does today.</strong></p>
 <hr>
 <div class="section level2">
 <h2 id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
@@ -380,7 +381,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># This will not:</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">237</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -507,7 +508,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://ndohpenngit.github.io/reproducr/"><img src="https://img.shields.io/badge/reproducibility-caution-yellow" alt="reproducibility"></a></li>
+<li><a href="https://ndohpenngit.github.io/reproducr/"><img src="https://img.shields.io/badge/reproducibility-reproducible-brightgreen" alt="reproducibility"></a></li>
 <li><a href="https://cran.r-project.org" class="external-link"><img src="https://img.shields.io/badge/CRAN-not%20yet-lightgrey" alt="CRAN status"></a></li>
 <li><a href="https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yml" class="external-link"><img src="https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
