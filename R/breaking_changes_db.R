@@ -6,7 +6,7 @@
 #
 # Schema per entry:
 #   from_version : character  — last "safe" version (exclusive lower bound)
-#   to_version   : character  — first "risky" version (inclusive upper bound)
+#   to_version   : character  — last version where the risk applies (inclusive upper bound)
 #   risk         : character  — "high" | "medium" | "low"
 #                   high   = output values can change silently
 #                   medium = argument renamed/deprecated; may error or change output
@@ -16,6 +16,47 @@
 #
 # To contribute: add entries following this schema and open a PR.
 # Keys are "pkg::fn" strings matching qualified call detection in audit_script().
+#
+# ---- Version window design principles ----------------------------------------
+#
+# Each entry uses a half-open interval (from_version, to_version]:
+#
+#   A call is flagged only if:
+#     installed version > from_version  AND  installed version <= to_version
+#
+# The window should close when the ecosystem has moved on. A breaking change
+# is only an ACTIVE risk if users might realistically be comparing results
+# produced by versions on DIFFERENT SIDES of the change. Once the entire
+# R community has moved past the breaking version, the flag becomes noise.
+#
+# Rules for setting to_version:
+#
+#   1. PERMANENT PACKAGE CHANGES (e.g. dplyr 1.1.0 summarise grouping):
+#      Keep the window open with a high ceiling (e.g. "1.1.9" or "9.9.9")
+#      because any user upgrading from before to after the change is at risk.
+#      Close the window only if a future version reverts or compensates.
+#
+#   2. HISTORICAL BASE R CHANGES (e.g. R 3.6.0 RNG, R 4.0.0 hclust):
+#      Close the window at the patch series where the change occurred.
+#      Example: R 3.6.0 RNG change -> to_version = "3.6.9"
+#      Rationale: by 2024+, all active R users are on R >= 4.x and are
+#      all on the same side of the change. Flagging them is a false positive.
+#      The risk only applies to teams actively comparing output between
+#      R <= 3.5 and R >= 3.6, which is rare in modern practice.
+#
+#   3. TRANSITIONAL CHANGES (e.g. readr 2.0 backend switch):
+#      Set to_version to the last version of the new behaviour's adoption
+#      period. If the new behaviour is now universal, close the window.
+#
+# Examples:
+#   R 3.6.0 RNG  -> from = "3.5.99", to = "3.6.9"   (not "4.9.9")
+#   R 4.0.0 hclust -> from = "3.6.99", to = "4.0.9" (not "4.9.9")
+#   dplyr summarise -> from = "1.0.99", to = "1.1.9" (window stays open)
+#   readr read_csv  -> from = "1.4.99", to = "2.1.9" (window stays open)
+#
+# When in doubt, prefer a narrower window. A missed flag is better than
+# a false positive that erodes trust in the tool.
+# ------------------------------------------------------------------------------
 
 .BREAKING_CHANGES_DB <- list(
 
@@ -72,7 +113,7 @@
       risk         = "medium",
       description  = paste0(
         "In dplyr 1.1.0, across() changed column naming when .names uses the ",
-        "{col}_{fn} pattern with multiple functions \u2014 the function label changed ",
+        "{col}_{fn} pattern with multiple functions \2014 the function label changed ",
         "from the function name to the list-element name. Column names in output ",
         "data frames may differ silently."
       ),
@@ -360,7 +401,7 @@
   "stats::sample" = list(
     list(
       from_version = "3.5.99",
-      to_version   = "4.9.9",
+      to_version   = "3.6.9",
       risk         = "high",
       description  = paste0(
         "In R 3.6.0, the default RNG algorithm for sample() changed ",
@@ -377,7 +418,7 @@
   "stats::runif" = list(
     list(
       from_version = "3.5.99",
-      to_version   = "4.9.9",
+      to_version   = "3.6.9",
       risk         = "high",
       description  = paste0(
         "In R 3.6.0, RNG defaults changed. Stochastic output from runif() with ",
@@ -391,7 +432,7 @@
   "stats::rnorm" = list(
     list(
       from_version = "3.5.99",
-      to_version   = "4.9.9",
+      to_version   = "3.6.9",
       risk         = "high",
       description  = paste0(
         "In R 3.6.0, RNG defaults changed. Stochastic output from rnorm() with ",
@@ -404,7 +445,7 @@
   "stats::rbinom" = list(
     list(
       from_version = "3.5.99",
-      to_version   = "4.9.9",
+      to_version   = "3.6.9",
       risk         = "high",
       description  = paste0(
         "In R 3.6.0, RNG defaults changed. Results from rbinom() with the same ",
@@ -417,7 +458,7 @@
   "stats::hclust" = list(
     list(
       from_version = "3.6.99",
-      to_version   = "4.9.9",
+      to_version   = "4.0.9",
       risk         = "high",
       description  = paste0(
         "In R 4.0.0, hclust() changed its tie-breaking rule for equal distances. ",
