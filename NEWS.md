@@ -1,3 +1,20 @@
+# reproducr 0.1.0.9001
+
+* Fixed `audit_script()` to skip prose lines in `.Rmd` and `.qmd` files —
+  only lines inside fenced ` ```{r} ` code blocks are now parsed. Previously,
+  inline backtick references like `` `stats::sample()` `` in prose were
+  incorrectly detected as qualified calls, producing false positives when
+  auditing vignettes.
+
+* Added explanatory text to the "See it in action" gallery section in
+  `README.md`.
+
+* Simplified the `reproducr` package audit workflow to use a placeholder
+  script — the package source has no analysis code to audit, and vignettes
+  intentionally demonstrate risky patterns as examples.
+
+---
+
 # reproducr 0.1.0.9000
 
 * `check_db_staleness()` — compares `to_version` ceilings in the
