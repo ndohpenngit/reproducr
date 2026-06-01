@@ -106,6 +106,8 @@
 <div class="section level2">
 <h2 id="see-it-in-action">See it in action<a class="anchor" aria-label="anchor" href="#see-it-in-action"></a>
 </h2>
+<p>The best way to understand <code>reproducr</code> is to see it running on a real analysis. The companion repositories below each demonstrate the full three-tier workflow on a realistic dataset, with CI that audits on every push, certifies outputs, detects drift, and updates the badge automatically.</p>
+<p>They also show that <code>reproducr</code> is environment-agnostic — the ecology example runs without <code>renv</code>, while the clinical trial example uses <code>renv</code> to lock the environment first. Both approaches are fully supported.</p>
 <table class="table">
 <colgroup>
 <col width="20%">
@@ -138,6 +140,7 @@
 </tr>
 </tbody>
 </table>
+<p>Each <code>DEMO.md</code> walks through the complete pipeline with real output at every step — from <code><a href="reference/audit_script.html">audit_script()</a></code> through to the pharma QC report and committed certification history.</p>
 <hr>
 </div>
 <div class="section level2">
