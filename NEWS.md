@@ -1,4 +1,4 @@
-# reproducr (development version)
+# reproducr 0.1.0.9000
 
 * `check_db_staleness()` — compares `to_version` ceilings in the
   breaking-changes database against current CRAN releases. Returns a tidy
@@ -18,6 +18,8 @@
 * Added version window design principles to `R/breaking_changes_db.R` and
   expanded `vignette("contributing-to-the-database")` with three rules for
   setting `to_version` and a quick-reference table.
+
+---
 
 # reproducr 0.1.0
 
