@@ -1,6 +1,6 @@
 # Changelog
 
-## reproducr (development version)
+## reproducr 0.1.0.9000
 
 - [`check_db_staleness()`](https://ndohpenngit.github.io/reproducr/reference/check_db_staleness.md)
   — compares `to_version` ceilings in the breaking-changes database
@@ -26,6 +26,8 @@
   and expanded
   [`vignette("contributing-to-the-database")`](https://ndohpenngit.github.io/reproducr/articles/contributing-to-the-database.md)
   with three rules for setting `to_version` and a quick-reference table.
+
+------------------------------------------------------------------------
 
 ## reproducr 0.1.0
 
