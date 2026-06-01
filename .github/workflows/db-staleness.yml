@@ -1,0 +1,102 @@
+name: Database staleness check
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'   # Weekly on Monday at 07:00 UTC
+  workflow_dispatch:        # Allow manual trigger from GitHub UI
+
+jobs:
+  check-staleness:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write         # Required to open issues
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install reproducr
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          Rscript -e "
+            install.packages('remotes')
+            remotes::install_github('ndohpenngit/reproducr',
+                                    quiet        = TRUE,
+                                    force        = TRUE,
+                                    dependencies = TRUE)
+          "
+
+      - name: Run staleness check
+        id: staleness
+        run: |
+          Rscript -e "
+            library(reproducr)
+
+            report <- check_db_staleness(source = 'cran', verbose = TRUE)
+            stale  <- report[report\$status == 'stale', ]
+
+            # Write summary for GitHub Actions output
+            n_stale <- nrow(stale)
+            cat(sprintf('n_stale=%d\n', n_stale),
+                file = Sys.getenv('GITHUB_OUTPUT'), append = TRUE)
+
+            if (n_stale > 0L) {
+              # Build issue body
+              rows <- apply(stale, 1, function(r) {
+                sprintf('| \`%s\` | \`%s\` | \`%s\` |',
+                        r['key'], r['to_version'], r['current_version'])
+              })
+              body <- paste0(
+                '## Breaking-changes database staleness alert\n\n',
+                'The following database entries have a \`to_version\` below ',
+                'the current CRAN release.\n\n',
+                'A human must review each entry and determine whether:\n',
+                '- The breaking change **still applies** in the new version ',
+                  '(extend \`to_version\`)\n',
+                '- The new version **fixed** the change (lower or remove ceiling)\n',
+                '- The entry should be **closed** (ecosystem has moved on)\n\n',
+                'See \`vignette(\"contributing-to-the-database\")\` for guidance ',
+                'on setting \`to_version\`.\n\n',
+                '| Entry | \`to_version\` | Current CRAN |\n',
+                '|---|---|---|\n',
+                paste(rows, collapse = '\n'),
+                '\n\n---\n',
+                '_Opened automatically by the database staleness workflow._'
+              )
+              writeLines(body, 'staleness_issue_body.md')
+              cat('has_stale=true\n',
+                  file = Sys.getenv('GITHUB_OUTPUT'), append = TRUE)
+            } else {
+              cat('has_stale=false\n',
+                  file = Sys.getenv('GITHUB_OUTPUT'), append = TRUE)
+            }
+          "
+
+      - name: Open GitHub issue for stale entries
+        if: steps.staleness.outputs.has_stale == 'true'
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: >
+            Database staleness: ${{ steps.staleness.outputs.n_stale }}
+            entries need review
+          content-filepath: staleness_issue_body.md
+          labels: |
+            database
+            maintenance
+          assignees: ndohpenngit
+
+      - name: Report clean status
+        if: steps.staleness.outputs.has_stale == 'false'
+        run: |
+          echo "All database entries are current. No issues opened."
