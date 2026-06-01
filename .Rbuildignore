@@ -10,3 +10,4 @@
 ^reproducr\.Rproj$
 ^_pkgdown\.yml$
 ^pkgdown$
+^docs$
