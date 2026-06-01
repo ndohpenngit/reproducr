@@ -189,6 +189,28 @@ summary.audit_report <- function(object, ...) {
   )
   if (length(lines) == 0L) return(NULL)
 
+  # For Rmd/qmd files, only parse lines inside fenced R code blocks.
+  # Prose lines (including inline `pkg::fn()` backtick code) are skipped
+  # to avoid false positives from documentation examples.
+  is_rmd <- grepl("\\.(Rmd|rmd|qmd)$", file, perl = TRUE)
+  if (is_rmd) {
+    in_chunk  <- FALSE
+    keep      <- logical(length(lines))
+    for (i in seq_along(lines)) {
+      ln <- lines[[i]]
+      if (!in_chunk && grepl("^```\\{[rR]", ln, perl = TRUE)) {
+        in_chunk <- TRUE
+        next  # skip the opening fence line itself
+      }
+      if (in_chunk && grepl("^```\\s*$", ln, perl = TRUE)) {
+        in_chunk <- FALSE
+        next  # skip the closing fence line itself
+      }
+      keep[[i]] <- in_chunk
+    }
+    lines <- ifelse(keep, lines, "")
+  }
+
   # Pattern: pkg::fn or pkg:::fn
   # pkg: starts with letter, followed by letters/digits/dots
   # fn:  starts with letter, followed by letters/digits/dots/underscores
