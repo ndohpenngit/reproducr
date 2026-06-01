@@ -1,7 +1,7 @@
 # reproducr <a href="https://ndohpenngit.github.io/reproducr/"><img src="man/figures/logo.svg" align="right" height="120" alt="reproducr website" /></a>
 
 <!-- badges: start -->
-[![reproducibility](https://img.shields.io/badge/reproducibility-at%20risk-red)](https://ndohpenngit.github.io/reproducr/)
+[![reproducibility](https://img.shields.io/badge/reproducibility-caution-yellow)](https://ndohpenngit.github.io/reproducr/)
 [![CRAN status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)](https://cran.r-project.org)
 [![R-CMD-check](https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/ndohpenngit/reproducr/actions/workflows/R-CMD-check.yml)
 <!-- badges: end -->
