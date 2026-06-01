@@ -8,7 +8,7 @@
 
 > The reproducibility badge reflects the status of the [example analysis repos](#see-it-in-action). See those repos for a live demonstration of `repro_badge()` in a real analysis workflow.
 
-**Know your R analysis will produce the same results tomorrow as it does today.**
+> **Know your R analysis will produce the same results tomorrow as it does today.**
 
 ---
 
@@ -46,10 +46,10 @@ remotes::install_github("ndohpenngit/reproducr")
 
 ## See it in action
 
-| Example | Domain | renv | Walkthrough |
-|---|---|---|---|
-| [reproducr-example](https://github.com/ndohpenngit/reproducr-example) | Ecology / penguins | No | [DEMO.md](https://github.com/ndohpenngit/reproducr-example/blob/main/DEMO.md) |
-| [reproducr-example-clinical](https://github.com/ndohpenngit/reproducr-example-clinical) | Clinical trials / oncology | Yes | [DEMO.md](https://github.com/ndohpenngit/reproducr-example-clinical/blob/main/DEMO.md) |
+| Example | Domain | renv | Badge | Walkthrough |
+|---|---|---|---|---|
+| [reproducr-example](https://github.com/ndohpenngit/reproducr-example) | Ecology / penguins | No | [![reproducibility](https://github.com/ndohpenngit/reproducr-example/actions/workflows/reproducr-audit.yml/badge.svg)](https://github.com/ndohpenngit/reproducr-example/actions/workflows/reproducr-audit.yml) | [DEMO.md](https://github.com/ndohpenngit/reproducr-example/blob/main/DEMO.md) |
+| [reproducr-example-clinical](https://github.com/ndohpenngit/reproducr-example-clinical) | Clinical trials / oncology | Yes | [![reproducibility](https://github.com/ndohpenngit/reproducr-example-clinical/actions/workflows/reproducr-audit.yml/badge.svg)](https://github.com/ndohpenngit/reproducr-example-clinical/actions/workflows/reproducr-audit.yml) | [DEMO.md](https://github.com/ndohpenngit/reproducr-example-clinical/blob/main/DEMO.md) |
 
 ---
 
