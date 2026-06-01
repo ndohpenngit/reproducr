@@ -6,14 +6,13 @@
 \alias{reproducr-package}
 \title{reproducr: Behavioural Reproducibility Auditing for R Projects}
 \description{
-You finish an analysis. The code runs. The numbers look right. But are
-they stable?
+You finish an analysis. The code runs. The numbers look right. But are they
+stable?
 
 \code{reproducr} makes behavioural reproducibility risks visible and trackable.
 It scans your scripts for known silent breaking changes, flags stochastic
 calls missing \code{set.seed()}, certifies analytical outputs as baselines, and
-detects numerical drift across runs — before it reaches a journal, a
-regulator, or a collaborator.
+detects numerical drift across runs.
 }
 \section{Workflow}{
 
@@ -30,7 +29,7 @@ print(risks)
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{model <- lm(mpg ~ wt, data = mtcars)
 certify(list(coefs = coef(model)), tag = "submission-v1")
 
-# After any environment change:
+# Later, after any environment change:
 check_drift(list(coefs = coef(model)), against = "submission-v1")
 }\if{html}{\out{</div>}}
 
@@ -48,9 +47,10 @@ repro_badge(report, risks, output = "README")
    \code{\link[=risk_score]{risk_score()}} \tab Check calls against the breaking-changes database \cr
    \code{\link[=certify]{certify()}} \tab Hash and store analytical outputs as a baseline \cr
    \code{\link[=check_drift]{check_drift()}} \tab Compare current outputs against a stored baseline \cr
+   \code{\link[=list_certs]{list_certs()}} \tab List all certifications in a \code{.reproducr} file \cr
    \code{\link[=repro_report]{repro_report()}} \tab Render a human-readable audit report \cr
    \code{\link[=repro_badge]{repro_badge()}} \tab Generate a reproducibility status badge \cr
-   \code{\link[=list_certs]{list_certs()}} \tab List all certifications in a \code{.reproducr} file \cr
+   \code{\link[=check_db_staleness]{check_db_staleness()}} \tab Check database entries against current CRAN versions \cr
 }
 }
 
@@ -60,7 +60,11 @@ repro_badge(report, risks, output = "README")
 The internal database covers known silent breaking changes in:
 \code{dplyr}, \code{tidyr}, \code{ggplot2}, \code{readr}, \code{purrr}, \code{stringr}, \code{broom},
 \code{data.table}, \code{lme4}, \code{lubridate}, and base R. Community contributions
-to expand the database are very welcome — see the contributing vignette.
+are welcome — see \code{vignette("contributing-to-the-database")}.
+
+The database is kept current via a weekly GitHub Actions workflow that
+calls \code{\link[=check_db_staleness]{check_db_staleness()}} and opens an issue automatically
+when any entry's \code{to_version} ceiling falls below the current CRAN release.
 }
 
 \seealso{
