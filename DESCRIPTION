@@ -24,6 +24,7 @@ Imports:
     utils
 Suggests:
     digest (>= 0.6.0),
+    jsonlite,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
