@@ -25,7 +25,7 @@ your lockfile automatically. No configuration required.
 ### Auditing a script
 
 The entry point is
-[`audit_script()`](https://ndohpenngit.github.io/reproducr/reference/audit_script.md).
+[`audit_script()`](https://reproducr-dev.github.io/reproducr/reference/audit_script.md).
 It reads your R source files, extracts every qualified `pkg::fn` call,
 and resolves which version of each package is in use.
 
@@ -46,7 +46,7 @@ writeLines(c(
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 #> 
-#> -- reproducr audit report [2026-06-02 18:52] --
+#> -- reproducr audit report [2026-06-02 19:23] --
 #> 
 #>   Files scanned:     1
 #>   Packages found:    3
@@ -62,17 +62,17 @@ print(report)
 
 report$calls
 #>                                 file line   pkg        fn pkg_version
-#> 1 /tmp/RtmpIIgQ05/file1bfe558a706a.R    3 dplyr    filter        <NA>
-#> 2 /tmp/RtmpIIgQ05/file1bfe558a706a.R    4 dplyr summarise        <NA>
-#> 3 /tmp/RtmpIIgQ05/file1bfe558a706a.R    4 dplyr         n        <NA>
-#> 4 /tmp/RtmpIIgQ05/file1bfe558a706a.R    6 stats     rnorm       4.6.0
-#> 5 /tmp/RtmpIIgQ05/file1bfe558a706a.R    7  base      sort       4.6.0
+#> 1 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    3 dplyr    filter        <NA>
+#> 2 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    4 dplyr summarise        <NA>
+#> 3 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    4 dplyr         n        <NA>
+#> 4 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    6 stats     rnorm       4.6.0
+#> 5 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    7  base      sort       4.6.0
 ```
 
 ### Scoring for risk
 
 Pass the report to
-[`risk_score()`](https://ndohpenngit.github.io/reproducr/reference/risk_score.md)
+[`risk_score()`](https://reproducr-dev.github.io/reproducr/reference/risk_score.md)
 to run three independent checks:
 
 ``` r
@@ -86,7 +86,7 @@ print(risks)
 #>   MEDIUM:    0
 #>   LOW:       1
 #> 
-#> [LOW]     base::sort  (line 7 in file1bfe558a706a.R)
+#> [LOW]     base::sort  (line 7 in file1bec3b9e739d.R)
 #>          Check    : locale_check
 #>          Details  : sort() output is locale-sensitive. Current locale: C.UTF-8.
 #>                     Results may differ on machines with different LC_COLLATE or
@@ -115,7 +115,7 @@ seed_issues <- risk_score(report, methods = "seed_check")
 # As a plain data frame for downstream use
 as.data.frame(risks)
 #>                                 file line       call pkg_version risk
-#> 1 /tmp/RtmpIIgQ05/file1bfe558a706a.R    7 base::sort       4.6.0  low
+#> 1 /tmp/Rtmppiw0L1/file1bec3b9e739d.R    7 base::sort       4.6.0  low
 #>          check
 #> 1 locale_check
 #>                                                                                                                                 description
@@ -129,7 +129,7 @@ as.data.frame(risks)
 ### Certifying outputs
 
 After running an analysis, certify the key outputs using
-[`certify()`](https://ndohpenngit.github.io/reproducr/reference/certify.md).
+[`certify()`](https://reproducr-dev.github.io/reproducr/reference/certify.md).
 
 ``` r
 
@@ -154,15 +154,15 @@ certify(
 
 list_certs(file = cert_file)
 #>           tag                timestamp r_version                      os
-#> 1 baseline-v1 2026-06-02T18:52:16+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1 baseline-v1 2026-06-02T19:23:25+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs                             script
-#> 1         3 /tmp/RtmpIIgQ05/file1bfe558a706a.R
+#> 1         3 /tmp/Rtmppiw0L1/file1bec3b9e739d.R
 ```
 
 ### Checking for drift
 
 After any environment change, re-run
-[`check_drift()`](https://ndohpenngit.github.io/reproducr/reference/check_drift.md):
+[`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md):
 
 ``` r
 
@@ -229,9 +229,9 @@ cat(repro_report(report, risks, format = "text", style = "academic"))
 ``` r
 
 badge <- repro_badge(report, risks, output = "markdown")
-#> [![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://ndohpenngit.github.io/reproducr/)
+#> [![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://reproducr-dev.github.io/reproducr/)
 cat(badge)
-#> [![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://ndohpenngit.github.io/reproducr/)
+#> [![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://reproducr-dev.github.io/reproducr/)
 ```
 
 ## The full pipeline
