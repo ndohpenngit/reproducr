@@ -342,8 +342,14 @@ for the complete GitHub Actions workflow.
 
 ## Contributing
 
-Contributions to the breaking-changes database are especially welcome.
-Each entry requires:
+### Breaking-changes database
+
+The database powering
+[`risk_score()`](https://ndohpenngit.github.io/reproducr/reference/risk_score.md)
+is maintained in a dedicated community repository —
+**[reproducr-db](https://github.com/ndohpenngit/reproducr-db)**.
+
+Contributing a new entry requires:
 
 1.  A `pkg::fn` key
 2.  A version window (`from_version`, `to_version`)
@@ -351,5 +357,14 @@ Each entry requires:
 4.  A plain-English description of the breaking change
 5.  A URL reference (package `NEWS.md`, CRAN page, GitHub release)
 
-See `R/breaking_changes_db.R` for the existing format and open a pull
-request.
+Each entry is a small JSON file — see the [reproducr-db
+README](https://github.com/ndohpenngit/reproducr-db#entry-format) for
+the format and the [contributing
+guide](https://ndohpenngit.github.io/reproducr/articles/contributing-to-the-database.html)
+for the version window design principles.
+
+### Package development
+
+To contribute to `reproducr` itself — new features, bug fixes, or
+additional risk checks — open an issue or pull request on the [main
+repository](https://github.com/ndohpenngit/reproducr).

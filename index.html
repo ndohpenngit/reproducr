@@ -473,7 +473,11 @@ risk_score()               check_drift()                    repro_badge()</code>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p>Contributions to the breaking-changes database are especially welcome. Each entry requires:</p>
+<div class="section level3">
+<h3 id="breaking-changes-database">Breaking-changes database<a class="anchor" aria-label="anchor" href="#breaking-changes-database"></a>
+</h3>
+<p>The database powering <code><a href="reference/risk_score.html">risk_score()</a></code> is maintained in a dedicated community repository — <strong><a href="https://github.com/ndohpenngit/reproducr-db" class="external-link">reproducr-db</a></strong>.</p>
+<p>Contributing a new entry requires:</p>
 <ol style="list-style-type: decimal">
 <li>A <code>pkg::fn</code> key</li>
 <li>A version window (<code>from_version</code>, <code>to_version</code>)</li>
@@ -481,7 +485,13 @@ risk_score()               check_drift()                    repro_badge()</code>
 <li>A plain-English description of the breaking change</li>
 <li>A URL reference (package <code>NEWS.md</code>, CRAN page, GitHub release)</li>
 </ol>
-<p>See <code>R/breaking_changes_db.R</code> for the existing format and open a pull request.</p>
+<p>Each entry is a small JSON file — see the <a href="https://github.com/ndohpenngit/reproducr-db#entry-format" class="external-link">reproducr-db README</a> for the format and the <a href="https://ndohpenngit.github.io/reproducr/articles/contributing-to-the-database.html">contributing guide</a> for the version window design principles.</p>
+</div>
+<div class="section level3">
+<h3 id="package-development">Package development<a class="anchor" aria-label="anchor" href="#package-development"></a>
+</h3>
+<p>To contribute to <code>reproducr</code> itself — new features, bug fixes, or additional risk checks — open an issue or pull request on the <a href="https://github.com/ndohpenngit/reproducr" class="external-link">main repository</a>.</p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
