@@ -82,17 +82,35 @@ NULL
 #' @noRd
 .parse_renv_lock <- function(root = getwd()) {
   lock_path <- file.path(root, "renv.lock")
-  lock_text  <- paste(readLines(lock_path, warn = FALSE), collapse = "\n")
 
-  pkg_matches <- gregexpr('"Package":\\s*"([^"]+)"', lock_text, perl = TRUE)
-  ver_matches <- gregexpr('"Version":\\s*"([^"]+)"', lock_text, perl = TRUE)
+  # Use jsonlite if available — handles all renv.lock formats reliably
+  if (requireNamespace("jsonlite", quietly = TRUE)) {
+    lock <- jsonlite::fromJSON(lock_path, simplifyVector = FALSE)
+    pkgs <- lock[["Packages"]]
+    if (is.null(pkgs) || length(pkgs) == 0L) return(list())
+    versions <- lapply(pkgs, function(p) p[["Version"]])
+    return(versions[!sapply(versions, is.null)])
+  }
+
+  # Fallback: regex restricted to the Packages block only.
+  # The R block at the top also has a "Version" field which previously
+  # caused a length mismatch between pkgs and vers.
+  lock_text <- paste(readLines(lock_path, warn = FALSE), collapse = "\n")
+
+  # Strip everything before the first package entry
+  pkg_start <- regexpr('"Packages"\\s*:', lock_text, perl = TRUE)
+  if (pkg_start == -1L) return(list())
+  pkg_block <- substring(lock_text, pkg_start)
+
+  pkg_matches <- gregexpr('"Package":\\s*"([^"]+)"', pkg_block, perl = TRUE)
+  ver_matches <- gregexpr('"Version":\\s*"([^"]+)"', pkg_block, perl = TRUE)
 
   pkgs <- gsub('"Package":\\s*"([^"]+)"', "\\1",
-               regmatches(lock_text, pkg_matches)[[1]], perl = TRUE)
+               regmatches(pkg_block, pkg_matches)[[1]], perl = TRUE)
   vers <- gsub('"Version":\\s*"([^"]+)"', "\\1",
-               regmatches(lock_text, ver_matches)[[1]], perl = TRUE)
+               regmatches(pkg_block, ver_matches)[[1]], perl = TRUE)
 
-  if (length(pkgs) != length(vers) || length(pkgs) == 0) return(list())
+  if (length(pkgs) != length(vers) || length(pkgs) == 0L) return(list())
   setNames(as.list(vers), pkgs)
 }
 

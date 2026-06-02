@@ -1,3 +1,13 @@
+# reproducr 0.1.0.9002
+
+* Fixed `audit_script(renv = TRUE)` incorrectly falling back to the installed
+  library when a valid `renv.lock` was present. The regex parser was matching
+  the R version field in the lockfile header, causing a length mismatch.
+  Now uses `jsonlite` when available for robust JSON parsing, with a corrected
+  regex fallback.
+
+---
+
 # reproducr 0.1.0.9001
 
 * Fixed `audit_script()` to skip prose lines in `.Rmd` and `.qmd` files —
