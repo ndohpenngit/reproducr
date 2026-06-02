@@ -11,4 +11,5 @@ docs/
 
 # R CMD check
 /*.Rcheck/
-*.tar.gzreproducibility_report.md
+*.tar.gz
+reproducibility_report.md
