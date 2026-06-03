@@ -1,77 +1,3 @@
-# ---- internal helpers -------------------------------------------------------
-# Defined first so static analysers can resolve them from check_db_staleness()
-
-#' Resolve current package versions from CRAN or installed library
-#' @noRd
-.resolve_current_versions <- function(pkgs, source, verbose) {
-  versions <- setNames(
-    rep(NA_character_, length(pkgs)),
-    pkgs
-  )
-
-  if (source == "cran") {
-    tryCatch({
-      avail <- utils::available.packages(
-        repos = getOption("repos", "https://cloud.r-project.org")
-      )
-      for (pkg in pkgs) {
-        if (pkg %in% rownames(avail)) {
-          versions[[pkg]] <- avail[pkg, "Version"]
-        } else if (pkg %in% c("base", "stats", "utils", "tools", "methods")) {
-          versions[[pkg]] <- paste(R.version$major, R.version$minor, sep = ".")
-        }
-      }
-    }, error = function(e) {
-      if (verbose) message("reproducr: CRAN query failed, falling back to installed library")
-      inst <- utils::installed.packages()[, c("Package", "Version"), drop = FALSE]
-      for (pkg in pkgs) {
-        if (pkg %in% inst[, "Package"]) {
-          versions[[pkg]] <<- inst[inst[, "Package"] == pkg, "Version"]
-        }
-      }
-    })
-  } else {
-    inst <- utils::installed.packages()[, c("Package", "Version"), drop = FALSE]
-    for (pkg in pkgs) {
-      if (pkg %in% inst[, "Package"]) {
-        versions[[pkg]] <- inst[inst[, "Package"] == pkg, "Version"]
-      } else if (pkg %in% c("base", "stats", "utils", "tools", "methods")) {
-        versions[[pkg]] <- paste(R.version$major, R.version$minor, sep = ".")
-      }
-    }
-  }
-
-  versions
-}
-
-#' Assess staleness of a single entry
-#' @noRd
-.assess_staleness <- function(current_ver, to_ver) {
-  if (is.na(current_ver)) return("unknown")
-  tryCatch({
-    cv <- package_version(as.character(current_ver))
-    tv <- package_version(as.character(to_ver))
-    if (cv > tv) "stale" else "ok"
-  }, error = function(e) "unknown")
-}
-
-#' Empty staleness data frame with correct columns
-#' @noRd
-.empty_staleness_df <- function() {
-  data.frame(
-    key             = character(0),
-    pkg             = character(0),
-    fn              = character(0),
-    to_version      = character(0),
-    current_version = character(0),
-    status          = character(0),
-    gap             = character(0),
-    stringsAsFactors = FALSE
-  )
-}
-
-# ---- main function ----------------------------------------------------------
-
 #' Check whether breaking-changes database entries are stale
 #'
 #' @description
@@ -110,10 +36,10 @@
 #'     \item{`current_version`}{The current version on CRAN or installed.}
 #'     \item{`status`}{One of `"ok"`, `"stale"`, or `"unknown"`.}
 #'     \item{`gap`}{The version difference as a string, e.g. `"1.1.9 -> 1.3.0"`.
-#'       `NA` when status is `"unknown"` or `"ok"`.}
+#'       `NA` when status is `"unknown"`.}
 #'   }
 #'   Rows are ordered: stale first, then ok, then unknown.
-#'   Returned invisibly.
+#'   Printed invisibly when all entries are current.
 #'
 #' @section Staleness vs requiring an update:
 #' A stale entry does not automatically mean the database is wrong. It means
@@ -197,6 +123,7 @@ check_db_staleness <- function(packages = NULL,
     pkg   <- parts[[1L]]
     fn    <- parts[[2L]]
 
+    # Skip if not in requested packages
     if (!is.null(packages) && !pkg %in% packages) next
 
     entries <- .get_breaking_changes(key)
@@ -205,9 +132,14 @@ check_db_staleness <- function(packages = NULL,
     curr_ver <- current_versions[[pkg]]
 
     for (entry in entries) {
-      to_ver <- entry$to_version
-      status <- .assess_staleness(curr_ver, to_ver)
-      gap    <- if (!is.na(curr_ver) && status == "stale") {
+      # Skip intentionally closed entries — their to_version is deliberately
+      # set low (e.g. historical base R changes). Flagging them as stale
+      # would be a false positive.
+      if (isTRUE(entry$closed)) next
+
+      to_ver  <- entry$to_version
+      status  <- .assess_staleness(curr_ver, to_ver)
+      gap     <- if (!is.na(curr_ver) && status == "stale") {
         sprintf("%s -> %s", to_ver, curr_ver)
       } else {
         NA_character_
@@ -229,11 +161,11 @@ check_db_staleness <- function(packages = NULL,
   if (length(results) == 0L) {
     out <- .empty_staleness_df()
   } else {
-    out        <- do.call(rbind, results)
-    status_ord <- c(stale = 1L, ok = 2L, unknown = 3L)
-    out$.ord   <- status_ord[out$status]
-    out        <- out[order(out$.ord, out$pkg, out$fn), ]
-    out$.ord   <- NULL
+    out         <- do.call(rbind, results)
+    status_ord  <- c(stale = 1L, ok = 2L, unknown = 3L)
+    out$.ord    <- status_ord[out$status]
+    out         <- out[order(out$.ord, out$pkg, out$fn), ]
+    out$.ord    <- NULL
     row.names(out) <- NULL
   }
 
@@ -297,4 +229,77 @@ print.staleness_report <- function(x, ...) {
   }
 
   invisible(x)
+}
+
+# ---- internal helpers -------------------------------------------------------
+
+#' Resolve current package versions from CRAN or installed library
+#' @noRd
+.resolve_current_versions <- function(pkgs, source, verbose) {
+  versions <- setNames(
+    rep(NA_character_, length(pkgs)),
+    pkgs
+  )
+
+  if (source == "cran") {
+    tryCatch({
+      avail <- utils::available.packages(
+        repos = getOption("repos", "https://cloud.r-project.org")
+      )
+      for (pkg in pkgs) {
+        if (pkg %in% rownames(avail)) {
+          versions[[pkg]] <- avail[pkg, "Version"]
+        } else if (pkg %in% c("base", "stats", "utils", "tools", "methods")) {
+          # Base R packages — use R version
+          versions[[pkg]] <- paste(R.version$major, R.version$minor, sep = ".")
+        }
+      }
+    }, error = function(e) {
+      if (verbose) message("reproducr: CRAN query failed, falling back to installed library")
+      inst <- utils::installed.packages()[, c("Package", "Version"), drop = FALSE]
+      for (pkg in pkgs) {
+        if (pkg %in% inst[, "Package"]) {
+          versions[[pkg]] <<- inst[inst[, "Package"] == pkg, "Version"]
+        }
+      }
+    })
+  } else {
+    # installed
+    inst <- utils::installed.packages()[, c("Package", "Version"), drop = FALSE]
+    for (pkg in pkgs) {
+      if (pkg %in% inst[, "Package"]) {
+        versions[[pkg]] <- inst[inst[, "Package"] == pkg, "Version"]
+      } else if (pkg %in% c("base", "stats", "utils", "tools", "methods")) {
+        versions[[pkg]] <- paste(R.version$major, R.version$minor, sep = ".")
+      }
+    }
+  }
+
+  versions
+}
+
+#' Assess staleness of a single entry
+#' @noRd
+.assess_staleness <- function(current_ver, to_ver) {
+  if (is.na(current_ver)) return("unknown")
+  tryCatch({
+    cv <- package_version(as.character(current_ver))
+    tv <- package_version(as.character(to_ver))
+    if (cv > tv) "stale" else "ok"
+  }, error = function(e) "unknown")
+}
+
+#' Empty staleness data frame with correct columns
+#' @noRd
+.empty_staleness_df <- function() {
+  data.frame(
+    key             = character(0),
+    pkg             = character(0),
+    fn              = character(0),
+    to_version      = character(0),
+    current_version = character(0),
+    status          = character(0),
+    gap             = character(0),
+    stringsAsFactors = FALSE
+  )
 }

@@ -42,10 +42,10 @@ with one row per database entry. Columns:
 \item{\code{current_version}}{The current version on CRAN or installed.}
 \item{\code{status}}{One of \code{"ok"}, \code{"stale"}, or \code{"unknown"}.}
 \item{\code{gap}}{The version difference as a string, e.g. \code{"1.1.9 -> 1.3.0"}.
-\code{NA} when status is \code{"unknown"} or \code{"ok"}.}
+\code{NA} when status is \code{"unknown"}.}
 }
 Rows are ordered: stale first, then ok, then unknown.
-Returned invisibly.
+Printed invisibly when all entries are current.
 }
 \description{
 Compares the \code{to_version} ceiling of each entry in the breaking-changes

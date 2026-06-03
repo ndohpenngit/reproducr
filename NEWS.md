@@ -1,4 +1,22 @@
-# reproducr (development version)
+# reproducr 0.1.1.9001
+
+* `check_db_staleness()` now skips entries marked `closed = TRUE` in the
+  database. These are intentionally closed version windows (e.g. historical
+  base R changes) that should not be flagged as stale. Five base R entries
+  (`stats::sample`, `stats::rnorm`, `stats::runif`, `stats::rbinom`,
+  `stats::hclust`) are now marked closed in `reproducr-db`.
+
+* Updated 19 stale `to_version` ceilings in `reproducr-db` to cover current
+  CRAN releases (`dplyr`, `ggplot2`, `tidyr`, `purrr`, `readr`, `stringr`,
+  `data.table`, `lme4`, `broom`, `caret`).
+
+* Added `caret::train` as a new database entry (version window `6.0.99` to
+  `7.0.9`).
+
+* Added `closed` and `closed_reason` fields to the `reproducr-db` JSON schema.
+
+* Migrated all repositories to the
+  [`reproducr-dev`](https://github.com/reproducr-dev) GitHub organisation.
 
 # reproducr 0.1.1
 
