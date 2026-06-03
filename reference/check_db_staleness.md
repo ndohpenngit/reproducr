@@ -90,10 +90,10 @@ row per database entry. Columns:
 - `gap`:
 
   The version difference as a string, e.g. `"1.1.9 -> 1.3.0"`. `NA` when
-  status is `"unknown"` or `"ok"`.
+  status is `"unknown"`.
 
-Rows are ordered: stale first, then ok, then unknown. Returned
-invisibly.
+Rows are ordered: stale first, then ok, then unknown. Printed invisibly
+when all entries are current.
 
 ## Staleness vs requiring an update
 
