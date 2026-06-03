@@ -91,7 +91,7 @@ jobs:
         if: steps.staleness.outputs.has_stale == 'true'
         uses: peter-evans/create-issue-from-file@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CROSS_REPO_PAT }}
           repository: reproducr-dev/reproducr-db
           title: >
             Database staleness: ${{ steps.staleness.outputs.n_stale }}
@@ -99,7 +99,7 @@ jobs:
           content-filepath: staleness_issue_body.md
           labels: |
             stale-entry
-          assignees: reproducr-dev
+          assignees: ndohpenngit
 
       - name: Report clean status
         if: steps.staleness.outputs.has_stale == 'false'
