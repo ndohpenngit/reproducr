@@ -22,7 +22,7 @@
   "broom::tidy" = list(
     list(
       from_version = "0.7.99",
-      to_version   = "1.0.9",
+      to_version   = "1.0.13",
       risk         = "medium",
       description  = paste0(
         "In broom 0.8.0, tidy() renamed columns for several model",
