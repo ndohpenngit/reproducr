@@ -26,7 +26,7 @@ jobs:
 
       - name: Clone reproducr-db
         run: |
-          git clone https://github.com/reproducr-dev/reproducr-db \
+          git clone https://github.com/repro-stats/reproducr-db \
             ../reproducr-db
 
       - name: Run sync_db.R

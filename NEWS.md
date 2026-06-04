@@ -16,7 +16,7 @@
 * Added `closed` and `closed_reason` fields to the `reproducr-db` JSON schema.
 
 * Migrated all repositories to the
-  [`reproducr-dev`](https://github.com/reproducr-dev) GitHub organisation.
+  [`repro-stats`](https://github.com/repro-stats) GitHub organisation.
 
 # reproducr 0.1.1
 
@@ -50,7 +50,7 @@
   expanded `vignette("contributing-to-the-database")` with three rules for
   setting `to_version` and a quick-reference table.
 
-* Launched [`reproducr-db`](https://github.com/reproducr-dev/reproducr-db) —
+* Launched [`reproducr-db`](https://github.com/repro-stats/reproducr-db) —
   a companion repository for community-contributed breaking-change entries.
   All 29 existing entries are available as JSON files with a validation CI
   workflow on every PR.

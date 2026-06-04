@@ -51,7 +51,7 @@ jobs:
               body <- paste0(
                 '## Breaking-changes database staleness alert\n\n',
                 'The following entries in ',
-                '[reproducr-db](https://github.com/reproducr-dev/reproducr-db) ',
+                '[reproducr-db](https://github.com/repro-stats/reproducr-db) ',
                 'have a \`to_version\` below the current CRAN release.\n\n',
                 'For each entry, determine whether:\n',
                 '- The breaking change **still applies** ',
@@ -61,14 +61,14 @@ jobs:
                 '- The entry should be **closed** ',
                   '(ecosystem has moved on)\n\n',
                 'See the [version window design principles]',
-                '(https://github.com/reproducr-dev/reproducr-db#version-window-design-principles) ',
+                '(https://github.com/repro-stats/reproducr-db#version-window-design-principles) ',
                 'for guidance.\n\n',
                 '| Entry | \`to_version\` | Current CRAN |\n',
                 '|---|---|---|\n',
                 paste(rows, collapse = '\n'),
                 '\n\n---\n',
                 '_Last updated automatically by the ',
-                '[db-staleness workflow](https://github.com/reproducr-dev/reproducr/actions/workflows/db-staleness.yml) ',
+                '[db-staleness workflow](https://github.com/repro-stats/reproducr/actions/workflows/db-staleness.yml) ',
                 'in the reproducr package._'
               )
               writeLines(body, 'staleness_issue_body.md')
@@ -86,7 +86,7 @@ jobs:
           GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
         run: |
           issue_number=$(gh issue list \
-            --repo reproducr-dev/reproducr-db \
+            --repo repro-stats/reproducr-db \
             --label stale-entry \
             --state open \
             --json number \
@@ -98,7 +98,7 @@ jobs:
         uses: peter-evans/create-issue-from-file@v5
         with:
           token: ${{ secrets.CROSS_REPO_PAT }}
-          repository: reproducr-dev/reproducr-db
+          repository: repro-stats/reproducr-db
           title: >
             Database staleness: ${{ steps.staleness.outputs.n_stale }}
             entries need review
@@ -113,12 +113,12 @@ jobs:
           GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
         run: |
           gh issue edit ${{ steps.find_issue.outputs.issue_number }} \
-            --repo reproducr-dev/reproducr-db \
+            --repo repro-stats/reproducr-db \
             --title "Database staleness: ${{ steps.staleness.outputs.n_stale }} entries need review" \
             --body-file staleness_issue_body.md
 
           gh issue comment ${{ steps.find_issue.outputs.issue_number }} \
-            --repo reproducr-dev/reproducr-db \
+            --repo repro-stats/reproducr-db \
             --body "🔄 Updated by the weekly staleness check — ${{ steps.staleness.outputs.n_stale }} entries still need review."
 
       - name: Close issue if all entries are now current
@@ -127,7 +127,7 @@ jobs:
           GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
         run: |
           gh issue close ${{ steps.find_issue.outputs.issue_number }} \
-            --repo reproducr-dev/reproducr-db \
+            --repo repro-stats/reproducr-db \
             --comment "✅ All database entries are now current. Closing automatically."
 
       - name: Report clean status

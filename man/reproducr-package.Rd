@@ -70,8 +70,8 @@ when any entry's \code{to_version} ceiling falls below the current CRAN release.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/reproducr-dev/reproducr}
-  \item Report bugs at \url{https://github.com/reproducr-dev/reproducr/issues}
+  \item \url{https://github.com/repro-stats/reproducr}
+  \item Report bugs at \url{https://github.com/repro-stats/reproducr/issues}
 }
 
 }
