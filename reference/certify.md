@@ -4,7 +4,7 @@ Hashes a named list of R objects (model coefficients, summary
 statistics, key scalars, data frames) and saves them alongside full
 environment metadata to a local certification file (`.reproducr.rds` by
 default). Later runs can call
-[`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md)
+[`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md)
 to verify that results have not changed.
 
 Think of `certify()` as a "signed receipt" for a completed analysis run.
@@ -54,7 +54,7 @@ summary to the console.
 All certifications for a project are accumulated in a single
 `.reproducr.rds` file. You can have multiple tags representing different
 stages (e.g. before and after peer review). Use
-[`list_certs()`](https://reproducr-dev.github.io/reproducr/reference/list_certs.md)
+[`list_certs()`](https://repro-stats.github.io/reproducr/reference/list_certs.md)
 to inspect stored tags.
 
 ## Version control
@@ -64,9 +64,9 @@ This makes the certification auditable and shareable with collaborators.
 
 ## See also
 
-[`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md)
+[`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md)
 to compare current outputs against a baseline;
-[`list_certs()`](https://reproducr-dev.github.io/reproducr/reference/list_certs.md)
+[`list_certs()`](https://repro-stats.github.io/reproducr/reference/list_certs.md)
 to inspect stored certifications.
 
 ## Examples
@@ -86,12 +86,12 @@ certify(
   script = "analysis.R",
   file   = cert_file
 )
-#> reproducr: certified 3 output(s) [2026-06-03] under tag 'baseline-v1'
+#> reproducr: certified 3 output(s) [2026-06-04] under tag 'baseline-v1'
 
 # See what is stored
 list_certs(file = cert_file)
 #>           tag                timestamp r_version                      os
-#> 1 baseline-v1 2026-06-03T21:37:03+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1 baseline-v1 2026-06-04T20:41:22+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs     script
 #> 1         3 analysis.R
 ```

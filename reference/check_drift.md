@@ -22,7 +22,7 @@ check_drift(
 - outputs:
 
   A fully named list of current R objects — the same names used in the
-  [`certify()`](https://reproducr-dev.github.io/reproducr/reference/certify.md)
+  [`certify()`](https://repro-stats.github.io/reproducr/reference/certify.md)
   call being compared against.
 
 - against:
@@ -53,9 +53,9 @@ Also prints a summary to the console.
 
 ## See also
 
-[`certify()`](https://reproducr-dev.github.io/reproducr/reference/certify.md)
+[`certify()`](https://repro-stats.github.io/reproducr/reference/certify.md)
 to create a baseline;
-[`list_certs()`](https://reproducr-dev.github.io/reproducr/reference/list_certs.md)
+[`list_certs()`](https://repro-stats.github.io/reproducr/reference/list_certs.md)
 to see available tags.
 
 ## Examples
@@ -65,7 +65,7 @@ cert_file <- tempfile()
 model <- lm(mpg ~ wt, data = mtcars)
 
 certify(list(coefs = coef(model)), tag = "v1", file = cert_file)
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'v1'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'v1'
 
 # Same outputs — should report "ok"
 result <- check_drift(list(coefs = coef(model)),

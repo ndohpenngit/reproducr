@@ -1,10 +1,10 @@
 # Certifying outputs and detecting drift
 
 This vignette covers Tier 2 of the `reproducr` workflow in depth:
-[`certify()`](https://reproducr-dev.github.io/reproducr/reference/certify.md),
-[`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md),
+[`certify()`](https://repro-stats.github.io/reproducr/reference/certify.md),
+[`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md),
 and
-[`list_certs()`](https://reproducr-dev.github.io/reproducr/reference/list_certs.md).
+[`list_certs()`](https://repro-stats.github.io/reproducr/reference/list_certs.md).
 These three functions together form the *baseline and drift detection*
 system.
 
@@ -15,9 +15,9 @@ libraries (BLAS, LAPACK) get updated by system administrators. R itself
 changes RNG defaults between minor versions. Any of these can alter your
 numerical results without producing an error.
 
-[`certify()`](https://reproducr-dev.github.io/reproducr/reference/certify.md)
+[`certify()`](https://repro-stats.github.io/reproducr/reference/certify.md)
 and
-[`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md)
+[`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md)
 detect this. The idea is simple:
 
 1.  After a successful analysis run, hash the key outputs and store the
@@ -52,7 +52,7 @@ certify(
   script = "analysis.R",
   file   = cert_file
 )
-#> reproducr: certified 6 output(s) [2026-06-03] under tag 'baseline-v1'
+#> reproducr: certified 6 output(s) [2026-06-04] under tag 'baseline-v1'
 ```
 
 ### Choosing what to certify
@@ -79,14 +79,14 @@ certify(
   tag     = "pre-peer-review",
   file    = cert_file
 )
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'pre-peer-review'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'pre-peer-review'
 
 certify(
   outputs = list(coefs = coef(model)),
   tag     = "post-revision",
   file    = cert_file
 )
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'post-revision'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'post-revision'
 ```
 
 Passing a duplicate tag overwrites the existing record with a warning:
@@ -98,9 +98,9 @@ certify(
   tag     = "baseline-v1",
   file    = cert_file
 )
-#> Warning: Tag 'baseline-v1' already exists in '/tmp/RtmpjB1uRS/file1b70e6d86a9'.
-#> Overwriting.
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'baseline-v1'
+#> Warning: Tag 'baseline-v1' already exists in
+#> '/tmp/RtmpfY5mnL/file1bd37541f60d'. Overwriting.
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'baseline-v1'
 ```
 
 ------------------------------------------------------------------------
@@ -111,9 +111,9 @@ certify(
 
 list_certs(file = cert_file)
 #>               tag                timestamp r_version                      os
-#> 1     baseline-v1 2026-06-03T21:37:10+0000     4.6.0 Linux 6.17.0-1015-azure
-#> 2 pre-peer-review 2026-06-03T21:37:10+0000     4.6.0 Linux 6.17.0-1015-azure
-#> 3   post-revision 2026-06-03T21:37:10+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1     baseline-v1 2026-06-04T20:41:29+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 2 pre-peer-review 2026-06-04T20:41:29+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 3   post-revision 2026-06-04T20:41:29+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs script
 #> 1         1   <NA>
 #> 2         1   <NA>
@@ -165,7 +165,7 @@ certify(
   tag  = "four-statuses",
   file = cert_file
 )
-#> reproducr: certified 3 output(s) [2026-06-03] under tag 'four-statuses'
+#> reproducr: certified 3 output(s) [2026-06-04] under tag 'four-statuses'
 
 demo_result <- check_drift(
   outputs = list(
@@ -205,19 +205,19 @@ print(demo_result)
 |----|----|
 | `ok` | Hash matches the baseline exactly |
 | `drifted` | Hash differs — output has changed |
-| `missing` | Present in baseline, not supplied to [`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md) |
-| `new` | Supplied to [`check_drift()`](https://reproducr-dev.github.io/reproducr/reference/check_drift.md), not in baseline |
+| `missing` | Present in baseline, not supplied to [`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md) |
+| `new` | Supplied to [`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md), not in baseline |
 
 ### Using `"latest"`
 
 ``` r
 
 certify(outputs = list(x = 1L), tag = "run-1", file = cert_file)
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'run-1'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'run-1'
 certify(outputs = list(x = 1L), tag = "run-2", file = cert_file)
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'run-2'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'run-2'
 certify(outputs = list(x = 1L), tag = "run-3", file = cert_file)
-#> reproducr: certified 1 output(s) [2026-06-03] under tag 'run-3'
+#> reproducr: certified 1 output(s) [2026-06-04] under tag 'run-3'
 
 check_drift(outputs = list(x = 1L), against = "latest", file = cert_file)
 #> reproducr: comparing against latest tag: 'run-3'
