@@ -136,7 +136,7 @@ certify <- function(outputs, tag, script = NULL, file = ".reproducr") {
 #' changed (`"drifted"`), are present in the baseline but not supplied
 #' (`"missing"`), or are new outputs not in the baseline (`"new"`).
 #'
-#' @param outputs A fully named list of current R objects — the same names used
+#' @param outputs A fully named list of current R objects -- the same names used
 #'   in the [certify()] call being compared against.
 #' @param against `character(1)`. The certification tag to compare against.
 #'   Use `"latest"` (the default) to automatically select the most recently
@@ -163,12 +163,12 @@ certify <- function(outputs, tag, script = NULL, file = ".reproducr") {
 #'
 #' certify(list(coefs = coef(model)), tag = "v1", file = cert_file)
 #'
-#' # Same outputs — should report "ok"
+#' # Same outputs -- should report "ok"
 #' result <- check_drift(list(coefs = coef(model)),
 #'                        against = "v1", file = cert_file)
 #' print(result)
 #'
-#' # Different model — should report "drifted"
+#' # Different model -- should report "drifted"
 #' model2 <- lm(mpg ~ hp, data = mtcars)
 #' check_drift(list(coefs = coef(model2)),
 #'              against = "v1", file = cert_file)
@@ -240,7 +240,7 @@ check_drift <- function(outputs,
       next
     }
 
-    # Hashes differ — attempt numeric tolerance comparison
+    # Hashes differ -- attempt numeric tolerance comparison
     max_delta <- NA_real_
     note      <- "Hash mismatch."
 
@@ -325,7 +325,7 @@ check_drift <- function(outputs,
 #'   Default `".reproducr"`.
 #'
 #' @return A `data.frame` with columns `tag`, `timestamp`, `r_version`,
-#'   `os`, `n_outputs`, `script` — one row per certification.
+#'   `os`, `n_outputs`, `script` -- one row per certification.
 #'   Returns an empty data frame if no certifications exist.
 #'
 #' @examples

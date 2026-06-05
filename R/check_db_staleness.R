@@ -132,7 +132,7 @@ check_db_staleness <- function(packages = NULL,
     curr_ver <- current_versions[[pkg]]
 
     for (entry in entries) {
-      # Skip intentionally closed entries — their to_version is deliberately
+      # Skip intentionally closed entries -- their to_version is deliberately
       # set low (e.g. historical base R changes). Flagging them as stale
       # would be a false positive.
       if (isTRUE(entry$closed)) next
@@ -250,7 +250,7 @@ print.staleness_report <- function(x, ...) {
         if (pkg %in% rownames(avail)) {
           versions[[pkg]] <- avail[pkg, "Version"]
         } else if (pkg %in% c("base", "stats", "utils", "tools", "methods")) {
-          # Base R packages — use R version
+          # Base R packages -- use R version
           versions[[pkg]] <- paste(R.version$major, R.version$minor, sep = ".")
         }
       }

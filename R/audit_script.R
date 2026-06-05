@@ -22,7 +22,7 @@
 #'   \item{`calls`}{A `data.frame` with one row per detected `pkg::fn` call,
 #'     columns `file`, `line`, `pkg`, `fn`, `pkg_version`.}
 #'   \item{`env`}{A list with R version, platform, OS, locale, and timezone.}
-#'   \item{`renv_used`}{`logical` — were versions sourced from a lockfile?}
+#'   \item{`renv_used`}{`logical` -- were versions sourced from a lockfile?}
 #'   \item{`timestamp`}{`POSIXct` timestamp of when the audit was run.}
 #'   \item{`paths`}{Character vector of files that were scanned.}
 #' }
@@ -35,7 +35,7 @@
 #' be used alongside `reproducr`.
 #'
 #' @section What counts as a qualifying call?:
-#' Only *qualified* calls — those using `::` or `:::` — are detected. Unqualified
+#' Only *qualified* calls -- those using `::` or `:::` -- are detected. Unqualified
 #' calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not detected because
 #' the package cannot be determined unambiguously from source text alone.
 #' This is by design: qualifying calls is also a reproducibility best practice.

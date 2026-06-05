@@ -11,7 +11,7 @@
 #'
 #' @section Workflow:
 #'
-#' **Tier 1 — Scan & score**
+#' **Tier 1 -- Scan & score**
 #'
 #' ```r
 #' report <- audit_script("analysis.R")
@@ -19,7 +19,7 @@
 #' print(risks)
 #' ```
 #'
-#' **Tier 2 — Baseline & drift**
+#' **Tier 2 -- Baseline & drift**
 #'
 #' ```r
 #' model <- lm(mpg ~ wt, data = mtcars)
@@ -29,7 +29,7 @@
 #' check_drift(list(coefs = coef(model)), against = "submission-v1")
 #' ```
 #'
-#' **Tier 3 — Report & export**
+#' **Tier 3 -- Report & export**
 #'
 #' ```r
 #' repro_report(report, risks, format = "html", style = "pharma")
@@ -54,7 +54,7 @@
 #' The internal database covers known silent breaking changes in:
 #' `dplyr`, `tidyr`, `ggplot2`, `readr`, `purrr`, `stringr`, `broom`,
 #' `data.table`, `lme4`, `lubridate`, and base R. Community contributions
-#' are welcome — see `vignette("contributing-to-the-database")`.
+#' are welcome -- see `vignette("contributing-to-the-database")`.
 #'
 #' The database is kept current via a weekly GitHub Actions workflow that
 #' calls [reproducr::check_db_staleness()] and opens an issue automatically

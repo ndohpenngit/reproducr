@@ -83,7 +83,7 @@ NULL
 .parse_renv_lock <- function(root = getwd()) {
   lock_path <- file.path(root, "renv.lock")
 
-  # Use jsonlite if available — handles all renv.lock formats reliably
+  # Use jsonlite if available -- handles all renv.lock formats reliably
   if (requireNamespace("jsonlite", quietly = TRUE)) {
     lock <- jsonlite::fromJSON(lock_path, simplifyVector = FALSE)
     pkgs <- lock[["Packages"]]
@@ -138,7 +138,7 @@ NULL
 # ---- version comparison -----------------------------------------------------
 
 #' Return TRUE if `installed` version sits in the half-open risk window
-#' (from_ver, to_ver] — i.e., the breaking change was introduced in to_ver.
+#' (from_ver, to_ver] -- i.e., the breaking change was introduced in to_ver.
 #' @noRd
 .version_in_window <- function(installed, from_ver, to_ver) {
   tryCatch({

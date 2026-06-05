@@ -4,12 +4,12 @@
 #' Takes an `audit_report` and checks every detected `pkg::fn` call against
 #' three independent checks:
 #'
-#' - **`"changelog"`** — matches against a curated database of known breaking
+#' - **`"changelog"`** -- matches against a curated database of known breaking
 #'   changes in popular CRAN packages, flagging calls where the installed
 #'   version falls in a known-risky version window.
-#' - **`"seed_check"`** — flags stochastic functions (`rnorm`, `sample`, etc.)
+#' - **`"seed_check"`** -- flags stochastic functions (`rnorm`, `sample`, etc.)
 #'   where no `set.seed()` appears within 50 lines above the call.
-#' - **`"locale_check"`** — flags functions whose output is locale-sensitive
+#' - **`"locale_check"`** -- flags functions whose output is locale-sensitive
 #'   (`sort()`, `format()`, `tolower()`, etc.).
 #'
 #' @param audit An `audit_report` object returned by [reproducr::audit_script()].
