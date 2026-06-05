@@ -71,7 +71,7 @@
 <!-- badges: start -->
 
 <blockquote>
-<p>The reproducibility badge reflects the status of the <a href="#see-it-in-action">example analysis repos</a>. See those repos for a live demonstration of <code><a href="reference/repro_badge.html">repro_badge()</a></code> in a real analysis workflow.</p>
+<p>The reproducibility badge reflects the status of the <a href="#gallery">gallery repos</a>. See those repos for a live demonstration of <code><a href="reference/repro_badge.html">repro_badge()</a></code> in a real analysis workflow.</p>
 </blockquote>
 <blockquote>
 <p><strong>Know your R analysis will produce the same results tomorrow as it does today.</strong></p>
@@ -104,43 +104,59 @@
 <hr>
 </div>
 <div class="section level2">
-<h2 id="see-it-in-action">See it in action<a class="anchor" aria-label="anchor" href="#see-it-in-action"></a>
+<h2 id="gallery">Gallery<a class="anchor" aria-label="anchor" href="#gallery"></a>
 </h2>
-<p>The best way to understand <code>reproducr</code> is to see it running on a real analysis. The companion repositories below each demonstrate the full three-tier workflow on a realistic dataset, with CI that audits on every push, certifies outputs, detects drift, and updates the badge automatically.</p>
-<p>They also show that <code>reproducr</code> is environment-agnostic — the ecology example runs without <code>renv</code>, while the clinical trial example uses <code>renv</code> to lock the environment first. Both approaches are fully supported.</p>
-<table class="table">
+<p>Real-world pipelines demonstrating the full <code>reproducr</code> workflow across different domains, environments, and regulatory contexts. Each repository is a complete, independently runnable analysis with CI that audits on every push, certifies outputs, detects drift, and updates the badge automatically.</p>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
 </colgroup>
 <thead><tr>
 <th>Example</th>
 <th>Domain</th>
+<th>Audience</th>
 <th>renv</th>
+<th>Report style</th>
 <th>Badge</th>
 <th>Walkthrough</th>
 </tr></thead>
 <tbody>
 <tr>
-<td><a href="https://github.com/repro-stats/reproducr-example" class="external-link">reproducr-example</a></td>
+<td><a href="https://github.com/repro-stats/reproducr-ecology" class="external-link">reproducr-ecology</a></td>
 <td>Ecology / penguins</td>
+<td>General R users</td>
 <td>No</td>
-<td><a href="https://github.com/repro-stats/reproducr-example/actions/workflows/reproducr-audit.yml" class="external-link"><img src="https://github.com/repro-stats/reproducr-example/actions/workflows/reproducr-audit.yml/badge.svg" alt="reproducibility"></a></td>
-<td><a href="https://github.com/repro-stats/reproducr-example/blob/main/DEMO.md" class="external-link">DEMO.md</a></td>
+<td>minimal</td>
+<td><a href="https://github.com/repro-stats/reproducr-ecology/actions/workflows/reproducr-audit.yml" class="external-link"><img src="https://github.com/repro-stats/reproducr-ecology/actions/workflows/reproducr-audit.yml/badge.svg" alt="reproducibility"></a></td>
+<td><a href="https://github.com/repro-stats/reproducr-ecology/blob/main/DEMO.md" class="external-link">DEMO.md</a></td>
 </tr>
 <tr>
-<td><a href="https://github.com/repro-stats/reproducr-example-clinical" class="external-link">reproducr-example-clinical</a></td>
+<td><a href="https://github.com/repro-stats/reproducr-clinical" class="external-link">reproducr-clinical</a></td>
 <td>Clinical trials / oncology</td>
+<td>Biostatisticians, pharma</td>
 <td>Yes</td>
-<td><a href="https://github.com/repro-stats/reproducr-example-clinical/actions/workflows/reproducr-audit.yml" class="external-link"><img src="https://github.com/repro-stats/reproducr-example-clinical/actions/workflows/reproducr-audit.yml/badge.svg" alt="reproducibility"></a></td>
-<td><a href="https://github.com/repro-stats/reproducr-example-clinical/blob/main/DEMO.md" class="external-link">DEMO.md</a></td>
+<td>pharma</td>
+<td><a href="https://github.com/repro-stats/reproducr-clinical/actions/workflows/reproducr-audit.yml" class="external-link"><img src="https://github.com/repro-stats/reproducr-clinical/actions/workflows/reproducr-audit.yml/badge.svg" alt="reproducibility"></a></td>
+<td><a href="https://github.com/repro-stats/reproducr-clinical/blob/main/DEMO.md" class="external-link">DEMO.md</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/repro-stats/reproducr-rwe" class="external-link">reproducr-rwe</a></td>
+<td>Real world evidence</td>
+<td>Epidemiologists, HEOR</td>
+<td>Yes</td>
+<td>academic</td>
+<td><a href="https://github.com/repro-stats/reproducr-rwe/actions/workflows/reproducr-audit.yml" class="external-link"><img src="https://github.com/repro-stats/reproducr-rwe/actions/workflows/reproducr-audit.yml/badge.svg" alt="reproducibility"></a></td>
+<td><a href="https://github.com/repro-stats/reproducr-rwe/blob/main/DEMO.md" class="external-link">DEMO.md</a></td>
 </tr>
 </tbody>
 </table>
-<p>Each <code>DEMO.md</code> walks through the complete pipeline with real output at every step — from <code><a href="reference/audit_script.html">audit_script()</a></code> through to the pharma QC report and committed certification history.</p>
+<p>Together they demonstrate that <code>reproducr</code> is environment-agnostic — it works with or without <code>renv</code>, across domains, and at any level of regulatory rigour. Each <code>DEMO.md</code> walks through the complete pipeline with real output at every step.</p>
 <hr>
 </div>
 <div class="section level2">
@@ -307,7 +323,7 @@ risk_score()               check_drift()                    repro_badge()</code>
 <tbody>
 <tr>
 <td><code>dplyr</code></td>
-<td>4</td>
+<td>5</td>
 <td>
 <code>summarise()</code> grouping change (v1.1.0), <code>across()</code> naming (v1.1.0)</td>
 </tr>
@@ -360,14 +376,24 @@ risk_score()               check_drift()                    repro_badge()</code>
 <td>Optimizer tolerance change</td>
 </tr>
 <tr>
+<td><code>caret</code></td>
+<td>1</td>
+<td>
+<code>train()</code> interface changes (v7.0.0)</td>
+</tr>
+<tr>
+<td><code>rstan</code></td>
+<td>2</td>
+<td>Array syntax change (v2.26), <code>extract()</code> permutation default</td>
+</tr>
+<tr>
 <td><code>base R</code></td>
 <td>5</td>
 <td>RNG change (R 3.6.0), <code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust()</a></code> tie-breaking (R 4.0.0)</td>
 </tr>
 </tbody>
 </table>
-<p>The database is kept current via a weekly automated check — see <code><a href="reference/check_db_staleness.html">check_db_staleness()</a></code>.</p>
-<p><strong>Contributing:</strong> Each entry is a plain R list in <code>R/breaking_changes_db.R</code>. Open a pull request to add new entries — see the <a href="https://repro-stats.github.io/reproducr/articles/contributing-to-the-database.html">contributing guide</a> for the schema.</p>
+<p>The database is kept current via a weekly automated check — see <code><a href="reference/check_db_staleness.html">check_db_staleness()</a></code>. Community contributions are welcome via <strong><a href="https://github.com/repro-stats/reproducr-db" class="external-link">reproducr-db</a></strong>.</p>
 <hr>
 </div>
 <div class="section level2">
