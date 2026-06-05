@@ -8,14 +8,14 @@ result and
 [`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md)
 result. Three style presets are available:
 
-- **`"minimal"`** â€” compact summary suitable for console review or
+- **`"minimal"`** – compact summary suitable for console review or
   internal project documentation.
 
-- **`"academic"`** â€” generates a ready-to-paste methods paragraph for
+- **`"academic"`** – generates a ready-to-paste methods paragraph for
   journal submissions, listing all packages with versions and
   summarising risk findings.
 
-- **`"pharma"`** â€” structured QC document with a risk register and
+- **`"pharma"`** – structured QC document with a risk register and
   sign-off fields, suitable for pharmaceutical or regulated analytical
   workflows.
 
@@ -44,7 +44,7 @@ repro_report(
 
   A `risk_report` data frame from
   [`risk_score()`](https://repro-stats.github.io/reproducr/reference/risk_score.md).
-  Optional but strongly recommended â€” without it, the report cannot
+  Optional but strongly recommended – without it, the report cannot
   assess reproducibility.
 
 - drift:
@@ -98,7 +98,7 @@ risks  <- risk_score(report)
 repro_report(report, risks, format = "text", style = "minimal")
 #> reproducr audit report
 #> 
-#> - Generated: 2026-06-05 18:58
+#> - Generated: 2026-06-05 21:38
 #> - R version: 4.6.0
 #> - Platform: Linux 6.17.0-1015-azure
 #> - Files scanned: 1

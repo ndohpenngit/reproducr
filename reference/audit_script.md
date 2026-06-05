@@ -64,7 +64,7 @@ An S3 object of class `"audit_report"`, a list containing:
 
 - `renv_used`:
 
-  `logical` — were versions sourced from a lockfile?
+  `logical` – were versions sourced from a lockfile?
 
 - `timestamp`:
 
@@ -84,7 +84,7 @@ the parse tree (e.g. `lintr`) should be used alongside `reproducr`.
 
 ## What counts as a qualifying call?
 
-Only *qualified* calls — those using `::` or `:::` — are detected.
+Only *qualified* calls – those using `::` or `:::` – are detected.
 Unqualified calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not
 detected because the package cannot be determined unambiguously from
 source text alone. This is by design: qualifying calls is also a
@@ -114,7 +114,7 @@ writeLines(c(
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 #> 
-#> -- reproducr audit report [2026-06-05 18:58] --
+#> -- reproducr audit report [2026-06-05 21:38] --
 #> 
 #>   Files scanned:     1
 #>   Packages found:    2
@@ -129,7 +129,7 @@ print(report)
 # See the detected calls as a data frame
 report$calls
 #>                                 file line   pkg        fn pkg_version
-#> 1 /tmp/RtmptIHbNk/file1a492fb0e78e.R    2 dplyr    filter        <NA>
-#> 2 /tmp/RtmptIHbNk/file1a492fb0e78e.R    3 dplyr summarise        <NA>
-#> 3 /tmp/RtmptIHbNk/file1a492fb0e78e.R    4 stats     rnorm       4.6.0
+#> 1 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    2 dplyr    filter        <NA>
+#> 2 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    3 dplyr summarise        <NA>
+#> 3 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    4 stats     rnorm       4.6.0
 ```

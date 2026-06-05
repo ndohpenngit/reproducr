@@ -11,13 +11,13 @@ outputs as baselines, and detects numerical drift across runs.
 
 ## Workflow
 
-**Tier 1 — Scan & score**
+**Tier 1 – Scan & score**
 
     report <- audit_script("analysis.R")
     risks  <- risk_score(report)
     print(risks)
 
-**Tier 2 — Baseline & drift**
+**Tier 2 – Baseline & drift**
 
     model <- lm(mpg ~ wt, data = mtcars)
     certify(list(coefs = coef(model)), tag = "submission-v1")
@@ -25,7 +25,7 @@ outputs as baselines, and detects numerical drift across runs.
     # Later, after any environment change:
     check_drift(list(coefs = coef(model)), against = "submission-v1")
 
-**Tier 3 — Report & export**
+**Tier 3 – Report & export**
 
     repro_report(report, risks, format = "html", style = "pharma")
     repro_badge(report, risks, output = "README")
@@ -48,7 +48,7 @@ outputs as baselines, and detects numerical drift across runs.
 
 The internal database covers known silent breaking changes in: `dplyr`,
 `tidyr`, `ggplot2`, `readr`, `purrr`, `stringr`, `broom`, `data.table`,
-`lme4`, `lubridate`, and base R. Community contributions are welcome —
+`lme4`, `lubridate`, and base R. Community contributions are welcome –
 see
 [`vignette("contributing-to-the-database")`](https://repro-stats.github.io/reproducr/articles/contributing-to-the-database.md).
 

@@ -3,15 +3,15 @@
 Takes an `audit_report` and checks every detected `pkg::fn` call against
 three independent checks:
 
-- **`"changelog"`** — matches against a curated database of known
+- **`"changelog"`** – matches against a curated database of known
   breaking changes in popular CRAN packages, flagging calls where the
   installed version falls in a known-risky version window.
 
-- **`"seed_check"`** — flags stochastic functions (`rnorm`, `sample`,
+- **`"seed_check"`** – flags stochastic functions (`rnorm`, `sample`,
   etc.) where no [`set.seed()`](https://rdrr.io/r/base/Random.html)
   appears within 50 lines above the call.
 
-- **`"locale_check"`** — flags functions whose output is
+- **`"locale_check"`** – flags functions whose output is
   locale-sensitive ([`sort()`](https://rdrr.io/r/base/sort.html),
   [`format()`](https://rdrr.io/r/base/format.html),
   [`tolower()`](https://rdrr.io/r/base/chartr.html), etc.).
@@ -147,14 +147,14 @@ print(risks)
 #>   MEDIUM:    1
 #>   LOW:       1
 #> 
-#> [MEDIUM]  stats::rnorm  (line 2 in file1a49a517874.R)
+#> [MEDIUM]  stats::rnorm  (line 2 in file1a9579b686a4.R)
 #>          Check    : seed_check
 #>          Details  : rnorm() is stochastic but no set.seed() was found in the 50 lines
 #>                     above this call (line 2). Output will differ across runs without
 #>                     a fixed seed.
 #>          Reference: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Random.html
 #> 
-#> [LOW]     base::sort  (line 3 in file1a49a517874.R)
+#> [LOW]     base::sort  (line 3 in file1a9579b686a4.R)
 #>          Check    : locale_check
 #>          Details  : sort() output is locale-sensitive. Current locale: C. Results may
 #>                     differ on machines with different LC_COLLATE or LC_TIME settings.

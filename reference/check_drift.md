@@ -21,7 +21,7 @@ check_drift(
 
 - outputs:
 
-  A fully named list of current R objects — the same names used in the
+  A fully named list of current R objects – the same names used in the
   [`certify()`](https://repro-stats.github.io/reproducr/reference/certify.md)
   call being compared against.
 
@@ -67,7 +67,7 @@ model <- lm(mpg ~ wt, data = mtcars)
 certify(list(coefs = coef(model)), tag = "v1", file = cert_file)
 #> reproducr: certified 1 output(s) [2026-06-05] under tag 'v1'
 
-# Same outputs — should report "ok"
+# Same outputs -- should report "ok"
 result <- check_drift(list(coefs = coef(model)),
                        against = "v1", file = cert_file)
 #> 
@@ -86,7 +86,7 @@ print(result)
 #> [OK]      coefs
 #> 
 
-# Different model — should report "drifted"
+# Different model -- should report "drifted"
 model2 <- lm(mpg ~ hp, data = mtcars)
 check_drift(list(coefs = coef(model2)),
              against = "v1", file = cert_file)

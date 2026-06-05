@@ -19,7 +19,7 @@ list_certs(file = ".reproducr")
 ## Value
 
 A `data.frame` with columns `tag`, `timestamp`, `r_version`, `os`,
-`n_outputs`, `script` — one row per certification. Returns an empty data
+`n_outputs`, `script` – one row per certification. Returns an empty data
 frame if no certifications exist.
 
 ## Examples
@@ -35,8 +35,8 @@ certify(list(coefs = coef(model)), tag = "v2", file = cert_file)
 
 list_certs(file = cert_file)
 #>   tag                timestamp r_version                      os n_outputs
-#> 1  v1 2026-06-05T18:58:05+0000     4.6.0 Linux 6.17.0-1015-azure         1
-#> 2  v2 2026-06-05T18:58:05+0000     4.6.0 Linux 6.17.0-1015-azure         1
+#> 1  v1 2026-06-05T21:38:46+0000     4.6.0 Linux 6.17.0-1015-azure         1
+#> 2  v2 2026-06-05T21:38:46+0000     4.6.0 Linux 6.17.0-1015-azure         1
 #>   script
 #> 1   <NA>
 #> 2   <NA>

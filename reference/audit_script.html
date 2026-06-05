@@ -109,7 +109,7 @@ columns <code>file</code>, <code>line</code>, <code>pkg</code>, <code>fn</code>,
 <dd><p>A list with R version, platform, OS, locale, and timezone.</p></dd>
 
 <dt><code>renv_used</code></dt>
-<dd><p><code>logical</code> — were versions sourced from a lockfile?</p></dd>
+<dd><p><code>logical</code> – were versions sourced from a lockfile?</p></dd>
 
 <dt><code>timestamp</code></dt>
 <dd><p><code>POSIXct</code> timestamp of when the audit was run.</p></dd>
@@ -133,7 +133,7 @@ be used alongside <code>reproducr</code>.</p>
     <h2 id="what-counts-as-a-qualifying-call-">What counts as a qualifying call?<a class="anchor" aria-label="anchor" href="#what-counts-as-a-qualifying-call-"></a></h2>
 
 
-<p>Only <em>qualified</em> calls — those using <code>::</code> or <code>:::</code> — are detected. Unqualified
+<p>Only <em>qualified</em> calls – those using <code>::</code> or <code>:::</code> – are detected. Unqualified
 calls (e.g. <code>filter(df, x &gt; 0)</code> without <code>dplyr::</code>) are not detected because
 the package cannot be determined unambiguously from source text alone.
 This is by design: qualifying calls is also a reproducibility best practice.</p>
@@ -159,7 +159,7 @@ a set of outputs as a baseline.</p></div>
 <span class="r-in"><span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu">audit_script</span><span class="op">(</span><span class="va">script</span>, renv <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">report</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -- reproducr audit report [2026-06-05 18:58] --</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -- reproducr audit report [2026-06-05 21:38] --</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Files scanned:     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Packages found:    2</span>
@@ -174,9 +174,9 @@ a set of outputs as a baseline.</p></div>
 <span class="r-in"><span><span class="co"># See the detected calls as a data frame</span></span></span>
 <span class="r-in"><span><span class="va">report</span><span class="op">$</span><span class="va">calls</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                 file line   pkg        fn pkg_version</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /tmp/RtmptIHbNk/file1a492fb0e78e.R    2 dplyr    filter        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /tmp/RtmptIHbNk/file1a492fb0e78e.R    3 dplyr summarise        &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /tmp/RtmptIHbNk/file1a492fb0e78e.R    4 stats     rnorm       4.6.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    2 dplyr    filter        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    3 dplyr summarise        &lt;NA&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /tmp/RtmpG1AvIa/file1a95381cb1d2.R    4 stats     rnorm       4.6.0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

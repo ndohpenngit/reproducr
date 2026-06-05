@@ -4,14 +4,14 @@ Produces a [shields.io](https://shields.io) Markdown badge reflecting
 the current reproducibility status of a project. The badge is
 colour-coded:
 
-- **Green** (`reproducible`) â€” no risks detected.
+- **Green** (`reproducible`) – no risks detected.
 
-- **Yellow** (`caution`) â€” medium-severity risks only.
+- **Yellow** (`caution`) – medium-severity risks only.
 
-- **Red** (`at risk`) â€” one or more high-severity risks or drifted
+- **Red** (`at risk`) – one or more high-severity risks or drifted
   outputs.
 
-- **Grey** (`unknown`) â€” no risk information supplied.
+- **Grey** (`unknown`) – no risk information supplied.
 
 Can be inserted automatically into a `README.md` (e.g. from a GitHub
 Actions workflow).
@@ -60,6 +60,12 @@ repro_badge(
 ## Value
 
 Invisibly returns the badge Markdown string.
+
+## See also
+
+[`repro_report()`](https://repro-stats.github.io/reproducr/reference/repro_report.md),
+[`risk_score()`](https://repro-stats.github.io/reproducr/reference/risk_score.md),
+[`check_drift()`](https://repro-stats.github.io/reproducr/reference/check_drift.md)
 
 ## Examples
 
