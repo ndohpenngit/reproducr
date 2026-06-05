@@ -38,7 +38,7 @@ An S3 object of class \code{"audit_report"}, a list containing:
 \item{\code{calls}}{A \code{data.frame} with one row per detected \code{pkg::fn} call,
 columns \code{file}, \code{line}, \code{pkg}, \code{fn}, \code{pkg_version}.}
 \item{\code{env}}{A list with R version, platform, OS, locale, and timezone.}
-\item{\code{renv_used}}{\code{logical} — were versions sourced from a lockfile?}
+\item{\code{renv_used}}{\code{logical} -- were versions sourced from a lockfile?}
 \item{\code{timestamp}}{\code{POSIXct} timestamp of when the audit was run.}
 \item{\code{paths}}{Character vector of files that were scanned.}
 }
@@ -60,7 +60,7 @@ be used alongside \code{reproducr}.
 
 \section{What counts as a qualifying call?}{
 
-Only \emph{qualified} calls — those using \code{::} or \code{:::} — are detected. Unqualified
+Only \emph{qualified} calls -- those using \code{::} or \code{:::} -- are detected. Unqualified
 calls (e.g. \code{filter(df, x > 0)} without \verb{dplyr::}) are not detected because
 the package cannot be determined unambiguously from source text alone.
 This is by design: qualifying calls is also a reproducibility best practice.

@@ -5,16 +5,16 @@
 #' and optionally a [reproducr::risk_score()] result and [reproducr::check_drift()] result. Three
 #' style presets are available:
 #'
-#' - **`"minimal"`** â compact summary suitable for console review or internal
+#' - **`"minimal"`** -- compact summary suitable for console review or internal
 #'   project documentation.
-#' - **`"academic"`** â generates a ready-to-paste methods paragraph for journal
+#' - **`"academic"`** -- generates a ready-to-paste methods paragraph for journal
 #'   submissions, listing all packages with versions and summarising risk findings.
-#' - **`"pharma"`** â structured QC document with a risk register and sign-off
+#' - **`"pharma"`** -- structured QC document with a risk register and sign-off
 #'   fields, suitable for pharmaceutical or regulated analytical workflows.
 #'
 #' @param audit An `audit_report` object from [reproducr::audit_script()]. Required.
 #' @param risks A `risk_report` data frame from [reproducr::risk_score()]. Optional but
-#'   strongly recommended â without it, the report cannot assess reproducibility.
+#'   strongly recommended -- without it, the report cannot assess reproducibility.
 #' @param drift A `drift_report` data frame from [reproducr::check_drift()]. Optional.
 #' @param format `character(1)`. Output format: `"text"` (console),
 #'   `"md"` (Markdown file), or `"html"` (HTML file). Default `"text"`.
@@ -27,7 +27,8 @@
 #' @return Invisibly returns the report content as a character string. For
 #'   file-based formats, the file is also written to disk.
 #'
-#' @seealso [reproducr::audit_script()], [reproducr::risk_score()], [reproducr::check_drift()], [reproducr::repro_badge()]
+#' @seealso [reproducr::audit_script()], [reproducr::risk_score()],
+#'   [reproducr::check_drift()], [reproducr::repro_badge()]
 #'
 #' @examples
 #' script <- tempfile(fileext = ".R")
@@ -96,112 +97,12 @@ repro_report <- function(audit,
 }
 
 
-#' Generate a reproducibility status badge
-#'
-#' @description
-#' Produces a [shields.io](https://shields.io) Markdown badge reflecting the
-#' current reproducibility status of a project. The badge is colour-coded:
-#'
-#' - **Green** (`reproducible`) â no risks detected.
-#' - **Yellow** (`caution`) â medium-severity risks only.
-#' - **Red** (`at risk`) â one or more high-severity risks or drifted outputs.
-#' - **Grey** (`unknown`) â no risk information supplied.
-#'
-#' Can be inserted automatically into a `README.md` (e.g. from a GitHub
-#' Actions workflow).
-#'
-#' @param audit An `audit_report` from [reproducr::audit_script()].
-#' @param risks A `risk_report` from [reproducr::risk_score()]. Optional.
-#' @param drift A `drift_report` from [reproducr::check_drift()]. Optional.
-#' @param output `character(1)`. `"markdown"` (return the badge string) or
-#'   `"README"` (insert/update the badge in `README.md`). Default `"markdown"`.
-#' @param readme_path `character(1)`. Path to the README file when
-#'   `output = "README"`. Default `"README.md"`.
-#'
-#' @return Invisibly returns the badge Markdown string.
-#'
-#' @examples
-#' script <- tempfile(fileext = ".R")
-#' writeLines("x <- dplyr::filter(mtcars, cyl == 4)", script)
-#' report <- audit_script(script, renv = FALSE, verbose = FALSE)
-#' risks  <- risk_score(report)
-#'
-#' badge <- repro_badge(report, risks)
-#' cat(badge)
-#'
-#' @export
-repro_badge <- function(audit,
-                        risks       = NULL,
-                        drift       = NULL,
-                        output      = "markdown",
-                        readme_path = "README.md") {
-
-  if (!inherits(audit, "audit_report")) {
-    stop("`audit` must be an `audit_report` object from `audit_script()`.",
-         call. = FALSE)
-  }
-  output <- match.arg(output, c("markdown", "README"))
-
-  verdict <- .compute_verdict(risks, drift)
-
-  badge_meta <- list(
-    reproducible = list(label = "reproducible", color = "brightgreen"),
-    caution      = list(label = "caution",       color = "yellow"),
-    at_risk      = list(label = "at%20risk",     color = "red"),
-    unknown      = list(label = "unknown",        color = "lightgrey")
-  )[[verdict$level]]
-
-  badge_url <- sprintf(
-    "https://img.shields.io/badge/reproducibility-%s-%s",
-    badge_meta$label, badge_meta$color
-  )
-  # Linked badge: [![alt](img)](link) -- standard tidyverse convention
-  badge_md <- sprintf(
-    "[![reproducibility](%s)](https://repro-stats.github.io/reproducr/)",
-    badge_url
-  )
-
-  if (output == "README") {
-    if (!file.exists(readme_path)) {
-      stop("README not found at '", readme_path, "'. ",
-           "Create the file first or set readme_path.", call. = FALSE)
-    }
-    lines <- readLines(readme_path, warn = FALSE)
-
-    # Replace existing reproducibility badge line
-    badge_line_idx <- grep("^\\[!\\[reproducibility\\]", lines, perl = TRUE)
-
-    if (length(badge_line_idx) > 0L) {
-      lines[badge_line_idx[[1L]]] <- badge_md
-    } else {
-      # Insert after <!-- badges: start --> if present
-      start_idx <- grep("<!-- badges: start -->", lines, fixed = TRUE)
-      if (length(start_idx) > 0L) {
-        lines <- c(
-          lines[seq_len(start_idx[[1L]])],
-          badge_md,
-          lines[seq(start_idx[[1L]] + 1L, length(lines))]
-        )
-      } else {
-        lines <- c(badge_md, "", lines)
-      }
-    }
-
-    writeLines(lines, readme_path)
-    message("reproducr: badge updated in '", readme_path, "'")
-  } else {
-    cat(badge_md, "\n")
-  }
-
-  invisible(badge_md)
-}
-
-
 # ---- rendering helpers ------------------------------------------------------
 
+#' @noRd
 .compute_verdict <- function(risks, drift) {
-  n_high    <- if (!is.null(risks)) sum(risks$risk == "high",    na.rm = TRUE) else 0L
-  n_medium  <- if (!is.null(risks)) sum(risks$risk == "medium",  na.rm = TRUE) else 0L
+  n_high    <- if (!is.null(risks)) sum(risks$risk == "high",      na.rm = TRUE) else 0L
+  n_medium  <- if (!is.null(risks)) sum(risks$risk == "medium",    na.rm = TRUE) else 0L
   n_drifted <- if (!is.null(drift)) sum(drift$status == "drifted", na.rm = TRUE) else 0L
 
   if (is.null(risks) && is.null(drift)) {
@@ -239,6 +140,7 @@ repro_badge <- function(audit,
   }
 }
 
+#' @noRd
 .render_minimal <- function(audit, risks, drift, verdict) {
   n_pkgs  <- length(unique(audit$calls$pkg[nchar(audit$calls$pkg) > 0L]))
   n_calls <- nrow(audit$calls)
@@ -292,8 +194,8 @@ repro_badge <- function(audit,
   paste(lines, collapse = "\n")
 }
 
+#' @noRd
 .render_academic <- function(audit, risks, verdict) {
-  # Build "pkg (v1.2.3)" list
   if (nrow(audit$calls) > 0L) {
     pkgs <- unique(audit$calls$pkg[!is.na(audit$calls$pkg)])
     pkg_strs <- vapply(pkgs, function(p) {
@@ -336,6 +238,7 @@ repro_badge <- function(audit,
   paste(c("# Methods paragraph (reproducr)", "", paragraph, ""), collapse = "\n")
 }
 
+#' @noRd
 .render_pharma <- function(audit, risks, drift, verdict) {
   lines <- c(
     "# Computational Reproducibility QC Document",
@@ -428,8 +331,8 @@ repro_badge <- function(audit,
   paste(lines, collapse = "\n")
 }
 
+#' @noRd
 .md_to_html <- function(md, title = "reproducr Report") {
-  # Light Markdown -> HTML conversion (no external dependencies)
   html <- md
   html <- gsub("^# (.+)$",    "<h1>\\1</h1>",  html, perl = TRUE)
   html <- gsub("^## (.+)$",   "<h2>\\1</h2>",  html, perl = TRUE)
@@ -438,7 +341,6 @@ repro_badge <- function(audit,
   html <- gsub("\\*\\*([^*]+)\\*\\*", "<strong>\\1</strong>", html, perl = TRUE)
   html <- gsub("`([^`]+)`",   "<code>\\1</code>", html, perl = TRUE)
   html <- gsub("^- (.+)$",    "<li>\\1</li>",  html, perl = TRUE)
-  # Simple table rows
   html <- gsub("^\\|(.+)\\|$", "<tr><td>\\1</td></tr>", html, perl = TRUE)
 
   css <- paste0(

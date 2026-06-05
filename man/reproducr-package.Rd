@@ -17,14 +17,14 @@ detects numerical drift across runs.
 \section{Workflow}{
 
 
-\strong{Tier 1 — Scan & score}
+\strong{Tier 1 -- Scan & score}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{report <- audit_script("analysis.R")
 risks  <- risk_score(report)
 print(risks)
 }\if{html}{\out{</div>}}
 
-\strong{Tier 2 — Baseline & drift}
+\strong{Tier 2 -- Baseline & drift}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{model <- lm(mpg ~ wt, data = mtcars)
 certify(list(coefs = coef(model)), tag = "submission-v1")
@@ -33,7 +33,7 @@ certify(list(coefs = coef(model)), tag = "submission-v1")
 check_drift(list(coefs = coef(model)), against = "submission-v1")
 }\if{html}{\out{</div>}}
 
-\strong{Tier 3 — Report & export}
+\strong{Tier 3 -- Report & export}
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{repro_report(report, risks, format = "html", style = "pharma")
 repro_badge(report, risks, output = "README")
@@ -60,7 +60,7 @@ repro_badge(report, risks, output = "README")
 The internal database covers known silent breaking changes in:
 \code{dplyr}, \code{tidyr}, \code{ggplot2}, \code{readr}, \code{purrr}, \code{stringr}, \code{broom},
 \code{data.table}, \code{lme4}, \code{lubridate}, and base R. Community contributions
-are welcome — see \code{vignette("contributing-to-the-database")}.
+are welcome -- see \code{vignette("contributing-to-the-database")}.
 
 The database is kept current via a weekly GitHub Actions workflow that
 calls \code{\link[=check_db_staleness]{check_db_staleness()}} and opens an issue automatically

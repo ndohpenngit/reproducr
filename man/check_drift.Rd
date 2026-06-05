@@ -12,7 +12,7 @@ check_drift(
 )
 }
 \arguments{
-\item{outputs}{A fully named list of current R objects — the same names used
+\item{outputs}{A fully named list of current R objects -- the same names used
 in the \code{\link[=certify]{certify()}} call being compared against.}
 
 \item{against}{\code{character(1)}. The certification tag to compare against.
@@ -46,12 +46,12 @@ model <- lm(mpg ~ wt, data = mtcars)
 
 certify(list(coefs = coef(model)), tag = "v1", file = cert_file)
 
-# Same outputs — should report "ok"
+# Same outputs -- should report "ok"
 result <- check_drift(list(coefs = coef(model)),
                        against = "v1", file = cert_file)
 print(result)
 
-# Different model — should report "drifted"
+# Different model -- should report "drifted"
 model2 <- lm(mpg ~ hp, data = mtcars)
 check_drift(list(coefs = coef(model2)),
              against = "v1", file = cert_file)

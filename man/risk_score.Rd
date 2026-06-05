@@ -60,12 +60,12 @@ returned.
 Takes an \code{audit_report} and checks every detected \code{pkg::fn} call against
 three independent checks:
 \itemize{
-\item \strong{\code{"changelog"}} — matches against a curated database of known breaking
+\item \strong{\code{"changelog"}} -- matches against a curated database of known breaking
 changes in popular CRAN packages, flagging calls where the installed
 version falls in a known-risky version window.
-\item \strong{\code{"seed_check"}} — flags stochastic functions (\code{rnorm}, \code{sample}, etc.)
+\item \strong{\code{"seed_check"}} -- flags stochastic functions (\code{rnorm}, \code{sample}, etc.)
 where no \code{set.seed()} appears within 50 lines above the call.
-\item \strong{\code{"locale_check"}} — flags functions whose output is locale-sensitive
+\item \strong{\code{"locale_check"}} -- flags functions whose output is locale-sensitive
 (\code{sort()}, \code{format()}, \code{tolower()}, etc.).
 }
 }

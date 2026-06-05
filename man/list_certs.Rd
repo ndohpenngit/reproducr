@@ -12,7 +12,7 @@ Default \code{".reproducr"}.}
 }
 \value{
 A \code{data.frame} with columns \code{tag}, \code{timestamp}, \code{r_version},
-\code{os}, \code{n_outputs}, \code{script} — one row per certification.
+\code{os}, \code{n_outputs}, \code{script} -- one row per certification.
 Returns an empty data frame if no certifications exist.
 }
 \description{
