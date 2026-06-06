@@ -177,7 +177,7 @@ repro_badge(report, risks, output = "README")
     audit_script()                 certify()                       repro_report()
          │                              │                               │
          ▼                              ▼                               ▼
-    risk_score()               check_drift()                    repro_badge()
+    risk_score()                   check_drift()                   repro_badge()
 
 Use Tier 1 alone for a quick scan, or build the full pipeline for
 regulated or peer-reviewed work.
