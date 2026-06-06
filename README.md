@@ -312,6 +312,12 @@ for the format and the
 [contributing guide](https://repro-stats.github.io/reproducr/articles/contributing-to-the-database.html)
 for the version window design principles.
 
+### Code of conduct
+
+Please note that this project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By participating you agree to abide by its terms.
+
 ### Package development
 
 To contribute to `reproducr` itself — new features, bug fixes, or
