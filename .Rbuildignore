@@ -12,3 +12,5 @@
 ^pkgdown$
 ^docs$
 ^data-raw$
+^CRAN-SUBMISSION$
+^CONTRIBUTING\.md$
