@@ -2,12 +2,9 @@
 % Please edit documentation in R/check_db_staleness.R
 \name{check_db_staleness}
 \alias{check_db_staleness}
-\alias{print.staleness_report}
 \title{Check whether breaking-changes database entries are stale}
 \usage{
 check_db_staleness(packages = NULL, verbose = TRUE, source = "cran")
-
-\method{print}{staleness_report}(x, ...)
 }
 \arguments{
 \item{packages}{\code{character} or \code{NULL}. Package names to check. If \code{NULL}
@@ -26,10 +23,6 @@ One of:
 what is installed on the current machine.}
 }
 Default \code{"cran"}.}
-
-\item{x}{A \code{staleness_report} object.}
-
-\item{...}{Additional arguments (currently unused).}
 }
 \value{
 A \code{data.frame} of class \code{c("staleness_report", "data.frame")}
