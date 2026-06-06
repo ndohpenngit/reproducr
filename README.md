@@ -4,6 +4,7 @@
 [![reproducibility](https://img.shields.io/badge/reproducibility-reproducible-brightgreen)](https://repro-stats.github.io/reproducr/)
 [![CRAN status](https://img.shields.io/badge/CRAN-not%20yet-lightgrey)](https://cran.r-project.org)
 [![R-CMD-check](https://github.com/repro-stats/reproducr/actions/workflows/R-CMD-check.yml/badge.svg)](https://github.com/repro-stats/reproducr/actions/workflows/R-CMD-check.yml)
+[![Codecov test coverage](https://codecov.io/gh/repro-stats/reproducr/graph/badge.svg)](https://app.codecov.io/gh/repro-stats/reproducr)
 <!-- badges: end -->
 
 > The reproducibility badge reflects the status of the [gallery repos](#gallery). See those repos for a live demonstration of `repro_badge()` in a real analysis workflow.
