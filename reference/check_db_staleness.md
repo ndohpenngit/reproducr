@@ -14,9 +14,6 @@ staleness is detected.
 
 ``` r
 check_db_staleness(packages = NULL, verbose = TRUE, source = "cran")
-
-# S3 method for class 'staleness_report'
-print(x, ...)
 ```
 
 ## Arguments
@@ -49,14 +46,6 @@ print(x, ...)
       current machine.
 
   Default `"cran"`.
-
-- x:
-
-  A `staleness_report` object.
-
-- ...:
-
-  Additional arguments (currently unused).
 
 ## Value
 
