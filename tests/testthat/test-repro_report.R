@@ -79,10 +79,8 @@ test_that("repro_report() academic style is a single prose paragraph", {
   r   <- audit_script(f, renv = FALSE, verbose = FALSE)
   out <- repro_report(r, format = "text", style = "academic")
 
-  # Strip the header line and check remaining content is prose
   lines <- strsplit(trimws(out), "\n")[[1]]
   lines <- lines[nchar(trimws(lines)) > 0L]
-  # Should have the title line + at least one prose line
   expect_true(length(lines) >= 2L)
 })
 
@@ -167,11 +165,109 @@ test_that("repro_report() uses a default output_file name when none supplied", {
   f  <- write_script("x <- dplyr::filter(mtcars, cyl == 4)")
   on.exit({
     unlink(f)
-    unlink("reproducr_report.md",  force = TRUE)
+    unlink("reproducr_report.md",   force = TRUE)
     unlink("reproducr_report.html", force = TRUE)
   })
   r <- audit_script(f, renv = FALSE, verbose = FALSE)
 
   repro_report(r, format = "md", style = "minimal")
   expect_true(file.exists("reproducr_report.md"))
+})
+
+# ---- verdict branches ------------------------------------------------------
+
+test_that("repro_report() shows AT RISK verdict for high-risk report", {
+  f      <- write_script("x <- dplyr::filter(mtcars, cyl == 4)")
+  on.exit(unlink(f))
+  report <- audit_script(f, renv = FALSE, verbose = FALSE)
+
+  # Build a mock high-risk report directly -- risk_score() may return 0 rows
+  # if no installed package version falls in a known window
+  mock_risks <- data.frame(
+    call        = "dplyr::summarise",
+    file        = f,
+    line        = 1L,
+    pkg         = "dplyr",
+    fn          = "summarise",
+    pkg_version = "1.1.0",
+    risk        = "high",
+    check       = "changelog",
+    description = "test high risk entry",
+    reference   = "https://example.com",
+    stringsAsFactors = FALSE
+  )
+  class(mock_risks) <- c("risk_report", "data.frame")
+
+  out <- repro_report(report, mock_risks, format = "text", style = "minimal")
+  expect_type(out, "character")
+  expect_true(grepl("AT RISK", out))
+})
+
+test_that("repro_report() shows CAUTION verdict for medium-risk report", {
+  f      <- write_script("x <- dplyr::filter(mtcars, cyl == 4)")
+  on.exit(unlink(f))
+  report <- audit_script(f, renv = FALSE, verbose = FALSE)
+
+  mock_risks <- data.frame(
+    call        = "dplyr::summarise",
+    file        = f,
+    line        = 1L,
+    pkg         = "dplyr",
+    fn          = "summarise",
+    pkg_version = "1.1.0",
+    risk        = "medium",
+    check       = "changelog",
+    description = "test medium risk entry",
+    reference   = "https://example.com",
+    stringsAsFactors = FALSE
+  )
+  class(mock_risks) <- c("risk_report", "data.frame")
+
+  out <- repro_report(report, mock_risks, format = "text", style = "minimal")
+  expect_type(out, "character")
+  expect_true(grepl("CAUTION", out))
+})
+
+test_that("repro_report() shows UNKNOWN verdict when risks is NULL", {
+  f      <- write_script("x <- dplyr::filter(mtcars, cyl == 4)")
+  on.exit(unlink(f))
+  report <- audit_script(f, renv = FALSE, verbose = FALSE)
+
+  out <- repro_report(report, risks = NULL, format = "text", style = "minimal")
+  expect_type(out, "character")
+  expect_true(grepl("unknown|UNKNOWN", out, ignore.case = TRUE))
+})
+
+# ---- all styles and formats ------------------------------------------------
+
+test_that("repro_report() renders all styles and formats without error", {
+  f      <- write_script("x <- dplyr::filter(mtcars, cyl == 4)")
+  on.exit(unlink(f))
+  report <- audit_script(f, renv = FALSE, verbose = FALSE)
+  risks  <- risk_score(report)
+
+  # academic text
+  out <- repro_report(report, risks, format = "text", style = "academic")
+  expect_type(out, "character")
+
+  # pharma md
+  md_out <- tempfile(fileext = ".md")
+  on.exit(unlink(md_out), add = TRUE)
+  repro_report(report, risks, format = "md", style = "pharma",
+               output_file = md_out)
+  expect_true(file.exists(md_out))
+
+  # html minimal
+  html_out <- tempfile(fileext = ".html")
+  on.exit(unlink(html_out), add = TRUE)
+  repro_report(report, risks, format = "html", style = "minimal",
+               output_file = html_out)
+  expect_true(file.exists(html_out))
+
+  # html pharma
+  html_out2 <- tempfile(fileext = ".html")
+  on.exit(unlink(html_out2), add = TRUE)
+  repro_report(report, risks, format = "html", style = "pharma",
+               output_file = html_out2)
+  expect_true(file.exists(html_out2))
 })

@@ -79,13 +79,31 @@ NULL
 }
 
 #' Parse renv.lock and return a named list of pkg -> version
+#'
+#' Accepts either a directory path (appends "renv.lock") or a direct path
+#' to a lockfile. Returns NULL invisibly if the file does not exist or
+#' cannot be parsed.
+#'
 #' @noRd
 .parse_renv_lock <- function(root = getwd()) {
-  lock_path <- file.path(root, "renv.lock")
+  # Accept direct file path or directory
+  lock_path <- if (grepl("\\.lock$", root, ignore.case = TRUE)) {
+    root
+  } else {
+    file.path(root, "renv.lock")
+  }
+
+  # Return NULL for missing or empty files
+  if (!file.exists(lock_path)) return(NULL)
+  if (file.info(lock_path)$size == 0L) return(NULL)
 
   # Use jsonlite if available -- handles all renv.lock formats reliably
   if (requireNamespace("jsonlite", quietly = TRUE)) {
-    lock <- jsonlite::fromJSON(lock_path, simplifyVector = FALSE)
+    lock <- tryCatch(
+      jsonlite::fromJSON(lock_path, simplifyVector = FALSE),
+      error = function(e) NULL
+    )
+    if (is.null(lock)) return(NULL)
     pkgs <- lock[["Packages"]]
     if (is.null(pkgs) || length(pkgs) == 0L) return(list())
     versions <- lapply(pkgs, function(p) p[["Version"]])
@@ -95,7 +113,11 @@ NULL
   # Fallback: regex restricted to the Packages block only.
   # The R block at the top also has a "Version" field which previously
   # caused a length mismatch between pkgs and vers.
-  lock_text <- paste(readLines(lock_path, warn = FALSE), collapse = "\n")
+  lock_text <- tryCatch(
+    paste(readLines(lock_path, warn = FALSE), collapse = "\n"),
+    error = function(e) NULL
+  )
+  if (is.null(lock_text)) return(NULL)
 
   # Strip everything before the first package entry
   pkg_start <- regexpr('"Packages"\\s*:', lock_text, perl = TRUE)
