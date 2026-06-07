@@ -316,7 +316,7 @@ for the version window design principles.
 ### Code of conduct
 
 Please note that this project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+[Contributor Code of Conduct](https://github.com/repro-stats/reproducr/blob/main/CODE_OF_CONDUCT.md).
 By participating you agree to abide by its terms.
 
 ### Package development
