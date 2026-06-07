@@ -4,10 +4,19 @@
 
 Brief description of the change.
 
+## Related issues
+
 ## Type of change
 
-\[ \] Bug fix \[ \] New breaking-changes database entry \[ \] New
-feature \[ \] Documentation \[ \] Other
+Bug fix
+
+New feature
+
+New breaking-changes database entry
+
+Documentation
+
+Other
 
 ## For database entries
 
@@ -19,5 +28,8 @@ feature \[ \] Documentation \[ \] Other
 
 ## Checklist
 
-\[ \] `devtools::check()` passes with 0 errors, 0 warnings \[ \] Tests
-added or updated where applicable \[ \] `NEWS.md` updated
+`devtools::check()` passes with 0 errors, 0 warnings
+
+Tests added or updated where applicable
+
+`NEWS.md` updated
