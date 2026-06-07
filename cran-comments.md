@@ -12,8 +12,7 @@
 None.
 
 ## Resubmission notes
-This is a resubmission of v0.1.3 (previously submitted 2026-06-07).
-Changes since v0.1.3:
+This is a resubmission of v0.1.4 (previously submitted 2026-06-07).
+Changes since v0.1.4:
 
-* Fixed invalid relative URI in README.md -- CODE_OF_CONDUCT.md link now use absolute GitHub URLs. Resolves CRAN
-  pre-check NOTE: "Found the following (possibly) invalid file URI".
+* Fixed remaining relative URI in README.md -- the CODE_OF_CONDUCT.md link. Now uses the full absolute GitHub URL.

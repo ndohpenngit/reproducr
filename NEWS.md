@@ -1,8 +1,13 @@
 # reproducr 0.1.5
 
+* Fixed remaining relative URI in `README.md` -- `CODE_OF_CONDUCT.md` link
+  now uses the full absolute GitHub URL. Resolves CRAN pre-check NOTE:
+  "Found the following (possibly) invalid file URI".
+
 # reproducr 0.1.4
 
-* Fixed invalid relative URI in `README.md` -- `CODE_OF_CONDUCT.md`link now use correct GitHub URLs. Resolves CRAN
+* Fixed invalid relative URIs in `README.md` -- `CODE_OF_CONDUCT.md` and
+  `CONTRIBUTING.md` links now use absolute GitHub URLs. Resolves CRAN
   pre-check NOTE: "Found the following (possibly) invalid file URI".
 
 # reproducr 0.1.3
