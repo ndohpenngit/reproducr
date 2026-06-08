@@ -48,6 +48,35 @@ entries <- lapply(json_files, function(f) {
 entries <- Filter(Negate(is.null), entries)
 cat(sprintf("Successfully parsed %d entries\n", length(entries)))
 
+# ---- Sanitise all string fields to ASCII ------------------------------------
+# Replaces non-ASCII characters (e.g. em dashes, curly quotes, degree symbols)
+# with ASCII equivalents. This prevents R CMD check WARNING on Windows/CRAN.
+
+.to_ascii <- function(s) {
+  if (is.null(s) || !is.character(s)) return(s)
+  # Common Unicode -> ASCII replacements
+  s <- gsub("\u2014", "--",  s)   # em dash
+  s <- gsub("\u2013", "-",   s)   # en dash
+  s <- gsub("\u00b0", " deg", s)  # degree symbol
+  s <- gsub("\u2019", "'",   s)   # right single quote
+  s <- gsub("\u2018", "'",   s)   # left single quote
+  s <- gsub("\u201c", '"',   s)   # left double quote
+  s <- gsub("\u201d", '"',   s)   # right double quote
+  s <- gsub("\u00e9", "e",   s)   # e acute
+  s <- gsub("\u00e8", "e",   s)   # e grave
+  # Final fallback: replace any remaining non-ASCII with ?
+  iconv(s, from = "UTF-8", to = "ASCII", sub = "?")
+}
+
+entries <- lapply(entries, function(e) {
+  e$description <- .to_ascii(e$description)
+  e$reference   <- .to_ascii(e$reference)
+  e$fn          <- .to_ascii(e$fn)
+  if (!is.null(e$closed_reason))
+    e$closed_reason <- .to_ascii(e$closed_reason)
+  e
+})
+
 # ---- Group by pkg::fn -------------------------------------------------------
 
 keys    <- vapply(entries, function(e) paste0(e$pkg, "::", e$fn), character(1L))
@@ -58,7 +87,6 @@ pkgs    <- sort(unique(vapply(entries, `[[`, character(1L), "pkg")))
 # ---- Helper: escape a string for R source ----------------------------------
 
 r_string <- function(s) {
-  # Word-wrap and emit as paste0() if long, else as a simple string
   s <- gsub('"', '\\\\"', s)
   parts <- strwrap(s, width = 60)
   if (length(parts) == 1L) {
@@ -130,13 +158,11 @@ for (pkg in pkgs) {
   sep <- paste(rep("-", max(1L, 67L - nchar(pkg))), collapse = "")
   body <- c(body, sprintf("  # ---- %s %s", pkg, sep), "")
 
-  all_keys_for_pkg <- names(grouped)
   for (ki in seq_along(pkg_keys)) {
     key   <- pkg_keys[[ki]]
     group <- grouped[[key]]
     fn    <- group[[1L]]$fn
 
-    # Last entry across ALL packages gets no trailing comma
     is_last <- (pkg == pkgs[length(pkgs)]) && (ki == length(pkg_keys))
     key_end <- if (is_last) "  )" else "  ),"
 
