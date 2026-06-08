@@ -2,7 +2,7 @@ name: Database staleness check
 
 on:
   schedule:
-    - cron: '0 4 * * 1'   # Weekly on Monday at 04:00 UTC (06:00 CEST)
+    - cron: '0 2 * * 1'   # Weekly on Monday at 02:00 UTC (04:00 CEST)
   workflow_dispatch:        # Allow manual trigger from GitHub UI
 
 jobs:
@@ -80,17 +80,20 @@ jobs:
             }
           "
 
-      - name: Find existing stale issue
+      - name: Find existing staleness issue
         id: find_issue
         env:
           GH_TOKEN: ${{ secrets.CROSS_REPO_PAT }}
         run: |
+          # Search by label AND title prefix to avoid matching manually
+          # created issues that happen to share the stale-entry label.
+          # The auto-generated title always starts with "Database staleness:".
           issue_number=$(gh issue list \
             --repo repro-stats/reproducr-db \
             --label stale-entry \
             --state open \
-            --json number \
-            --jq '.[0].number // empty')
+            --json number,title \
+            --jq '[.[] | select(.title | startswith("Database staleness:"))] | .[0].number // empty')
           echo "issue_number=${issue_number}" >> $GITHUB_OUTPUT
 
       - name: Create new issue if none exists
@@ -119,7 +122,7 @@ jobs:
 
           gh issue comment ${{ steps.find_issue.outputs.issue_number }} \
             --repo repro-stats/reproducr-db \
-            --body "🔄 Updated by the weekly staleness check — ${{ steps.staleness.outputs.n_stale }} entries still need review."
+            --body "🔄 Updated by the weekly staleness check -- ${{ steps.staleness.outputs.n_stale }} entries still need review."
 
       - name: Close issue if all entries are now current
         if: steps.staleness.outputs.has_stale == 'false' && steps.find_issue.outputs.issue_number != ''
