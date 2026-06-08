@@ -309,7 +309,7 @@
         "In MatchIt 4.0.0, the package was completely rewritten. The",
         "distance argument changed syntax: the old default distance",
         "= 'logit' is now distance = 'glm', link = 'logit'. The",
-        "output object structure changed substantially —",
+        "output object structure changed substantially --",
         "match.matrix, subclass, and weights components differ from",
         "3.x. Code that accesses matchit() output directly by",
         "component name may silently return wrong values or error."
