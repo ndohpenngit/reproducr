@@ -224,7 +224,8 @@ check_drift <- function(outputs,
 
   for (nm in current_names) {
     curr_hash <- tryCatch(
-      .hash_object(outputs[[nm]]), error = function(e) NA_character_
+      .hash_object(outputs[[nm]]),
+      error = function(e) NA_character_
     )
 
     if (!nm %in% baseline_names) {

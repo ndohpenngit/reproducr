@@ -35,14 +35,14 @@
 #' be used alongside `reproducr`.
 #'
 #' @section What counts as a qualifying call?:
-#' Only *qualified* calls -- those using `::` or `:::` -- are detected. 
-#' Unqualified calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not 
-#' detected because he package cannot be determined unambiguously from source 
-#' text alone. This is by design: qualifying calls is also a reproducibility 
+#' Only *qualified* calls -- those using `::` or `:::` -- are detected.
+#' Unqualified calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not
+#' detected because he package cannot be determined unambiguously from source
+#' text alone. This is by design: qualifying calls is also a reproducibility
 #' best practice.
 #'
-#' @seealso [reproducr::risk_score()] to check detected calls against the 
-#' breaking-changes database; [reproducr::repro_report()] to render the 
+#' @seealso [reproducr::risk_score()] to check detected calls against the
+#' breaking-changes database; [reproducr::repro_report()] to render the
 #' full audit; [reproducr::certify()] to lock a set of outputs as a baseline.
 #'
 #' @examples

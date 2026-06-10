@@ -86,8 +86,8 @@
 #'
 #' @export
 check_db_staleness <- function(packages = NULL,
-                               verbose  = TRUE,
-                               source   = "cran",
+                               verbose = TRUE,
+                               source = "cran",
                                from_version_major_threshold = 1L) {
   source <- match.arg(source, c("cran", "installed"))
   from_version_major_threshold <- as.integer(from_version_major_threshold)
@@ -131,8 +131,8 @@ check_db_staleness <- function(packages = NULL,
 
   for (key in all_keys) {
     parts <- strsplit(key, "::")[[1L]]
-    pkg   <- parts[[1L]]
-    fn    <- parts[[2L]]
+    pkg <- parts[[1L]]
+    fn <- parts[[2L]]
 
     if (!is.null(packages) && !pkg %in% packages) next
 
@@ -145,7 +145,7 @@ check_db_staleness <- function(packages = NULL,
       # Skip intentionally closed entries
       if (isTRUE(entry$closed)) next
 
-      to_ver   <- entry$to_version
+      to_ver <- entry$to_version
       from_ver <- entry$from_version
 
       # ---- to_version (ceiling) staleness ----------------------------------
@@ -173,21 +173,23 @@ check_db_staleness <- function(packages = NULL,
       gap <- if (status == "stale_ceiling" && !is.na(curr_ver)) {
         sprintf("to_version %s -> current %s", to_ver, curr_ver)
       } else if (status == "stale_floor" && !is.na(curr_ver)) {
-        sprintf("from_version %s << current %s (>= %d major versions behind)",
-                from_ver, curr_ver, from_version_major_threshold)
+        sprintf(
+          "from_version %s << current %s (>= %d major versions behind)",
+          from_ver, curr_ver, from_version_major_threshold
+        )
       } else {
         NA_character_
       }
 
       results[[length(results) + 1L]] <- data.frame(
-        key             = key,
-        pkg             = pkg,
-        fn              = fn,
-        from_version    = from_ver,
-        to_version      = to_ver,
+        key = key,
+        pkg = pkg,
+        fn = fn,
+        from_version = from_ver,
+        to_version = to_ver,
         current_version = if (is.na(curr_ver)) NA_character_ else curr_ver,
-        status          = status,
-        gap             = gap,
+        status = status,
+        gap = gap,
         stringsAsFactors = FALSE
       )
     }
@@ -197,8 +199,10 @@ check_db_staleness <- function(packages = NULL,
     out <- .empty_staleness_df()
   } else {
     out <- do.call(rbind, results)
-    status_ord <- c(stale_ceiling = 1L, stale_floor = 2L,
-                    ok = 3L, unknown = 4L)
+    status_ord <- c(
+      stale_ceiling = 1L, stale_floor = 2L,
+      ok = 3L, unknown = 4L
+    )
     out$.ord <- status_ord[out$status]
     out <- out[order(out$.ord, out$pkg, out$fn), ]
     out$.ord <- NULL
@@ -208,9 +212,9 @@ check_db_staleness <- function(packages = NULL,
   class(out) <- c("staleness_report", "data.frame")
 
   n_stale_ceiling <- sum(out$status == "stale_ceiling", na.rm = TRUE)
-  n_stale_floor   <- sum(out$status == "stale_floor",   na.rm = TRUE)
-  n_ok            <- sum(out$status == "ok",            na.rm = TRUE)
-  n_unknown       <- sum(out$status == "unknown",       na.rm = TRUE)
+  n_stale_floor <- sum(out$status == "stale_floor", na.rm = TRUE)
+  n_ok <- sum(out$status == "ok", na.rm = TRUE)
+  n_unknown <- sum(out$status == "unknown", na.rm = TRUE)
 
   if (verbose) {
     message(sprintf(
@@ -224,7 +228,8 @@ check_db_staleness <- function(packages = NULL,
     message(
       "\nStale ceiling entries (to_version below current release):\n",
       paste(sprintf("  %s  [%s]", stale_c$key, stale_c$gap),
-            collapse = "\n")
+        collapse = "\n"
+      )
     )
   }
 
@@ -233,7 +238,8 @@ check_db_staleness <- function(packages = NULL,
     message(
       "\nStale floor entries (from_version too old -- window too wide):\n",
       paste(sprintf("  %s  [%s]", stale_f$key, stale_f$gap),
-            collapse = "\n")
+        collapse = "\n"
+      )
     )
   }
 
@@ -245,15 +251,15 @@ check_db_staleness <- function(packages = NULL,
 #' @export
 print.staleness_report <- function(x, ...) {
   n_stale_ceiling <- sum(x$status == "stale_ceiling", na.rm = TRUE)
-  n_stale_floor   <- sum(x$status == "stale_floor",   na.rm = TRUE)
-  n_ok            <- sum(x$status == "ok",            na.rm = TRUE)
-  n_unknown       <- sum(x$status == "unknown",       na.rm = TRUE)
+  n_stale_floor <- sum(x$status == "stale_floor", na.rm = TRUE)
+  n_ok <- sum(x$status == "ok", na.rm = TRUE)
+  n_unknown <- sum(x$status == "unknown", na.rm = TRUE)
 
   cat("\n-- reproducr database staleness report --\n\n")
   cat(sprintf("  %-20s %d\n", "STALE CEILING:", n_stale_ceiling))
-  cat(sprintf("  %-20s %d\n", "STALE FLOOR:",   n_stale_floor))
-  cat(sprintf("  %-20s %d\n", "OK:",             n_ok))
-  cat(sprintf("  %-20s %d\n", "UNKNOWN:",        n_unknown))
+  cat(sprintf("  %-20s %d\n", "STALE FLOOR:", n_stale_floor))
+  cat(sprintf("  %-20s %d\n", "OK:", n_ok))
+  cat(sprintf("  %-20s %d\n", "UNKNOWN:", n_unknown))
   cat("\n")
 
   if (n_stale_ceiling > 0L) {
@@ -304,19 +310,26 @@ print.staleness_report <- function(x, ...) {
         for (pkg in pkgs) {
           if (pkg %in% rownames(avail)) {
             versions[[pkg]] <- avail[pkg, "Version"]
-          } else if (pkg %in% c("base", "stats", "utils",
-                                 "tools", "methods")) {
+          } else if (pkg %in% c(
+            "base", "stats", "utils",
+            "tools", "methods"
+          )) {
             versions[[pkg]] <- paste(R.version$major, R.version$minor,
-                                     sep = ".")
+              sep = "."
+            )
           }
         }
       },
       error = function(e) {
-        if (verbose) message(
-          "reproducr: CRAN query failed, falling back to installed library"
-        )
+        if (verbose) {
+          message(
+            "reproducr: CRAN query failed, falling back to installed library"
+          )
+        }
         inst <- utils::installed.packages()[
-          , c("Package", "Version"), drop = FALSE]
+          , c("Package", "Version"),
+          drop = FALSE
+        ]
         for (pkg in pkgs) {
           if (pkg %in% inst[, "Package"]) {
             idx <- which(inst[, "Package"] == pkg)[[1L]]
@@ -327,7 +340,9 @@ print.staleness_report <- function(x, ...) {
     )
   } else {
     inst <- utils::installed.packages()[
-      , c("Package", "Version"), drop = FALSE]
+      , c("Package", "Version"),
+      drop = FALSE
+    ]
     for (pkg in pkgs) {
       if (pkg %in% inst[, "Package"]) {
         idx <- which(inst[, "Package"] == pkg)[[1L]]
@@ -344,12 +359,17 @@ print.staleness_report <- function(x, ...) {
 #' Assess to_version (ceiling) staleness
 #' @noRd
 .assess_staleness <- function(current_ver, to_ver) {
-  if (is.na(current_ver)) return("unknown")
-  tryCatch({
-    cv <- package_version(as.character(current_ver))
-    tv <- package_version(as.character(to_ver))
-    if (cv > tv) "stale" else "ok"
-  }, error = function(e) "unknown")
+  if (is.na(current_ver)) {
+    return("unknown")
+  }
+  tryCatch(
+    {
+      cv <- package_version(as.character(current_ver))
+      tv <- package_version(as.character(to_ver))
+      if (cv > tv) "stale" else "ok"
+    },
+    error = function(e) "unknown"
+  )
 }
 
 #' Assess from_version (floor) staleness
@@ -358,27 +378,32 @@ print.staleness_report <- function(x, ...) {
 #' ahead of from_version, indicating the window may be too wide.
 #' @noRd
 .assess_floor_staleness <- function(current_ver, from_ver, threshold) {
-  if (is.na(current_ver) || is.infinite(threshold)) return("ok")
-  tryCatch({
-    cv <- package_version(as.character(current_ver))
-    fv <- package_version(as.character(from_ver))
-    major_gap <- cv[[1L]][[1L]] - fv[[1L]][[1L]]
-    if (!is.na(major_gap) && major_gap >= threshold) "stale" else "ok"
-  }, error = function(e) "unknown")
+  if (is.na(current_ver) || is.infinite(threshold)) {
+    return("ok")
+  }
+  tryCatch(
+    {
+      cv <- package_version(as.character(current_ver))
+      fv <- package_version(as.character(from_ver))
+      major_gap <- cv[[1L]][[1L]] - fv[[1L]][[1L]]
+      if (!is.na(major_gap) && major_gap >= threshold) "stale" else "ok"
+    },
+    error = function(e) "unknown"
+  )
 }
 
 #' Empty staleness data frame with correct columns
 #' @noRd
 .empty_staleness_df <- function() {
   data.frame(
-    key             = character(0),
-    pkg             = character(0),
-    fn              = character(0),
-    from_version    = character(0),
-    to_version      = character(0),
+    key = character(0),
+    pkg = character(0),
+    fn = character(0),
+    from_version = character(0),
+    to_version = character(0),
     current_version = character(0),
-    status          = character(0),
-    gap             = character(0),
+    status = character(0),
+    gap = character(0),
     stringsAsFactors = FALSE
   )
 }
