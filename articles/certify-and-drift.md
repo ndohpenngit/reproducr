@@ -126,7 +126,7 @@ certify(
   tag     = "baseline-v1",
   file    = cert_file
 )
-#> Warning: Tag 'baseline-v1' already exists in '/tmp/Rtmp49P25V/file1c77f07757d'.
+#> Warning: Tag 'baseline-v1' already exists in '/tmp/RtmpVu4Wu1/file1c70519a52e'.
 #> Overwriting.
 #> reproducr: certified 1 output(s) [2026-06-10] under tag 'baseline-v1'
 ```
@@ -139,9 +139,9 @@ certify(
 
 list_certs(file = cert_file)
 #>               tag                timestamp r_version                      os
-#> 1     baseline-v1 2026-06-10T20:44:24+0000     4.6.0 Linux 6.17.0-1015-azure
-#> 2 pre-peer-review 2026-06-10T20:44:24+0000     4.6.0 Linux 6.17.0-1015-azure
-#> 3   post-revision 2026-06-10T20:44:24+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1     baseline-v1 2026-06-10T21:15:02+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 2 pre-peer-review 2026-06-10T21:15:01+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 3   post-revision 2026-06-10T21:15:01+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs script
 #> 1         1   <NA>
 #> 2         1   <NA>

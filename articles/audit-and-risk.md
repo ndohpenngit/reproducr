@@ -142,7 +142,7 @@ report$env
 
 # Files scanned
 report$paths
-#> [1] "/tmp/Rtmp80Q8RU/file1c3c4d966c6b.R"
+#> [1] "/tmp/RtmpQFIRxd/file1c35757b2799.R"
 
 # Programmatic summary
 s <- summary(report)
@@ -391,7 +391,7 @@ risks[risks$check == "seed_check", ]
 #>   MEDIUM:    1
 #>   LOW:       0
 #> 
-#> [MEDIUM]  stats::rnorm  (line 2 in file1c3c42445ede.R)
+#> [MEDIUM]  stats::rnorm  (line 2 in file1c355deeaa59.R)
 #>          Check    : seed_check
 #>          Details  : rnorm() is stochastic but no set.seed() was found in the 50 lines
 #>                     above this call (line 2). Output will differ across runs without
