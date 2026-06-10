@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">reproducr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -219,7 +219,7 @@ components are:</p>
 <span></span>
 <span><span class="co"># Files scanned</span></span>
 <span><span class="va">report</span><span class="op">$</span><span class="va">paths</span></span>
-<span><span class="co">#&gt; [1] "/tmp/RtmpnbEnX5/file1ba36008560b.R"</span></span>
+<span><span class="co">#&gt; [1] "/tmp/Rtmp80Q8RU/file1c3c4d966c6b.R"</span></span>
 <span></span>
 <span><span class="co"># Programmatic summary</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">report</span><span class="op">)</span></span>
@@ -262,11 +262,11 @@ versions where the specific change does not apply.</p>
 <span>  <span class="st">"# dplyr 1.1.0 changed summarise() grouping behaviour"</span>,</span>
 <span>  <span class="st">"x &lt;- dplyr::group_by(mtcars, cyl)"</span>,</span>
 <span>  <span class="st">"y &lt;- dplyr::summarise(x, mean_mpg = mean(mpg))"</span>,</span>
-<span>  <span class="st">"z &lt;- stringr::str_c('a', NA)"</span>   <span class="co"># str_c NA-handling changed in 1.5.0</span></span>
+<span>  <span class="st">"z &lt;- stringr::str_c('a', NA)"</span> <span class="co"># str_c NA-handling changed in 1.5.0</span></span>
 <span><span class="op">)</span>, <span class="va">risky_script</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/audit_script.html">audit_script</a></span><span class="op">(</span><span class="va">risky_script</span>, renv <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">risks</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"changelog"</span><span class="op">)</span></span>
+<span><span class="va">risks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"changelog"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">risks</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -- reproducr risk score --</span></span>
@@ -309,7 +309,7 @@ base::sample     base::sample.int</code></pre>
 <span><span class="op">)</span>, <span class="va">seed_script</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/audit_script.html">audit_script</a></span><span class="op">(</span><span class="va">seed_script</span>, renv <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">risks</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"seed_check"</span><span class="op">)</span></span>
+<span><span class="va">risks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"seed_check"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">risks</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"line"</span>, <span class="st">"call"</span>, <span class="st">"risk"</span>, <span class="st">"description"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   line         call   risk</span></span>
 <span><span class="co">#&gt; 1    2 stats::rnorm medium</span></span>
@@ -336,11 +336,11 @@ base::as.Date   base::sprintf</code></pre>
 <span><span class="fu"><a href="https://rdrr.io/r/base/writeLines.html" class="external-link">writeLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"x &lt;- base::sort(c('banana', 'apple', 'cherry'))"</span>,</span>
 <span>  <span class="st">"y &lt;- base::format(3.14159, digits = 3)"</span>,</span>
-<span>  <span class="st">"z &lt;- base::strftime(Sys.time(), '%B')"</span>   <span class="co"># month name is locale-dependent</span></span>
+<span>  <span class="st">"z &lt;- base::strftime(Sys.time(), '%B')"</span> <span class="co"># month name is locale-dependent</span></span>
 <span><span class="op">)</span>, <span class="va">locale_script</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">report</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/audit_script.html">audit_script</a></span><span class="op">(</span><span class="va">locale_script</span>, renv <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">risks</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"locale_check"</span><span class="op">)</span></span>
+<span><span class="va">risks</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_score.html">risk_score</a></span><span class="op">(</span><span class="va">report</span>, methods <span class="op">=</span> <span class="st">"locale_check"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">risks</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"call"</span>, <span class="st">"risk"</span>, <span class="st">"description"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;             call risk</span></span>
 <span><span class="co">#&gt; 1     base::sort  low</span></span>
@@ -439,7 +439,7 @@ operations work directly:</p>
 <span><span class="co">#&gt;   MEDIUM:    1</span></span>
 <span><span class="co">#&gt;   LOW:       0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [MEDIUM]  stats::rnorm  (line 2 in file1ba333d158a6.R)</span></span>
+<span><span class="co">#&gt; [MEDIUM]  stats::rnorm  (line 2 in file1c3c42445ede.R)</span></span>
 <span><span class="co">#&gt;          Check    : seed_check</span></span>
 <span><span class="co">#&gt;          Details  : rnorm() is stochastic but no set.seed() was found in the 50 lines</span></span>
 <span><span class="co">#&gt;                     above this call (line 2). Output will differ across runs without</span></span>

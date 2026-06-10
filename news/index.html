@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">reproducr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="reproducr-020">reproducr 0.2.0<a class="anchor" aria-label="anchor" href="#reproducr-020"></a></h2>
+<ul><li><p><code><a href="../reference/risk_score.html">risk_score()</a></code> gains a <code>major_version_grace</code> parameter (default <code>1L</code>) – when the installed version is one or more major versions ahead of an entry’s <code>from_version</code>, the entry is suppressed entirely. This prevents historically wide version windows (e.g. a major package rewrite from several years ago) from generating false-positive flags for users who are already well past the breaking-change transition.</p></li>
+<li><p><code><a href="../reference/check_db_staleness.html">check_db_staleness()</a></code> gains a <code>from_version_major_threshold</code> parameter (default <code>1L</code>) – flags database entries where the current CRAN release is one or more major versions ahead of <code>from_version</code>, indicating the window floor may be too wide and the entry may need its <code>from_version</code> raised or the entry closed. New status values: <code>"stale_ceiling"</code> (the previous <code>"stale"</code> status, renamed for clarity) and <code>"stale_floor"</code>.</p></li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.5" id="reproducr-015">reproducr 0.1.5<a class="anchor" aria-label="anchor" href="#reproducr-015"></a></h2>
-<ul><li><p>Fixed remaining relative URI in <code>README.md</code> – <code>CODE_OF_CONDUCT.md</code> link now uses the full absolute GitHub URL. Resolves CRAN pre-check NOTE.</p></li>
-<li><p>Fixed <code>db-staleness.yml</code> to filter issues by title prefix <code>"Database staleness:"</code> in addition to the <code>stale-entry</code> label – prevents the workflow from incorrectly closing manually created issues that share the label. Schedule updated to <code>02:00 UTC</code> (04:00 CEST).</p></li>
+<ul><li><p>Fixed remaining relative URI in <code>README.md</code> – <code>CODE_OF_CONDUCT.md</code> link now uses the full absolute GitHub URL. Resolves CRAN pre-check NOTE: “Found the following (possibly) invalid file URI”.</p></li>
+<li><p>Updated <code>MatchIt::matchit</code> database entry: narrowed <code>from_version</code> from <code>3.0.2</code> to <code>4.6.99</code> to reflect that the 3.x -&gt; 4.x rewrite is long complete and active users are on 4.x.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="reproducr-014">reproducr 0.1.4<a class="anchor" aria-label="anchor" href="#reproducr-014"></a></h2>

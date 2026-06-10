@@ -86,7 +86,7 @@ the parse tree (e.g. `lintr`) should be used alongside `reproducr`.
 
 Only *qualified* calls – those using `::` or `:::` – are detected.
 Unqualified calls (e.g. `filter(df, x > 0)` without `dplyr::`) are not
-detected because the package cannot be determined unambiguously from
+detected because he package cannot be determined unambiguously from
 source text alone. This is by design: qualifying calls is also a
 reproducibility best practice.
 
@@ -114,7 +114,7 @@ writeLines(c(
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
 print(report)
 #> 
-#> -- reproducr audit report [2026-06-08 18:48] --
+#> -- reproducr audit report [2026-06-10 20:44] --
 #> 
 #>   Files scanned:     1
 #>   Packages found:    2
@@ -129,7 +129,7 @@ print(report)
 # See the detected calls as a data frame
 report$calls
 #>                                 file line   pkg        fn pkg_version
-#> 1 /tmp/RtmpnQMxGQ/file1a5940f79d0b.R    2 dplyr    filter        <NA>
-#> 2 /tmp/RtmpnQMxGQ/file1a5940f79d0b.R    3 dplyr summarise        <NA>
-#> 3 /tmp/RtmpnQMxGQ/file1a5940f79d0b.R    4 stats     rnorm       4.6.0
+#> 1 /tmp/Rtmp6iZ3Ch/file1af265b3d48d.R    2 dplyr    filter        <NA>
+#> 2 /tmp/Rtmp6iZ3Ch/file1af265b3d48d.R    3 dplyr summarise        <NA>
+#> 3 /tmp/Rtmp6iZ3Ch/file1af265b3d48d.R    4 stats     rnorm       4.6.0
 ```

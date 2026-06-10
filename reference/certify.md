@@ -82,16 +82,16 @@ certify(
     r_squared = summary(model)$r.squared,
     n_obs     = nrow(mtcars)
   ),
-  tag    = "baseline-v1",
+  tag = "baseline-v1",
   script = "analysis.R",
-  file   = cert_file
+  file = cert_file
 )
-#> reproducr: certified 3 output(s) [2026-06-08] under tag 'baseline-v1'
+#> reproducr: certified 3 output(s) [2026-06-10] under tag 'baseline-v1'
 
 # See what is stored
 list_certs(file = cert_file)
 #>           tag                timestamp r_version                      os
-#> 1 baseline-v1 2026-06-08T18:48:52+0000     4.6.0 Linux 6.17.0-1015-azure
+#> 1 baseline-v1 2026-06-10T20:44:16+0000     4.6.0 Linux 6.17.0-1015-azure
 #>   n_outputs     script
 #> 1         3 analysis.R
 ```

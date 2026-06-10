@@ -65,11 +65,12 @@ cert_file <- tempfile()
 model <- lm(mpg ~ wt, data = mtcars)
 
 certify(list(coefs = coef(model)), tag = "v1", file = cert_file)
-#> reproducr: certified 1 output(s) [2026-06-08] under tag 'v1'
+#> reproducr: certified 1 output(s) [2026-06-10] under tag 'v1'
 
 # Same outputs -- should report "ok"
 result <- check_drift(list(coefs = coef(model)),
-                       against = "v1", file = cert_file)
+  against = "v1", file = cert_file
+)
 #> 
 #> -- reproducr drift check vs 'v1' --
 #> 
@@ -89,7 +90,8 @@ print(result)
 # Different model -- should report "drifted"
 model2 <- lm(mpg ~ hp, data = mtcars)
 check_drift(list(coefs = coef(model2)),
-             against = "v1", file = cert_file)
+  against = "v1", file = cert_file
+)
 #> 
 #> -- reproducr drift check vs 'v1' --
 #> 

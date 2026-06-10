@@ -1,9 +1,16 @@
 # Check whether breaking-changes database entries are stale
 
-Compares the `to_version` ceiling of each entry in the breaking-changes
-database against the current version of that package on CRAN. Entries
-whose `to_version` is below the current CRAN version may need their
-ceiling updated to reflect new releases.
+Compares the `to_version` ceiling and `from_version` floor of each entry
+in the breaking-changes database against the current version of that
+package on CRAN. Two types of staleness are detected:
+
+- **`stale_ceiling`** – the package has released a new version above the
+  `to_version` ceiling. The window may need extending.
+
+- **`stale_floor`** – the current CRAN version is so far ahead of
+  `from_version` that the window captures users who are already well
+  past the breaking-change transition. The entry may need closing or the
+  `from_version` floor raising.
 
 This function is primarily intended for use by `reproducr` maintainers
 and contributors. It is also run as a scheduled GitHub Actions workflow
@@ -13,7 +20,12 @@ staleness is detected.
 ## Usage
 
 ``` r
-check_db_staleness(packages = NULL, verbose = TRUE, source = "cran")
+check_db_staleness(
+  packages = NULL,
+  verbose = TRUE,
+  source = "cran",
+  from_version_major_threshold = 1L
+)
 ```
 
 ## Arguments
@@ -47,6 +59,13 @@ check_db_staleness(packages = NULL, verbose = TRUE, source = "cran")
 
   Default `"cran"`.
 
+- from_version_major_threshold:
+
+  `integer(1)` or `Inf`. Number of full major versions the current CRAN
+  release must be *ahead* of `from_version` before the entry is flagged
+  as having a stale floor. Set to `Inf` to disable this check. Default
+  `1L`.
+
 ## Value
 
 A `data.frame` of class `c("staleness_report", "data.frame")` with one
@@ -64,6 +83,10 @@ row per database entry. Columns:
 
   Function name.
 
+- `from_version`:
+
+  The floor version currently in the database.
+
 - `to_version`:
 
   The ceiling version currently in the database.
@@ -74,31 +97,15 @@ row per database entry. Columns:
 
 - `status`:
 
-  One of `"ok"`, `"stale"`, or `"unknown"`.
+  One of `"ok"`, `"stale_ceiling"`, `"stale_floor"`, or `"unknown"`.
 
 - `gap`:
 
-  The version difference as a string, e.g. `"1.1.9 -> 1.3.0"`. `NA` when
-  status is `"unknown"`.
+  Description of the version gap. `NA` when status is `"ok"` or
+  `"unknown"`.
 
-Rows are ordered: stale first, then ok, then unknown. Printed invisibly
-when all entries are current.
-
-## Staleness vs requiring an update
-
-A stale entry does not automatically mean the database is wrong. It
-means the package has released a new version since the ceiling was set.
-A human must determine whether:
-
-1.  The breaking change still applies in the new version (extend
-    ceiling).
-
-2.  The new version fixed or reverted the change (lower or remove
-    ceiling).
-
-3.  The entry should be closed because the ecosystem has moved on.
-
-See the contributing vignette for guidance on setting `to_version`.
+Rows are ordered: stale_ceiling first, stale_floor second, then ok, then
+unknown.
 
 ## See also
 
@@ -123,6 +130,6 @@ check_db_staleness(source = "installed")
 
 # Filter to stale entries only
 report <- check_db_staleness()
-report[report$status == "stale", ]
+report[report$status != "ok", ]
 } # }
 ```

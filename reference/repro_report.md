@@ -92,13 +92,13 @@ writeLines(c(
 ), script)
 
 report <- audit_script(script, renv = FALSE, verbose = FALSE)
-risks  <- risk_score(report)
+risks <- risk_score(report)
 
 # Console summary
 repro_report(report, risks, format = "text", style = "minimal")
 #> reproducr audit report
 #> 
-#> - Generated: 2026-06-08 18:48
+#> - Generated: 2026-06-10 20:44
 #> - R version: 4.6.0
 #> - Platform: Linux 6.17.0-1015-azure
 #> - Files scanned: 1

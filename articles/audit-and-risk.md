@@ -142,7 +142,7 @@ report$env
 
 # Files scanned
 report$paths
-#> [1] "/tmp/RtmpnbEnX5/file1ba36008560b.R"
+#> [1] "/tmp/Rtmp80Q8RU/file1c3c4d966c6b.R"
 
 # Programmatic summary
 s <- summary(report)
@@ -191,11 +191,11 @@ writeLines(c(
   "# dplyr 1.1.0 changed summarise() grouping behaviour",
   "x <- dplyr::group_by(mtcars, cyl)",
   "y <- dplyr::summarise(x, mean_mpg = mean(mpg))",
-  "z <- stringr::str_c('a', NA)"   # str_c NA-handling changed in 1.5.0
+  "z <- stringr::str_c('a', NA)" # str_c NA-handling changed in 1.5.0
 ), risky_script)
 
 report <- audit_script(risky_script, renv = FALSE, verbose = FALSE)
-risks  <- risk_score(report, methods = "changelog")
+risks <- risk_score(report, methods = "changelog")
 print(risks)
 #> 
 #> -- reproducr risk score --
@@ -242,7 +242,7 @@ writeLines(c(
 ), seed_script)
 
 report <- audit_script(seed_script, renv = FALSE, verbose = FALSE)
-risks  <- risk_score(report, methods = "seed_check")
+risks <- risk_score(report, methods = "seed_check")
 as.data.frame(risks)[, c("line", "call", "risk", "description")]
 #>   line         call   risk
 #> 1    2 stats::rnorm medium
@@ -271,11 +271,11 @@ locale_script <- tempfile(fileext = ".R")
 writeLines(c(
   "x <- base::sort(c('banana', 'apple', 'cherry'))",
   "y <- base::format(3.14159, digits = 3)",
-  "z <- base::strftime(Sys.time(), '%B')"   # month name is locale-dependent
+  "z <- base::strftime(Sys.time(), '%B')" # month name is locale-dependent
 ), locale_script)
 
 report <- audit_script(locale_script, renv = FALSE, verbose = FALSE)
-risks  <- risk_score(report, methods = "locale_check")
+risks <- risk_score(report, methods = "locale_check")
 as.data.frame(risks)[, c("call", "risk", "description")]
 #>             call risk
 #> 1     base::sort  low
@@ -391,7 +391,7 @@ risks[risks$check == "seed_check", ]
 #>   MEDIUM:    1
 #>   LOW:       0
 #> 
-#> [MEDIUM]  stats::rnorm  (line 2 in file1ba333d158a6.R)
+#> [MEDIUM]  stats::rnorm  (line 2 in file1c3c42445ede.R)
 #>          Check    : seed_check
 #>          Details  : rnorm() is stochastic but no set.seed() was found in the 50 lines
 #>                     above this call (line 2). Output will differ across runs without
