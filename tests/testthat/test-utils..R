@@ -68,7 +68,7 @@ test_that(".renv_lock_exists returns FALSE when no lockfile present", {
 })
 
 test_that(".renv_lock_exists returns TRUE when lockfile present", {
-  tmp  <- tempfile()
+  tmp <- tempfile()
   dir.create(tmp)
   lock <- file.path(tmp, "renv.lock")
   writeLines('{"R": {"Version": "4.4.2"}, "Packages": {}}', lock)
@@ -95,7 +95,7 @@ test_that(".hash_object is deterministic", {
 test_that(".hash_object differs for different inputs", {
   expect_false(
     reproducr:::.hash_object(list(a = 1)) ==
-    reproducr:::.hash_object(list(a = 2))
+      reproducr:::.hash_object(list(a = 2))
   )
 })
 

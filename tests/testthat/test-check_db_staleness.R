@@ -3,9 +3,11 @@ test_that("check_db_staleness() returns a staleness_report data frame", {
 
   expect_s3_class(result, "data.frame")
   expect_s3_class(result, "staleness_report")
-  expect_true(all(c("key", "pkg", "fn", "to_version",
-                    "current_version", "status", "gap")
-                  %in% names(result)))
+  expect_true(all(c(
+    "key", "pkg", "fn", "to_version",
+    "current_version", "status", "gap"
+  )
+  %in% names(result)))
 })
 
 test_that("check_db_staleness() status column only contains valid values", {
@@ -16,7 +18,9 @@ test_that("check_db_staleness() status column only contains valid values", {
 test_that("check_db_staleness() key column matches pkg::fn format", {
   result <- check_db_staleness(source = "installed", verbose = FALSE)
   expect_true(all(grepl("^[a-zA-Z][a-zA-Z0-9.]*::[a-zA-Z][a-zA-Z0-9._]*$",
-                         result$key, perl = TRUE)))
+    result$key,
+    perl = TRUE
+  )))
 })
 
 test_that("check_db_staleness() pkg and fn columns are consistent with key", {
